@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMALA - Tumbuh Lebih Baik</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <button id="theme-toggle" onclick="toggleDarkMode()">🌙</button>
+            <h1>AMALA</h1>
+            <p class="tagline">Tumbuh lebih baik setiap hari</p>
+        </header>
+
+        <section class="quote-section">
+            <div class="quote-card">
+                <p id="daily-quote">"Niatkan setiap langkah kecilmu karena-Nya."</p>
+                <span id="quote-source">— Amala</span>
+            </div>
+        </section>
+
+        <section class="progress-section">
+            <div class="progress-info">
+                <span>Progress Hari Ini</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+        </section>
+
+        <section class="garden-section">
+            <h3>Kebun Kebaikanku</h3>
+            <div id="plant-container">🌱</div>
+            <p id="garden-status">Kebunmu butuh perhatian hari ini.</p>
+        </section>
+
+        <section class="task-section">
+            <h3>Checklist Kebaikan</h3>
+            <div class="add-task-container">
+                <input type="text" id="new-task-input" placeholder="Tulis niat baikmu...">
+                <button onclick="addTask()">Tambah</button>
+            </div>
+            <div id="task-list"></div>
+            <button id="reset-btn" onclick="resetDay()">Mulai Hari Baru</button>
+        </section>
+    </div>
+
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
