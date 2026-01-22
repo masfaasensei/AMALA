@@ -22,61 +22,54 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
-    transition: all 0.3s ease;
 }
 
 .app-container {
     width: 100%;
     max-width: 400px;
     padding: 20px;
-    position: relative;
-    min-height: 100vh;
 }
 
-header { text-align: center; margin-bottom: 20px; }
-h1 { color: var(--primary-green); letter-spacing: 2px; margin: 0; }
-.tagline { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 10px; }
+header { text-align: center; margin-bottom: 20px; position: relative; }
+h1 { color: var(--primary-green); margin: 0; }
 
-#theme-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+#theme-toggle { position: absolute; top: 0; right: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+
+/* --- BAGIAN YANG PALING PENTING --- */
+.task-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important; /* Memaksa isi kotak menyebar ke ujung-ujung */
+    background: var(--card-bg);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.task-text {
+    flex-grow: 1 !important; /* Mengambil semua ruang kosong di tengah */
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: left;
+}
+
+.delete-btn {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    color: #ff4444;
+    font-weight: bold;
+    font-size: 1.2rem;
     cursor: pointer;
+    padding: 5px;
+    margin-left: auto; /* Dorongan tambahan ke kanan */
 }
 
-.quote-card {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 15px;
-    border-left: 5px solid var(--primary-green);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-#daily-quote { font-style: italic; font-size: 0.9rem; margin-bottom: 5px; color: var(--text-main); }
-#quote-source { font-size: 0.7rem; color: var(--primary-green); font-weight: bold; }
-
-.progress-section, .garden-section {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.progress-info { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
-.progress-bar { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: width 0.5s ease; }
-
-.garden-section { text-align: center; border: 2px dashed var(--primary-green); }
-#plant-container { font-size: 60px; margin: 10px 0; transition: transform 0.3s; }
-#garden-status { font-size: 0.8rem; color: var(--text-sub); }
-
+/* Sisanya agar tampilan tetap rapi */
+.quote-card, .progress-section, .garden-section { background: var(--card-bg); padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+.progress-bar { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; }
+#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: width 0.5s; }
 .add-task-container { display: flex; gap: 10px; margin-bottom: 15px; }
-#new-task-input {
-    flex: 1;
-    padding: 12px;
+#new-task-input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); }
+.add-task-container button { background: var(--primary-green); color: white; border: none; padding: 10px; border-radius: 10px; }
+#reset-btn { width: 100%; padding: 12px; background: none; border: 2px solid var(--primary-green); color: var(--primary-green); border-radius: 10px; font-weight: bold; }
