@@ -4,7 +4,7 @@
     --card-bg: #ffffff;
     --text-main: #333;
     --text-sub: #777;
-    --border-color: #ddd;
+    --border-color: #eee;
 }
 
 [data-theme="dark"] {
@@ -16,60 +16,57 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     margin: 0;
     display: flex;
     justify-content: center;
+    transition: background 0.3s ease;
 }
 
-.app-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-}
-
+.app-container { width: 100%; max-width: 400px; padding: 20px; min-height: 100vh; }
 header { text-align: center; margin-bottom: 20px; position: relative; }
-h1 { color: var(--primary-green); margin: 0; }
-
+h1 { color: var(--primary-green); letter-spacing: 2px; margin: 0; }
 #theme-toggle { position: absolute; top: 0; right: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+.tagline { font-size: 0.9rem; margin: 5px 0; }
 
-/* --- BAGIAN YANG PALING PENTING --- */
+.quote-card, .progress-section, .garden-section {
+    background: var(--card-bg); padding: 15px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.progress-bar { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: width 0.5s ease; }
+
+.garden-section { text-align: center; border: 2px dashed var(--primary-green); }
+#plant-container { font-size: 60px; margin: 10px 0; }
+
+.add-task-container { display: flex; gap: 10px; margin-bottom: 15px; }
+#new-task-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); outline: none; }
+.add-task-container button { background: var(--primary-green); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; }
+
+/* FIX POSISI TOMBOL HAPUS */
 .task-item {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important; /* Memaksa isi kotak menyebar ke ujung-ujung */
     background: var(--card-bg);
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-bottom: 10px;
     border: 1px solid var(--border-color);
 }
 
 .task-text {
-    flex-grow: 1 !important; /* Mengambil semua ruang kosong di tengah */
-    margin-left: 10px;
+    flex-grow: 1 !important;
+    margin-left: 12px;
     margin-right: 10px;
-    text-align: left;
+    font-size: 0.95rem;
 }
 
 .delete-btn {
-    background: none;
-    border: none;
-    color: #ff4444;
-    font-weight: bold;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 5px;
-    margin-left: auto; /* Dorongan tambahan ke kanan */
+    background: none; border: none; color: #ff4444; font-weight: bold; font-size: 1.2rem; cursor: pointer; padding: 5px;
 }
 
-/* Sisanya agar tampilan tetap rapi */
-.quote-card, .progress-section, .garden-section { background: var(--card-bg); padding: 15px; border-radius: 15px; margin-bottom: 20px; }
-.progress-bar { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; }
-#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: width 0.5s; }
-.add-task-container { display: flex; gap: 10px; margin-bottom: 15px; }
-#new-task-input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); }
-.add-task-container button { background: var(--primary-green); color: white; border: none; padding: 10px; border-radius: 10px; }
-#reset-btn { width: 100%; padding: 12px; background: none; border: 2px solid var(--primary-green); color: var(--primary-green); border-radius: 10px; font-weight: bold; }
+.task-item.done { opacity: 0.5; text-decoration: line-through; }
+
+#reset-btn { width: 100%; padding: 12px; background: none; border: 2px solid var(--primary-green); color: var(--primary-green); border-radius: 10px; font-weight: bold; margin-top: 10px; }
