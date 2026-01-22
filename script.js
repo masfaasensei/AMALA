@@ -22,7 +22,7 @@ const defaultTasks = [
 
 const keutamaan = {
     "Shalat Shubuh Berjamaah": "Mendapat jaminan perlindungan Allah sepanjang hari.",
-    "default": "Kebaikan kecil yang istiqomah sangat dicintai Allah."
+    "default": "Kebaikan kecil yang istiqomah dicintai Allah."
 };
 
 let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || defaultTasks;
@@ -55,22 +55,15 @@ function toggleTask(id) {
 function addTask() {
     const input = document.getElementById('new-task-input');
     if (input && input.value.trim() !== "") {
-        const newTask = {
-            id: Date.now(),
-            text: input.value.trim(),
-            done: false
-        };
-        tasks.push(newTask);
+        tasks.push({ id: Date.now(), text: input.value.trim(), done: false });
         input.value = "";
         renderTasks();
     }
 }
 
 function deleteTask(id) {
-    if(confirm("Hapus amalan ini?")) {
-        tasks = tasks.filter(t => t.id !== id);
-        renderTasks();
-    }
+    tasks = tasks.filter(t => t.id !== id);
+    renderTasks();
 }
 
 function renderTasks() {
@@ -79,12 +72,12 @@ function renderTasks() {
     list.innerHTML = '';
     
     if (!userName) {
-        userName = prompt("Siapa namamu?") || "Hamba Allah";
+        userName = prompt("Boleh tahu siapa namamu?") || "Hamba Allah";
         localStorage.setItem('amalaUserName', userName);
     }
     
     const tagline = document.querySelector('.tagline');
-    if(tagline) tagline.innerText = "Semangat, " + userName + "!";
+    if(tagline) tagline.innerText = "Semangat beramal, " + userName + "!";
 
     tasks.forEach(t => {
         const div = document.createElement('div');
@@ -92,7 +85,7 @@ function renderTasks() {
         div.innerHTML = `
             <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})">
             <span>${t.text}</span>
-            <button class="delete-btn" onclick="deleteTask(${t.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:1.2rem;">✕</button>
+            <button onclick="deleteTask(${t.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer;">✕</button>
         `;
         list.appendChild(div);
     });
@@ -103,15 +96,12 @@ function updateUI() {
     const done = tasks.filter(t => t.done).length;
     const percent = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
     
-    const fill = document.getElementById('progress-fill');
-    if(fill) fill.style.width = percent + '%';
+    if(document.getElementById('progress-fill')) document.getElementById('progress-fill').style.width = percent + '%';
+    if(document.getElementById('progress-percent')) document.getElementById('progress-percent').innerText = percent + '%';
     
-    const txtPercent = document.getElementById('progress-percent');
-    if(txtPercent) txtPercent.innerText = percent + '%';
-
-    const pts = history.reduce((s, h) => s + h.score, 0) + percent;
-    const txtPoints = document.getElementById('total-points');
-    if(txtPoints) txtPoints.innerText = pts;
+    const points = history.reduce((s, h) => s + h.score, 0) + percent;
+    if(document.getElementById('total-points')) document.getElementById('total-points').innerText = points;
+    if(document.getElementById('total-days')) document.getElementById('total-days').innerText = history.length;
 
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
@@ -128,8 +118,9 @@ function resetDay() {
 }
 
 function toggleDarkMode() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('amalaTheme', theme);
 }
 
 document.addEventListener('DOMContentLoaded', renderTasks);
