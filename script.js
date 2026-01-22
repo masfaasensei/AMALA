@@ -1,3 +1,4 @@
+// 1. Konfigurasi Kutipan
 const quotes = [
     { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari & Muslim" },
     { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" },
@@ -6,7 +7,8 @@ const quotes = [
     { text: "Jadikan sabar dan shalat sebagai penolongmu.", source: "Al-Baqarah: 45" }
 ];
 
-let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
+// 2. Daftar 19 Tugas Utama (Master Data)
+const masterTasks = [
     { id: 1, text: "Shalat Shubuh Berjamaah", done: false },
     { id: 2, text: "Shalat Dhuhur Berjamaah", done: false },
     { id: 3, text: "Shalat Ashar Berjamaah", done: false },
@@ -28,10 +30,23 @@ let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
     { id: 19, text: "Membaca Shalawat", done: false }
 ];
 
+// 3. Logika Memori (LocalStorage) & Reset Otomatis Versi Lama
+let savedTasks = JSON.parse(localStorage.getItem('amalaTasks'));
+
+// JIKA data kosong ATAU jumlah tugas kurang dari 10 (berarti versi lama 2 tugas)
+if (!savedTasks || savedTasks.length < 10) {
+    localStorage.setItem('amalaTasks', JSON.stringify(masterTasks));
+    savedTasks = masterTasks;
+}
+
+let tasks = savedTasks;
+
+// 4. Fungsi Render (Menampilkan ke Layar)
 function renderTasks() {
     const taskList = document.getElementById('task-list');
     if (!taskList) return;
     taskList.innerHTML = '';
+    
     tasks.forEach(task => {
         const div = document.createElement('div');
         div.className = `task-item ${task.done ? 'done' : ''}`;
@@ -42,11 +57,13 @@ function renderTasks() {
         `;
         taskList.appendChild(div);
     });
+    
     updateProgress();
     updateGarden();
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
 
+// 5. Logika Interaksi (Centang, Tambah, Hapus)
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
     if (task) {
@@ -73,67 +90,7 @@ function deleteTask(id) {
     renderTasks();
 }
 
+// 6. Logika Progress & Kebun
 function updateProgress() {
     const completed = tasks.filter(t => t.done).length;
-    const percent = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
-    document.getElementById('progress-fill').style.width = percent + '%';
-    document.getElementById('progress-percent').innerText = percent + '%';
-}
-
-function updateGarden() {
-    const completed = tasks.filter(t => t.done).length;
-    const plant = document.getElementById('plant-container');
-    const status = document.getElementById('garden-status');
-    if (completed === 0) { plant.innerText = "🌱"; status.innerText = "Benih baru ditanam."; }
-    else if (completed <= 5) { plant.innerText = "🌿"; status.innerText = "Mulai tumbuh."; }
-    else if (completed < tasks.length) { plant.innerText = "🌳"; status.innerText = "Semakin rimbun!"; }
-    else { plant.innerText = "🌸"; status.innerText = "Kebunmu berbunga!"; }
-}
-
-function askName() {
-    const name = prompt("Siapa namamu?");
-    if (name) {
-        localStorage.setItem('amalaUserName', name);
-        displayGreeting();
-    }
-}
-
-function displayGreeting() {
-    const name = localStorage.getItem('amalaUserName');
-    const greetingElement = document.getElementById('user-greeting');
-    if (name) { greetingElement.innerText = `Assalamu'alaikum, ${name}! ✨`; }
-    else { greetingElement.innerText = "Tumbuh lebih baik setiap hari"; }
-}
-
-function toggleDarkMode() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('amalaTheme', newTheme);
-    document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '☀️' : '🌙';
-}
-
-function resetDay() {
-    if (confirm("Mulai hari baru?")) {
-        tasks.forEach(t => t.done = false);
-        renderTasks();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Theme
-    const savedTheme = localStorage.getItem('amalaTheme');
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
-    }
-    // Greeting
-    const savedName = localStorage.getItem('amalaUserName');
-    if (!savedName) { setTimeout(askName, 1000); } else { displayGreeting(); }
-    // Quote
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    document.getElementById('daily-quote').innerText = `"${quotes[randomIndex].text}"`;
-    document.getElementById('quote-source').innerText = `— ${quotes[randomIndex].source}`;
-    
-    renderTasks();
-});
+    const percent = tasks.length > 0 ? Math.round((completed / tasks.length) *
