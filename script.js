@@ -32,7 +32,6 @@ function renderTasks() {
     const taskList = document.getElementById('task-list');
     if (!taskList) return;
     taskList.innerHTML = '';
-    
     tasks.forEach(task => {
         const div = document.createElement('div');
         div.className = `task-item ${task.done ? 'done' : ''}`;
@@ -43,7 +42,6 @@ function renderTasks() {
         `;
         taskList.appendChild(div);
     });
-    
     updateProgress();
     updateGarden();
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
@@ -92,6 +90,21 @@ function updateGarden() {
     else { plant.innerText = "🌸"; status.innerText = "Kebunmu berbunga!"; }
 }
 
+function askName() {
+    const name = prompt("Siapa namamu?");
+    if (name) {
+        localStorage.setItem('amalaUserName', name);
+        displayGreeting();
+    }
+}
+
+function displayGreeting() {
+    const name = localStorage.getItem('amalaUserName');
+    const greetingElement = document.getElementById('user-greeting');
+    if (name) { greetingElement.innerText = `Assalamu'alaikum, ${name}! ✨`; }
+    else { greetingElement.innerText = "Tumbuh lebih baik setiap hari"; }
+}
+
 function toggleDarkMode() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const newTheme = isDark ? 'light' : 'dark';
@@ -101,20 +114,26 @@ function toggleDarkMode() {
 }
 
 function resetDay() {
-    if (confirm("Mulai hari baru? Centang akan dikosongkan.")) {
+    if (confirm("Mulai hari baru?")) {
         tasks.forEach(t => t.done = false);
         renderTasks();
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Theme
     const savedTheme = localStorage.getItem('amalaTheme');
     if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
     }
+    // Greeting
+    const savedName = localStorage.getItem('amalaUserName');
+    if (!savedName) { setTimeout(askName, 1000); } else { displayGreeting(); }
+    // Quote
     const randomIndex = Math.floor(Math.random() * quotes.length);
     document.getElementById('daily-quote').innerText = `"${quotes[randomIndex].text}"`;
     document.getElementById('quote-source').innerText = `— ${quotes[randomIndex].source}`;
+    
     renderTasks();
 });
