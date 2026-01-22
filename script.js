@@ -1,3 +1,7 @@
+// --- FORCE RESET (Hapus ini nanti jika sudah muncul 19 tugas) ---
+// Baris di bawah ini akan memaksa browser menghapus memori lama setiap kali refresh
+// localStorage.clear(); // Jika masih belum muncul, hapus tanda // di depan kata localStorage ini.
+
 // 1. Konfigurasi Kutipan
 const quotes = [
     { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari & Muslim" },
@@ -7,7 +11,7 @@ const quotes = [
     { text: "Jadikan sabar dan shalat sebagai penolongmu.", source: "Al-Baqarah: 45" }
 ];
 
-// 2. Daftar 19 Tugas Utama (Master Data)
+// 2. Daftar 19 Tugas Utama
 const masterTasks = [
     { id: 1, text: "Shalat Shubuh Berjamaah", done: false },
     { id: 2, text: "Shalat Dhuhur Berjamaah", done: false },
@@ -30,18 +34,11 @@ const masterTasks = [
     { id: 19, text: "Membaca Shalawat", done: false }
 ];
 
-// 3. Logika Memori (LocalStorage) & Reset Otomatis Versi Lama
-let savedTasks = JSON.parse(localStorage.getItem('amalaTasks'));
+// 3. Logika Reset Total
+// Kita ganti nama kuncinya dari 'amalaTasks' ke 'amalaTasks_v2' 
+// agar browser menganggap ini data yang benar-benar baru
+let tasks = JSON.parse(localStorage.getItem('amalaTasks_v2')) || masterTasks;
 
-// JIKA data kosong ATAU jumlah tugas kurang dari 10 (berarti versi lama 2 tugas)
-if (!savedTasks || savedTasks.length < 10) {
-    localStorage.setItem('amalaTasks', JSON.stringify(masterTasks));
-    savedTasks = masterTasks;
-}
-
-let tasks = savedTasks;
-
-// 4. Fungsi Render (Menampilkan ke Layar)
 function renderTasks() {
     const taskList = document.getElementById('task-list');
     if (!taskList) return;
@@ -60,10 +57,9 @@ function renderTasks() {
     
     updateProgress();
     updateGarden();
-    localStorage.setItem('amalaTasks', JSON.stringify(tasks));
+    localStorage.setItem('amalaTasks_v2', JSON.stringify(tasks));
 }
 
-// 5. Logika Interaksi (Centang, Tambah, Hapus)
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
     if (task) {
@@ -90,7 +86,77 @@ function deleteTask(id) {
     renderTasks();
 }
 
-// 6. Logika Progress & Kebun
 function updateProgress() {
     const completed = tasks.filter(t => t.done).length;
-    const percent = tasks.length > 0 ? Math.round((completed / tasks.length) *
+    const percent = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+    const fill = document.getElementById('progress-fill');
+    const txt = document.getElementById('progress-percent');
+    if (fill) fill.style.width = percent + '%';
+    if (txt) txt.innerText = percent + '%';
+}
+
+function updateGarden() {
+    const completed = tasks.filter(t => t.done).length;
+    const plant = document.getElementById('plant-container');
+    const status = document.getElementById('garden-status');
+    if (!plant || !status) return;
+
+    if (completed === 0) { plant.innerText = "🌱"; status.innerText = "Benih baru ditanam."; }
+    else if (completed <= 5) { plant.innerText = "🌿"; status.innerText = "Mulai tumbuh."; }
+    else if (completed < tasks.length) { plant.innerText = "🌳"; status.innerText = "Semakin rimbun!"; }
+    else { plant.innerText = "🌸"; status.innerText = "Luar biasa! Kebunmu berbunga."; }
+}
+
+function askName() {
+    const name = prompt("Siapa namamu?");
+    if (name) {
+        localStorage.setItem('amalaUserName', name);
+        displayGreeting();
+    }
+}
+
+function displayGreeting() {
+    const name = localStorage.getItem('amalaUserName');
+    const greetingElement = document.getElementById('user-greeting');
+    if (name && greetingElement) { 
+        greetingElement.innerText = `Assalamu'alaikum, ${name}! ✨`; 
+    }
+}
+
+function toggleDarkMode() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('amalaTheme', newTheme);
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.innerText = newTheme === 'dark' ? '☀️' : '🌙';
+}
+
+function resetDay() {
+    if (confirm("Mulai hari baru?")) {
+        tasks.forEach(t => t.done = false);
+        renderTasks();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('amalaTheme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const btn = document.getElementById('theme-toggle');
+        if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+    
+    const savedName = localStorage.getItem('amalaUserName');
+    if (!savedName) { setTimeout(askName, 1000); } else { displayGreeting(); }
+    
+    const quoteTxt = document.getElementById('daily-quote');
+    const quoteSrc = document.getElementById('quote-source');
+    if (quoteTxt && quoteSrc) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        quoteTxt.innerText = `"${quotes[randomIndex].text}"`;
+        quoteSrc.innerText = `— ${quotes[randomIndex].source}`;
+    }
+    
+    renderTasks();
+});
