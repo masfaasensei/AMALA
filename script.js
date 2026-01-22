@@ -1,18 +1,14 @@
-// ==========================================
-// 1. DATA & KONFIGURASI
-// ==========================================
+// 1. DATA MASTER
 const quotes = [
     { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari" },
-    { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" },
-    { text: "Dunia ini ladang, akhirat tempat memanen.", source: "Amala" }
+    { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" }
 ];
 
 const keutamaan = {
     "Shalat Shubuh Berjamaah": "Mendapat jaminan perlindungan Allah sepanjang hari.",
     "Shalat Tahajud/Witir": "Waktu paling mustajab dan kemuliaan bagi seorang mukmin.",
-    "Sedekah Subuh": "Dua malaikat mendoakan ganti yang berlipat bagi yang berinfak.",
+    "Sedekah Subuh": "Dua malaikat mendoakan ganti bagi yang berinfak.",
     "Membaca Al-Qur'an (Min. 1 Halaman)": "Setiap satu hurufnya bernilai sepuluh kebaikan.",
-    "Membaca Al-Mulk (Sebelum Tidur)": "Penyelamat dan penghalang dari siksa kubur.",
     "default": "Amalan istiqomah sangat dicintai Allah."
 };
 
@@ -38,57 +34,96 @@ const defaultTasks = [
     { id: 19, text: "Memberi Salam/Senyum", done: false }
 ];
 
-// Inisialisasi Data dari Penyimpanan HP (LocalStorage)
+// LOAD DATA
 let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || defaultTasks;
 let history = JSON.parse(localStorage.getItem('amalaHistory')) || [];
 let userName = localStorage.getItem('amalaUserName') || "";
 
-// ==========================================
-// 2. FUNGSI TOGGLE TASK (INTI APLIKASI)
-// ==========================================
+// FUNGSI TOAST (PESAN MELAYANG)
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    if(container) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => { toast.remove(); }, 3500);
+    }
+}
+
+// FUNGSI TOGGLE (KLIK CENTANG)
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
     if (!task) return;
-
-    task.done = !task.done; // Mengubah status (centang/tidak)
-
+    task.done = !task.done;
+    
     if (task.done) {
-        // Efek Suara
         const audio = document.getElementById('sound-success');
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         
-        // Pilih Pesan Motivasi Acak
-        const motivasi = ["MasyaAllah!", "Alhamdulillah!", "Luar Biasa!", "Satu Langkah Surga!", "Terus Istiqomah!"];
-        const randomMotivasi = motivasi[Math.floor(Math.random() * motivasi.length)];
-        
-        // Ambil Hadits
         const infoHadits = keutamaan[task.text] || keutamaan["default"];
-        
-        // Munculkan Pesan Melayang (Toast)
-        showToast(`${randomMotivasi} ✨\n${infoHadits}`);
+        showToast(`MasyaAllah! ✨\n${infoHadits}`);
     }
-    
-    renderTasks(); // Gambar ulang tampilan
+    renderTasks();
 }
 
-// ==========================================
-// 3. FUNGSI PENDUKUNG (RENDER & UI)
-// ==========================================
-function showToast(message) {
-    const container = document.getElementById('toast-container');
-    if(!container) return;
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerText = message;
-    container.appendChild(toast);
-    setTimeout(() => { toast.remove(); }, 3500);
-}
-
+// RENDER TAMPILAN
 function renderTasks() {
     const taskList = document.getElementById('task-list');
     if(!taskList) return;
     taskList.innerHTML = '';
     
-    // Sapaan Nama
+    // Cek Nama
     if (!userName) {
-        userName = prompt("Boleh tahu siapa namamu?") || "Hamba Allah
+        userName = prompt("Siapa namamu?") || "Hamba Allah";
+        localStorage.setItem('amalaUserName', userName);
+    }
+    document.querySelector('.tagline').innerText = `Semangat beramal, ${userName}!`;
+
+    tasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = `task-item ${task.done ? 'done' : ''}`;
+        div.innerHTML = `
+            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
+            <span>${task.text}</span>
+            <span class="info-btn" onclick="alert('${keutamaan[task.text] || keutamaan['default']}')">ⓘ</span>
+        `;
+        taskList.appendChild(div);
+    });
+    
+    updateUI();
+}
+
+function updateUI() {
+    const completed = tasks.filter(t => t.done).length;
+    const percent = tasks.length ? Math.round((completed / tasks.length) * 100) : 0;
+    
+    document.getElementById('progress-fill').style.width = percent + '%';
+    document.getElementById('progress-percent').innerText = percent + '%';
+
+    document.getElementById('total-days').innerText = history.length;
+    const points = history.reduce((sum, h) => sum + h.score, 0) + percent;
+    document.getElementById('total-points').innerText = points;
+
+    localStorage.setItem('amalaTasks', JSON.stringify(tasks));
+}
+
+function resetDay() {
+    if (confirm("Simpan rekap dan mulai hari baru?")) {
+        const score = Math.round((tasks.filter(t => t.done).length / tasks.length) * 100);
+        history.unshift({ date: new Date().toLocaleDateString('id-ID'), score: score });
+        localStorage.setItem('amalaHistory', JSON.stringify(history));
+        
+        tasks = defaultTasks.map(t => ({...t, done: false}));
+        renderTasks();
+    }
+}
+
+// DARK MODE
+function toggleDarkMode() {
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('amalaTheme', theme);
+}
+
+document.addEventListener('DOMContentLoaded', renderTasks);
