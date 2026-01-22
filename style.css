@@ -55,39 +55,39 @@ h1 { color: var(--primary-green); margin: 0; letter-spacing: 2px; }
 
 .task-item { background: var(--card-bg); padding: 12px; border-radius: 12px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color); }
 .task-item.done { opacity: 0.5; text-decoration: line-through; }
-.info-btn { margin-left: 8px; color: var(--primary-green); cursor: pointer; font-size: 0.9rem; }
 
 #reset-btn { width: 100%; padding: 15px; background: var(--primary-green); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 20px; }
 
-/* Gaya Pesan Melayang (Toast) */
+/* Toast Notification Styles */
 #toast-container {
     position: fixed;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000;
+    z-index: 9999;
     width: 80%;
-    max-width: 300px;
+    max-width: 320px;
+    pointer-events: none;
 }
 
 .toast {
     background: var(--primary-green);
     color: white;
     padding: 12px 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-top: 10px;
     font-size: 0.85rem;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    animation: slideUp 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
-    border: 1px solid rgba(255,255,255,0.3);
+    animation: slideUp 0.4s ease, fadeOut 0.5s 3s forwards;
+    white-space: pre-line;
 }
 
 @keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
+    from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes fadeOut {
-    to { opacity: 0; visibility: hidden; }
+    to { opacity: 0; }
 }
