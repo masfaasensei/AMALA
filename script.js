@@ -22,7 +22,10 @@ const defaultTasks = [
 
 const keutamaan = {
     "Shalat Shubuh Berjamaah": "Mendapat jaminan perlindungan Allah sepanjang hari.",
-    "default": "Kebaikan kecil yang istiqomah dicintai Allah."
+    "Shalat Tahajud/Witir": "Waktu paling mustajab dan kemuliaan bagi seorang mukmin.",
+    "Sedekah Subuh": "Dua malaikat mendoakan ganti bagi yang berinfak.",
+    "Membaca Al-Qur'an": "Setiap satu hurufnya bernilai sepuluh kebaikan.",
+    "default": "Kebaikan kecil yang rutin sangat dicintai Allah."
 };
 
 let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || defaultTasks;
@@ -46,8 +49,8 @@ function toggleTask(id) {
     if (task.done) {
         const audio = document.getElementById('sound-success');
         if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); }
-        const hadits = keutamaan[task.text] || keutamaan["default"];
-        showToast("MasyaAllah! " + hadits);
+        const msg = keutamaan[task.text] || keutamaan["default"];
+        showToast(`MasyaAllah! ✨\n${msg}`);
     }
     renderTasks();
 }
@@ -72,20 +75,18 @@ function renderTasks() {
     list.innerHTML = '';
     
     if (!userName) {
-        userName = prompt("Boleh tahu siapa namamu?") || "Hamba Allah";
+        userName = prompt("Siapa namamu?") || "Hamba Allah";
         localStorage.setItem('amalaUserName', userName);
     }
-    
-    const tagline = document.querySelector('.tagline');
-    if(tagline) tagline.innerText = "Semangat beramal, " + userName + "!";
+    document.querySelector('.tagline').innerText = `Semangat beramal, ${userName}!`;
 
     tasks.forEach(t => {
         const div = document.createElement('div');
-        div.className = "task-item " + (t.done ? "done" : "");
+        div.className = `task-item ${t.done ? 'done' : ''}`;
         div.innerHTML = `
             <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})">
             <span>${t.text}</span>
-            <button onclick="deleteTask(${t.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer;">✕</button>
+            <button onclick="deleteTask(${t.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;">✕</button>
         `;
         list.appendChild(div);
     });
@@ -96,18 +97,24 @@ function updateUI() {
     const done = tasks.filter(t => t.done).length;
     const percent = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
     
-    if(document.getElementById('progress-fill')) document.getElementById('progress-fill').style.width = percent + '%';
-    if(document.getElementById('progress-percent')) document.getElementById('progress-percent').innerText = percent + '%';
+    document.getElementById('progress-fill').style.width = percent + '%';
+    document.getElementById('progress-percent').innerText = percent + '%';
+    document.getElementById('total-days').innerText = history.length;
     
     const points = history.reduce((s, h) => s + h.score, 0) + percent;
-    if(document.getElementById('total-points')) document.getElementById('total-points').innerText = points;
-    if(document.getElementById('total-days')) document.getElementById('total-days').innerText = history.length;
+    document.getElementById('total-points').innerText = points;
+
+    const plant = document.getElementById('plant-container');
+    if(percent === 0) plant.innerText = "🌱";
+    else if(percent < 50) plant.innerText = "🌿";
+    else if(percent < 100) plant.innerText = "🌳";
+    else plant.innerText = "🌸";
 
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
 
 function resetDay() {
-    if(confirm("Simpan rekap dan mulai hari baru?")) {
+    if(confirm("Simpan rekap dan reset checklist?")) {
         const done = tasks.filter(t => t.done).length;
         const score = Math.round((done / tasks.length) * 100);
         history.unshift({ date: new Date().toLocaleDateString(), score: score });
@@ -118,9 +125,8 @@ function resetDay() {
 }
 
 function toggleDarkMode() {
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('amalaTheme', theme);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
 }
 
 document.addEventListener('DOMContentLoaded', renderTasks);
