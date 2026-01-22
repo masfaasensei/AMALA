@@ -12,7 +12,7 @@ let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
     { id: 1, text: "Shalat Shubuh Berjamaah", done: false },
     { id: 2, text: "Shalat Dhuhur Berjamaah", done: false },
     { id: 3, text: "Shalat Ashar Berjamaah", done: false },
-    { id: 4, text: "Shalat Maghrib Berjamaah", done: false }, // Tadi kurang koma di sini
+    { id: 4, text: "Shalat Maghrib Berjamaah", done: false },
     { id: 5, text: "Shalat Isya Berjamaah", done: false },
     { id: 6, text: "Shalat Dhuha", done: false },
     { id: 7, text: "Shalat Tahajjud", done: false },
@@ -41,8 +41,8 @@ function renderTasks() {
         div.className = `task-item ${task.done ? 'done' : ''}`;
         div.innerHTML = `
             <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
-            <span>${task.text}</span>
-            <button onclick="deleteTask(${task.id})" style="margin-left:auto; background:none; border:none; color:#ff4444; cursor:pointer; font-weight:bold;">✕</button>
+            <span class="task-text">${task.text}</span>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">✕</button>
         `;
         taskList.appendChild(div);
     });
@@ -61,7 +61,7 @@ function toggleTask(id) {
             const audio = document.getElementById('sound-success');
             if (audio) {
                 audio.currentTime = 0;
-                audio.play().catch(e => console.log("Audio play blocked"));
+                audio.play().catch(e => console.log("Audio blocked"));
             }
         }
     }
@@ -97,19 +97,10 @@ function updateGarden() {
     const status = document.getElementById('garden-status');
     if (!plant || !status) return;
 
-    if (completed === 0) {
-        plant.innerText = "🌱";
-        status.innerText = "Benihmu baru saja ditanam.";
-    } else if (completed <= 5) { // Disesuaikan karena daftar tugas lebih banyak
-        plant.innerText = "🌿";
-        status.innerText = "Kebunmu mulai bertumbuh.";
-    } else if (completed < tasks.length) {
-        plant.innerText = "🌳";
-        status.innerText = "MasyaAllah, kebunmu semakin rimbun!";
-    } else {
-        plant.innerText = "🌸";
-        status.innerText = "Luar biasa! Hari ini kebunmu berbunga.";
-    }
+    if (completed === 0) { plant.innerText = "🌱"; status.innerText = "Benihmu baru saja ditanam."; }
+    else if (completed <= 5) { plant.innerText = "🌿"; status.innerText = "Kebunmu mulai bertumbuh."; }
+    else if (completed < tasks.length) { plant.innerText = "🌳"; status.innerText = "MasyaAllah, rimbun sekali!"; }
+    else { plant.innerText = "🌸"; status.innerText = "Luar biasa! Kebunmu berbunga."; }
 }
 
 function toggleDarkMode() {
@@ -122,13 +113,12 @@ function toggleDarkMode() {
 }
 
 function resetDay() {
-    if (confirm("Mulai hari baru? Semua centang akan dikosongkan.")) {
+    if (confirm("Mulai hari baru? Centang akan dikosongkan.")) {
         tasks.forEach(t => t.done = false);
         renderTasks();
     }
 }
 
-// Initialization
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('amalaTheme');
     if (savedTheme) {
@@ -136,14 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('theme-toggle');
         if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
     }
-    
-    const quoteTxt = document.getElementById('daily-quote');
-    const quoteSrc = document.getElementById('quote-source');
-    if (quoteTxt && quoteSrc) {
-        const randomIndex = Math.floor(Math.random() * quotes.length);
-        quoteTxt.innerText = `"${quotes[randomIndex].text}"`;
-        quoteSrc.innerText = `— ${quotes[randomIndex].source}`;
-    }
-    
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    document.getElementById('daily-quote').innerText = `"${quotes[randomIndex].text}"`;
+    document.getElementById('quote-source').innerText = `— ${quotes[randomIndex].source}`;
     renderTasks();
 });
