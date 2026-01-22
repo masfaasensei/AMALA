@@ -11,10 +11,7 @@
         <header>
             <button id="theme-toggle" onclick="toggleDarkMode()">🌙</button>
             <h1>AMALA</h1>
-            <div id="greeting-container">
-                <p id="user-greeting" class="tagline">Tumbuh lebih baik setiap hari</p>
-                <button id="edit-name-btn" onclick="askName()" style="font-size: 0.6rem; background: none; border: none; color: var(--primary-green); cursor: pointer; text-decoration: underline; opacity: 0.7;">Ganti Nama</button>
-            </div>
+            <p class="tagline">Tumbuh lebih baik setiap hari</p>
         </header>
 
         <section class="quote-section">
@@ -24,20 +21,35 @@
             </div>
         </section>
 
-        <section class="progress-section">
-            <div class="progress-info">
-                <span>Progress Hari Ini</span>
-                <span id="progress-percent">0%</span>
-            </div>
-            <div class="progress-bar">
-                <div id="progress-fill"></div>
-            </div>
-        </section>
+        <div class="dashboard-grid">
+            <section class="progress-section">
+                <div class="progress-info">
+                    <span>Progress</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+            </section>
+            
+            <section class="garden-section">
+                <div id="plant-container">🌱</div>
+                <p id="garden-status">Siap beramal?</p>
+            </section>
+        </div>
 
-        <section class="garden-section">
-            <h3>Kebun Kebaikanku</h3>
-            <div id="plant-container">🌱</div>
-            <p id="garden-status">Kebunmu butuh perhatian hari ini.</p>
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="total-days">0</span>
+                    <span class="stat-label">Hari Aktif</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="total-points">0</span>
+                    <span class="stat-label">⭐ Bintang</span>
+                </div>
+            </div>
+            <div id="history-list"></div>
         </section>
 
         <section class="task-section">
@@ -47,16 +59,11 @@
                 <button onclick="addTask()">Tambah</button>
             </div>
             <div id="task-list"></div>
-            <button id="reset-btn" onclick="resetDay()">Mulai Hari Baru</button>
+            <button id="reset-btn" onclick="resetDay()">Selesaikan Hari Ini & Simpan Rekap</button>
         </section>
-
-        <p style="text-align:center; font-size: 0.7rem; color: var(--text-sub); margin-top: 30px; opacity: 0.6;">
-            Gunakan browser Chrome/Safari > "Add to Home Screen" untuk jadi aplikasi.
-        </p>
     </div>
 
     <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
-
     <script src="script.js"></script>
 </body>
 </html>
