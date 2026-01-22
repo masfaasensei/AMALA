@@ -1,15 +1,20 @@
 {
-  "name": "AMALA - Tumbuh Lebih Baik",
   "short_name": "AMALA",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#f9fbf9",
-  "theme_color": "#89a894",
+  "name": "AMALA - Tumbuh Lebih Baik",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3588/3588658.png",
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#89a894",
+  "background_color": "#f9fbf9"
 }
