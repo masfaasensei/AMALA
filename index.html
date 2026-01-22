@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AMALA - Tumbuh Lebih Baik</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <meta name="theme-color" content="#89a894">
+    
+    <link rel="apple-touch-icon" href="icon.png">
+    
     <link rel="manifest" href="manifest.json">
+    
+    <link rel="stylesheet" href="style.css">
+
     <script>
+      // Mendaftarkan Service Worker agar bisa diinstal di HP
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js');
       }
@@ -75,6 +83,7 @@
     </div>
 
     <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
+    
     <script src="script.js"></script>
 </body>
 </html>
