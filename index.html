@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Tumbuh Lebih Baik Setiap Hari</title>
+    <title>AMALA - Tumbuh Lebih Baik</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +11,10 @@
         <header>
             <button id="theme-toggle" onclick="toggleDarkMode()">🌙</button>
             <h1>AMALA</h1>
-            <p class="tagline">Tumbuh lebih baik setiap hari</p>
+            <div id="greeting-container">
+                <p id="user-greeting" class="tagline">Tumbuh lebih baik setiap hari</p>
+                <button id="edit-name-btn" onclick="askName()" style="font-size: 0.6rem; background: none; border: none; color: var(--primary-green); cursor: pointer; text-decoration: underline; opacity: 0.7;">Ganti Nama</button>
+            </div>
         </header>
 
         <section class="quote-section">
