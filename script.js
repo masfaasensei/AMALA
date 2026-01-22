@@ -1,47 +1,26 @@
-// --- FORCE RESET (Hapus ini nanti jika sudah muncul 19 tugas) ---
-// Baris di bawah ini akan memaksa browser menghapus memori lama setiap kali refresh
-// localStorage.clear(); // Jika masih belum muncul, hapus tanda // di depan kata localStorage ini.
-
-// 1. Konfigurasi Kutipan
 const quotes = [
-    { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari & Muslim" },
+    { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari" },
     { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" },
-    { text: "Tumbuhlah lebih baik dari dirimu yang kemarin.", source: "AMALA" },
-    { text: "Sebaik-baik manusia adalah yang paling bermanfaat bagi orang lain.", source: "HR. Ahmad" },
-    { text: "Jadikan sabar dan shalat sebagai penolongmu.", source: "Al-Baqarah: 45" }
+    { text: "Satu langkah kecil adalah awal perjalanan besar.", source: "Amala" }
 ];
 
-// 2. Daftar 19 Tugas Utama
-const masterTasks = [
-    { id: 1, text: "Shalat Shubuh Berjamaah", done: false },
-    { id: 2, text: "Shalat Dhuhur Berjamaah", done: false },
-    { id: 3, text: "Shalat Ashar Berjamaah", done: false },
-    { id: 4, text: "Shalat Maghrib Berjamaah", done: false },
-    { id: 5, text: "Shalat Isya Berjamaah", done: false },
-    { id: 6, text: "Shalat Dhuha", done: false },
-    { id: 7, text: "Shalat Tahajjud", done: false },
-    { id: 8, text: "Shalat Witir", done: false },
-    { id: 9, text: "Tilawah Al Quran", done: false },
-    { id: 10, text: "Murojaah Hafalan", done: false },
-    { id: 11, text: "Puasa Sunnah", done: false },
-    { id: 12, text: "Dzikir Pagi", done: false },
-    { id: 13, text: "Dzikir Sore", done: false },
-    { id: 14, text: "Sedekah", done: false },
-    { id: 15, text: "Membaca Buku", done: false },
-    { id: 16, text: "Mendengarkan Kajian", done: false },
-    { id: 17, text: "Mengucapkan Salam", done: false },
-    { id: 18, text: "Menabung", done: false },
-    { id: 19, text: "Membaca Shalawat", done: false }
+const keutamaan = {
+    "Shalat Tepat Waktu": "Cahaya di hari kiamat dan pembeda mukmin.",
+    "Sedekah Subuh": "Didoakan malaikat setiap pagi.",
+    "Membaca Al-Qur'an": "Satu hurufnya sepuluh kebaikan.",
+    "default": "Kebaikan yang mendatangkan ketenangan hati."
+};
+
+let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
+    { id: 1, text: "Shalat Tepat Waktu", done: false },
+    { id: 2, text: "Sedekah Subuh", done: false },
+    { id: 3, text: "Membaca Al-Qur'an 1 Halaman", done: false }
 ];
 
-// 3. Logika Reset Total
-// Kita ganti nama kuncinya dari 'amalaTasks' ke 'amalaTasks_v2' 
-// agar browser menganggap ini data yang benar-benar baru
-let tasks = JSON.parse(localStorage.getItem('amalaTasks_v2')) || masterTasks;
+let history = JSON.parse(localStorage.getItem('amalaHistory')) || [];
 
 function renderTasks() {
     const taskList = document.getElementById('task-list');
-    if (!taskList) return;
     taskList.innerHTML = '';
     
     tasks.forEach(task => {
@@ -49,32 +28,31 @@ function renderTasks() {
         div.className = `task-item ${task.done ? 'done' : ''}`;
         div.innerHTML = `
             <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
-            <span class="task-text">${task.text}</span>
-            <button class="delete-btn" onclick="deleteTask(${task.id})">✕</button>
+            <span>${task.text}</span>
+            <span class="info-btn" onclick="showInfo('${task.text}')">ⓘ</span>
+            <button onclick="deleteTask(${task.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer;">✕</button>
         `;
         taskList.appendChild(div);
     });
     
-    updateProgress();
-    updateGarden();
-    localStorage.setItem('amalaTasks_v2', JSON.stringify(tasks));
+    updateUI();
 }
 
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
-    if (task) {
-        task.done = !task.done;
-        if (task.done) {
-            const audio = document.getElementById('sound-success');
-            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-        }
-    }
+    task.done = !task.done;
+    if (task.done) document.getElementById('sound-success').play().catch(() => {});
     renderTasks();
+}
+
+function showInfo(taskName) {
+    const info = keutamaan[taskName] || keutamaan["default"];
+    alert(`Keutamaan: ${info}`);
 }
 
 function addTask() {
     const input = document.getElementById('new-task-input');
-    if (input && input.value.trim() !== "") {
+    if (input.value.trim()) {
         tasks.push({ id: Date.now(), text: input.value, done: false });
         input.value = "";
         renderTasks();
@@ -86,77 +64,70 @@ function deleteTask(id) {
     renderTasks();
 }
 
-function updateProgress() {
+function updateUI() {
+    // Progress
     const completed = tasks.filter(t => t.done).length;
-    const percent = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
-    const fill = document.getElementById('progress-fill');
-    const txt = document.getElementById('progress-percent');
-    if (fill) fill.style.width = percent + '%';
-    if (txt) txt.innerText = percent + '%';
-}
+    const percent = tasks.length ? Math.round((completed / tasks.length) * 100) : 0;
+    document.getElementById('progress-fill').style.width = percent + '%';
+    document.getElementById('progress-percent').innerText = percent + '%';
 
-function updateGarden() {
-    const completed = tasks.filter(t => t.done).length;
+    // Garden
     const plant = document.getElementById('plant-container');
-    const status = document.getElementById('garden-status');
-    if (!plant || !status) return;
+    if (percent === 0) plant.innerText = "🌱";
+    else if (percent < 50) plant.innerText = "🌿";
+    else if (percent < 100) plant.innerText = "🌳";
+    else plant.innerText = "🌸";
 
-    if (completed === 0) { plant.innerText = "🌱"; status.innerText = "Benih baru ditanam."; }
-    else if (completed <= 5) { plant.innerText = "🌿"; status.innerText = "Mulai tumbuh."; }
-    else if (completed < tasks.length) { plant.innerText = "🌳"; status.innerText = "Semakin rimbun!"; }
-    else { plant.innerText = "🌸"; status.innerText = "Luar biasa! Kebunmu berbunga."; }
+    // Stats
+    document.getElementById('total-days').innerText = history.length;
+    const totalPoints = history.reduce((sum, h) => sum + h.score, 0) + (percent);
+    document.getElementById('total-points').innerText = totalPoints;
+
+    // History
+    const histList = document.getElementById('history-list');
+    histList.innerHTML = history.length ? '<h4>Rekap 7 Hari Terakhir</h4>' : '';
+    history.slice(0, 7).forEach(h => {
+        const d = document.createElement('div');
+        d.className = 'history-item';
+        d.innerHTML = `<span>${h.date}</span><span>⭐ ${h.score}</span>`;
+        histList.appendChild(d);
+    });
+
+    localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
 
-function askName() {
-    const name = prompt("Siapa namamu?");
-    if (name) {
-        localStorage.setItem('amalaUserName', name);
-        displayGreeting();
-    }
-}
-
-function displayGreeting() {
-    const name = localStorage.getItem('amalaUserName');
-    const greetingElement = document.getElementById('user-greeting');
-    if (name && greetingElement) { 
-        greetingElement.innerText = `Assalamu'alaikum, ${name}! ✨`; 
+function resetDay() {
+    const completed = tasks.filter(t => t.done).length;
+    const score = Math.round((completed / tasks.length) * 100);
+    
+    if (confirm(`Simpan skor hari ini (${score}) dan reset checklist?`)) {
+        const today = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric' });
+        history.unshift({ date: today, score: score });
+        localStorage.setItem('amalaHistory', JSON.stringify(history));
+        
+        tasks.forEach(t => t.done = false);
+        renderTasks();
+        alert("Bintang disimpan! Mari mulai hari baru dengan semangat.");
     }
 }
 
 function toggleDarkMode() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('amalaTheme', newTheme);
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.innerText = newTheme === 'dark' ? '☀️' : '🌙';
+    const theme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('amalaTheme', theme);
+    document.getElementById('theme-toggle').innerText = theme === 'dark' ? '☀️' : '🌙';
 }
 
-function resetDay() {
-    if (confirm("Mulai hari baru?")) {
-        tasks.forEach(t => t.done = false);
-        renderTasks();
-    }
-}
-
+// Init
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('amalaTheme');
     if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
-        const btn = document.getElementById('theme-toggle');
-        if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+        document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
     }
-    
-    const savedName = localStorage.getItem('amalaUserName');
-    if (!savedName) { setTimeout(askName, 1000); } else { displayGreeting(); }
-    
-    const quoteTxt = document.getElementById('daily-quote');
-    const quoteSrc = document.getElementById('quote-source');
-    if (quoteTxt && quoteSrc) {
-        const randomIndex = Math.floor(Math.random() * quotes.length);
-        quoteTxt.innerText = `"${quotes[randomIndex].text}"`;
-        quoteSrc.innerText = `— ${quotes[randomIndex].source}`;
-    }
-    
+    const q = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('daily-quote').innerText = `"${q.text}"`;
+    document.getElementById('quote-source').innerText = `— ${q.source}`;
     renderTasks();
 });
