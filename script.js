@@ -1,4 +1,3 @@
-// Konfigurasi Kutipan
 const quotes = [
     { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari & Muslim" },
     { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" },
@@ -7,7 +6,6 @@ const quotes = [
     { text: "Jadikan sabar dan shalat sebagai penolongmu.", source: "Al-Baqarah: 45" }
 ];
 
-// Load Data Awal
 let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
     { id: 1, text: "Shalat Shubuh Berjamaah", done: false },
     { id: 2, text: "Shalat Dhuhur Berjamaah", done: false },
@@ -30,7 +28,6 @@ let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
     { id: 19, text: "Membaca Shalawat", done: false }
 ];
 
-// Render Halaman
 function renderTasks() {
     const taskList = document.getElementById('task-list');
     if (!taskList) return;
@@ -52,17 +49,13 @@ function renderTasks() {
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
 
-// Logika Interaksi
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
     if (task) {
         task.done = !task.done;
         if (task.done) {
             const audio = document.getElementById('sound-success');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(e => console.log("Audio blocked"));
-            }
+            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         }
     }
     renderTasks();
@@ -85,22 +78,18 @@ function deleteTask(id) {
 function updateProgress() {
     const completed = tasks.filter(t => t.done).length;
     const percent = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
-    const fill = document.getElementById('progress-fill');
-    const txt = document.getElementById('progress-percent');
-    if (fill) fill.style.width = percent + '%';
-    if (txt) txt.innerText = percent + '%';
+    document.getElementById('progress-fill').style.width = percent + '%';
+    document.getElementById('progress-percent').innerText = percent + '%';
 }
 
 function updateGarden() {
     const completed = tasks.filter(t => t.done).length;
     const plant = document.getElementById('plant-container');
     const status = document.getElementById('garden-status');
-    if (!plant || !status) return;
-
-    if (completed === 0) { plant.innerText = "🌱"; status.innerText = "Benihmu baru saja ditanam."; }
-    else if (completed <= 5) { plant.innerText = "🌿"; status.innerText = "Kebunmu mulai bertumbuh."; }
-    else if (completed < tasks.length) { plant.innerText = "🌳"; status.innerText = "MasyaAllah, rimbun sekali!"; }
-    else { plant.innerText = "🌸"; status.innerText = "Luar biasa! Kebunmu berbunga."; }
+    if (completed === 0) { plant.innerText = "🌱"; status.innerText = "Benih baru ditanam."; }
+    else if (completed <= 5) { plant.innerText = "🌿"; status.innerText = "Mulai tumbuh."; }
+    else if (completed < tasks.length) { plant.innerText = "🌳"; status.innerText = "Semakin rimbun!"; }
+    else { plant.innerText = "🌸"; status.innerText = "Kebunmu berbunga!"; }
 }
 
 function toggleDarkMode() {
@@ -108,8 +97,7 @@ function toggleDarkMode() {
     const newTheme = isDark ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('amalaTheme', newTheme);
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.innerText = newTheme === 'dark' ? '☀️' : '🌙';
+    document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '☀️' : '🌙';
 }
 
 function resetDay() {
@@ -123,8 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('amalaTheme');
     if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
-        const btn = document.getElementById('theme-toggle');
-        if (btn) btn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+        document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
     }
     const randomIndex = Math.floor(Math.random() * quotes.length);
     document.getElementById('daily-quote').innerText = `"${quotes[randomIndex].text}"`;
