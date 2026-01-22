@@ -1,16 +1,20 @@
+// 1. DATA KUTIPAN & KEUTAMAAN AMAL
 const quotes = [
     { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari" },
     { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" },
-    { text: "Satu langkah kecil adalah awal perjalanan besar.", source: "Amala" }
+    { text: "Satu langkah kecil adalah awal perjalanan besar.", source: "Amala" },
+    { text: "Tumbuhlah lebih baik dari dirimu yang kemarin.", source: "Amala" }
 ];
 
 const keutamaan = {
-    "Shalat Tepat Waktu": "Cahaya di hari kiamat dan pembeda mukmin.",
-    "Sedekah Subuh": "Didoakan malaikat setiap pagi.",
-    "Membaca Al-Qur'an": "Satu hurufnya sepuluh kebaikan.",
-    "default": "Kebaikan yang mendatangkan ketenangan hati."
+    "Shalat Tepat Waktu": "Cahaya di hari kiamat dan pembeda mukmin. (HR. Ahmad)",
+    "Sedekah Subuh": "Dua malaikat berdoa: 'Ya Allah, berikan ganti bagi yang berinfak'. (HR. Bukhari)",
+    "Membaca Al-Qur'an 1 Halaman": "Satu hurufnya sepuluh kebaikan. (HR. Tirmidzi)",
+    "Tersenyum": "Senyummu di hadapan saudaramu adalah sedekah. (HR. Tirmidzi)",
+    "default": "Kebaikan kecil yang istiqomah sangat dicintai Allah."
 };
 
+// 2. LOAD DATA DARI STORAGE
 let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
     { id: 1, text: "Shalat Tepat Waktu", done: false },
     { id: 2, text: "Sedekah Subuh", done: false },
@@ -19,8 +23,10 @@ let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || [
 
 let history = JSON.parse(localStorage.getItem('amalaHistory')) || [];
 
+// 3. FUNGSI TAMPILAN (RENDER)
 function renderTasks() {
     const taskList = document.getElementById('task-list');
+    if(!taskList) return;
     taskList.innerHTML = '';
     
     tasks.forEach(task => {
@@ -29,7 +35,7 @@ function renderTasks() {
         div.innerHTML = `
             <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
             <span>${task.text}</span>
-            <span class="info-btn" onclick="showInfo('${task.text}')">ⓘ</span>
+            <span class="info-btn" onclick="showInfo('${task.text}')" style="cursor:pointer; margin-left:8px; color:#89a894">ⓘ</span>
             <button onclick="deleteTask(${task.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer;">✕</button>
         `;
         taskList.appendChild(div);
@@ -41,7 +47,10 @@ function renderTasks() {
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
     task.done = !task.done;
-    if (task.done) document.getElementById('sound-success').play().catch(() => {});
+    if (task.done) {
+        const sound = document.getElementById('sound-success');
+        if(sound) { sound.currentTime = 0; sound.play().catch(() => {}); }
+    }
     renderTasks();
 }
 
@@ -52,7 +61,7 @@ function showInfo(taskName) {
 
 function addTask() {
     const input = document.getElementById('new-task-input');
-    if (input.value.trim()) {
+    if (input && input.value.trim()) {
         tasks.push({ id: Date.now(), text: input.value, done: false });
         input.value = "";
         renderTasks();
@@ -65,69 +74,31 @@ function deleteTask(id) {
 }
 
 function updateUI() {
-    // Progress
     const completed = tasks.filter(t => t.done).length;
     const percent = tasks.length ? Math.round((completed / tasks.length) * 100) : 0;
+    
     document.getElementById('progress-fill').style.width = percent + '%';
     document.getElementById('progress-percent').innerText = percent + '%';
 
-    // Garden
     const plant = document.getElementById('plant-container');
-    if (percent === 0) plant.innerText = "🌱";
-    else if (percent < 50) plant.innerText = "🌿";
-    else if (percent < 100) plant.innerText = "🌳";
-    else plant.innerText = "🌸";
+    const status = document.getElementById('garden-status');
+    if (percent === 0) { plant.innerText = "🌱"; status.innerText = "Siap beramal?"; }
+    else if (percent < 50) { plant.innerText = "🌿"; status.innerText = "Terus bertumbuh!"; }
+    else if (percent < 100) { plant.innerText = "🌳"; status.innerText = "Hampir berbunga!"; }
+    else { plant.innerText = "🌸"; status.innerText = "Luar biasa!"; }
 
-    // Stats
     document.getElementById('total-days').innerText = history.length;
     const totalPoints = history.reduce((sum, h) => sum + h.score, 0) + (percent);
     document.getElementById('total-points').innerText = totalPoints;
 
-    // History
     const histList = document.getElementById('history-list');
-    histList.innerHTML = history.length ? '<h4>Rekap 7 Hari Terakhir</h4>' : '';
+    histList.innerHTML = history.length ? '<h4 style="margin:10px 0 5px">7 Hari Terakhir</h4>' : '';
     history.slice(0, 7).forEach(h => {
         const d = document.createElement('div');
         d.className = 'history-item';
+        d.style = "display:flex; justify-content:space-between; font-size:0.8rem; border-bottom:1px solid #eee; padding:4px 0";
         d.innerHTML = `<span>${h.date}</span><span>⭐ ${h.score}</span>`;
         histList.appendChild(d);
     });
 
-    localStorage.setItem('amalaTasks', JSON.stringify(tasks));
-}
-
-function resetDay() {
-    const completed = tasks.filter(t => t.done).length;
-    const score = Math.round((completed / tasks.length) * 100);
-    
-    if (confirm(`Simpan skor hari ini (${score}) dan reset checklist?`)) {
-        const today = new Date().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric' });
-        history.unshift({ date: today, score: score });
-        localStorage.setItem('amalaHistory', JSON.stringify(history));
-        
-        tasks.forEach(t => t.done = false);
-        renderTasks();
-        alert("Bintang disimpan! Mari mulai hari baru dengan semangat.");
-    }
-}
-
-function toggleDarkMode() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const theme = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('amalaTheme', theme);
-    document.getElementById('theme-toggle').innerText = theme === 'dark' ? '☀️' : '🌙';
-}
-
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('amalaTheme');
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
-    }
-    const q = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById('daily-quote').innerText = `"${q.text}"`;
-    document.getElementById('quote-source').innerText = `— ${q.source}`;
-    renderTasks();
-});
+    localStorage.setItem('am
