@@ -6,14 +6,15 @@
     <title>AMALA - Tumbuh Lebih Baik</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+      }
+    </script>
 </head>
-    <div id="toast-container"></div>
 <body>
+    <div id="toast-container"></div>
+
     <div class="app-container">
         <header>
             <button id="theme-toggle" onclick="toggleDarkMode()">🌙</button>
@@ -61,18 +62,12 @@
 
         <section class="task-section">
             <h3>Checklist Kebaikan</h3>
-            <div class="add-task-container">
-                <input type="text" id="new-task-input" placeholder="Tulis niat baikmu...">
-                <button onclick="addTask()">Tambah</button>
-            </div>
             <div id="task-list"></div>
             <button id="reset-btn" onclick="resetDay()">Selesaikan Hari Ini & Simpan Rekap</button>
         </section>
     </div>
 
-    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+    <audio id="sound-success" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
     <script src="script.js"></script>
 </body>
 </html>
-
-
