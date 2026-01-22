@@ -12,7 +12,7 @@
     --card-bg: #2d302d;
     --text-main: #e0e0e0;
     --text-sub: #a0a0a0;
-    --border-color: #444;
+    --border-color: #3d423d;
 }
 
 body {
@@ -22,51 +22,39 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
-    transition: background 0.3s ease;
+    transition: 0.3s;
 }
 
-.app-container { width: 100%; max-width: 400px; padding: 20px; min-height: 100vh; }
-header { text-align: center; margin-bottom: 20px; position: relative; }
-h1 { color: var(--primary-green); letter-spacing: 2px; margin: 0; }
-#theme-toggle { position: absolute; top: 0; right: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
-.tagline { font-size: 0.9rem; margin: 5px 0; }
+.app-container { width: 100%; max-width: 450px; padding: 20px; }
 
-.quote-card, .progress-section, .garden-section {
-    background: var(--card-bg); padding: 15px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
+header { text-align: center; position: relative; margin-bottom: 20px; }
+h1 { color: var(--primary-green); margin: 0; letter-spacing: 2px; }
+#theme-toggle { position: absolute; right: 0; top: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+
+.quote-card { background: var(--card-bg); padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-green); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; }
+
+.dashboard-grid { display: grid; grid-template-columns: 1fr 120px; gap: 10px; margin-bottom: 20px; }
+.progress-section, .garden-section, .stats-section { background: var(--card-bg); padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
 .progress-bar { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: width 0.5s ease; }
+#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: 0.5s; }
 
-.garden-section { text-align: center; border: 2px dashed var(--primary-green); }
-#plant-container { font-size: 60px; margin: 10px 0; }
+#plant-container { font-size: 45px; text-align: center; }
+#garden-status { font-size: 0.7rem; text-align: center; color: var(--text-sub); margin: 5px 0 0; }
+
+.stats-grid { display: flex; gap: 10px; margin-bottom: 10px; }
+.stat-card { flex: 1; background: var(--bg-color); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid var(--border-color); }
+.stat-value { display: block; font-size: 1.2rem; font-weight: bold; color: var(--primary-green); }
+.stat-label { font-size: 0.7rem; color: var(--text-sub); }
+
+.history-item { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
 
 .add-task-container { display: flex; gap: 10px; margin-bottom: 15px; }
-#new-task-input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); outline: none; }
-.add-task-container button { background: var(--primary-green); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; }
+#new-task-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); }
+.add-task-container button { background: var(--primary-green); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-/* FIX POSISI TOMBOL HAPUS */
-.task-item {
-    display: flex !important;
-    align-items: center !important;
-    background: var(--card-bg);
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    border: 1px solid var(--border-color);
-}
-
-.task-text {
-    flex-grow: 1 !important;
-    margin-left: 12px;
-    margin-right: 10px;
-    font-size: 0.95rem;
-}
-
-.delete-btn {
-    background: none; border: none; color: #ff4444; font-weight: bold; font-size: 1.2rem; cursor: pointer; padding: 5px;
-}
-
+.task-item { background: var(--card-bg); padding: 12px; border-radius: 12px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color); }
 .task-item.done { opacity: 0.5; text-decoration: line-through; }
+.info-btn { margin-left: 8px; color: var(--primary-green); cursor: pointer; font-size: 0.9rem; }
 
-#reset-btn { width: 100%; padding: 12px; background: none; border: 2px solid var(--primary-green); color: var(--primary-green); border-radius: 10px; font-weight: bold; margin-top: 10px; }
+#reset-btn { width: 100%; padding: 15px; background: var(--primary-green); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 20px; }
