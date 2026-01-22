@@ -36,7 +36,7 @@ function showToast(msg) {
     toast.className = 'toast';
     toast.innerText = msg;
     container.appendChild(toast);
-    setTimeout(() => { toast.remove(); }, 3000);
+    setTimeout(() => { toast.remove(); }, 3500);
 }
 
 function toggleTask(id) {
@@ -52,6 +52,27 @@ function toggleTask(id) {
     renderTasks();
 }
 
+function addTask() {
+    const input = document.getElementById('new-task-input');
+    if (input && input.value.trim() !== "") {
+        const newTask = {
+            id: Date.now(),
+            text: input.value.trim(),
+            done: false
+        };
+        tasks.push(newTask);
+        input.value = "";
+        renderTasks();
+    }
+}
+
+function deleteTask(id) {
+    if(confirm("Hapus amalan ini?")) {
+        tasks = tasks.filter(t => t.id !== id);
+        renderTasks();
+    }
+}
+
 function renderTasks() {
     const list = document.getElementById('task-list');
     if(!list) return;
@@ -62,12 +83,17 @@ function renderTasks() {
         localStorage.setItem('amalaUserName', userName);
     }
     
-    document.querySelector('.tagline').innerText = "Semangat, " + userName + "!";
+    const tagline = document.querySelector('.tagline');
+    if(tagline) tagline.innerText = "Semangat, " + userName + "!";
 
     tasks.forEach(t => {
         const div = document.createElement('div');
         div.className = "task-item " + (t.done ? "done" : "");
-        div.innerHTML = '<input type="checkbox" ' + (t.done ? "checked" : "") + ' onchange="toggleTask(' + t.id + ')"><span>' + t.text + '</span>';
+        div.innerHTML = `
+            <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})">
+            <span>${t.text}</span>
+            <button class="delete-btn" onclick="deleteTask(${t.id})" style="margin-left:auto; background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:1.2rem;">✕</button>
+        `;
         list.appendChild(div);
     });
     updateUI();
@@ -75,21 +101,28 @@ function renderTasks() {
 
 function updateUI() {
     const done = tasks.filter(t => t.done).length;
-    const percent = Math.round((done / tasks.length) * 100) || 0;
-    document.getElementById('progress-fill').style.width = percent + '%';
-    document.getElementById('progress-percent').innerText = percent + '%';
-    document.getElementById('total-days').innerText = history.length;
-    const points = history.reduce((s, h) => s + h.score, 0) + percent;
-    document.getElementById('total-points').innerText = points;
+    const percent = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
+    
+    const fill = document.getElementById('progress-fill');
+    if(fill) fill.style.width = percent + '%';
+    
+    const txtPercent = document.getElementById('progress-percent');
+    if(txtPercent) txtPercent.innerText = percent + '%';
+
+    const pts = history.reduce((s, h) => s + h.score, 0) + percent;
+    const txtPoints = document.getElementById('total-points');
+    if(txtPoints) txtPoints.innerText = pts;
+
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
 
 function resetDay() {
-    if(confirm("Simpan rekap hari ini?")) {
-        const score = Math.round((tasks.filter(t => t.done).length / tasks.length) * 100);
+    if(confirm("Simpan rekap dan mulai hari baru?")) {
+        const done = tasks.filter(t => t.done).length;
+        const score = Math.round((done / tasks.length) * 100);
         history.unshift({ date: new Date().toLocaleDateString(), score: score });
         localStorage.setItem('amalaHistory', JSON.stringify(history));
-        tasks = defaultTasks.map(t => ({...t, done: false}));
+        tasks = tasks.map(t => ({...t, done: false}));
         renderTasks();
     }
 }
