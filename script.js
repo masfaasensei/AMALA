@@ -1,14 +1,9 @@
-// 1. DATA MASTER
-const quotes = [
-    { text: "Amalan yang paling dicintai Allah adalah yang rutin meskipun sedikit.", source: "HR. Bukhari" },
-    { text: "Jangan meremehkan kebaikan sekecil apa pun.", source: "HR. Muslim" }
-];
-
 const keutamaan = {
     "Shalat Shubuh Berjamaah": "Mendapat jaminan perlindungan Allah sepanjang hari.",
     "Shalat Tahajud/Witir": "Waktu paling mustajab dan kemuliaan bagi seorang mukmin.",
-    "Sedekah Subuh": "Dua malaikat mendoakan ganti bagi yang berinfak.",
+    "Sedekah Subuh": "Dua malaikat mendoakan ganti yang berlipat bagi yang berinfak.",
     "Membaca Al-Qur'an (Min. 1 Halaman)": "Setiap satu hurufnya bernilai sepuluh kebaikan.",
+    "Membaca Al-Mulk (Sebelum Tidur)": "Penyelamat dan penghalang dari siksa kubur.",
     "default": "Amalan istiqomah sangat dicintai Allah."
 };
 
@@ -34,96 +29,76 @@ const defaultTasks = [
     { id: 19, text: "Memberi Salam/Senyum", done: false }
 ];
 
-// LOAD DATA
 let tasks = JSON.parse(localStorage.getItem('amalaTasks')) || defaultTasks;
 let history = JSON.parse(localStorage.getItem('amalaHistory')) || [];
 let userName = localStorage.getItem('amalaUserName') || "";
 
-// FUNGSI TOAST (PESAN MELAYANG)
 function showToast(message) {
     const container = document.getElementById('toast-container');
-    if(container) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerText = message;
-        container.appendChild(toast);
-        setTimeout(() => { toast.remove(); }, 3500);
-    }
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+    container.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 3500);
 }
 
-// FUNGSI TOGGLE (KLIK CENTANG)
 function toggleTask(id) {
     const task = tasks.find(t => t.id === id);
-    if (!task) return;
     task.done = !task.done;
-    
     if (task.done) {
-        const audio = document.getElementById('sound-success');
-        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-        
-        const infoHadits = keutamaan[task.text] || keutamaan["default"];
-        showToast(`MasyaAllah! ✨\n${infoHadits}`);
+        document.getElementById('sound-success').play().catch(()=>{});
+        const msg = keutamaan[task.text] || keutamaan["default"];
+        showToast(`MasyaAllah! ✨\nKeutamaan: ${msg}`);
     }
     renderTasks();
 }
 
-// RENDER TAMPILAN
 function renderTasks() {
-    const taskList = document.getElementById('task-list');
-    if(!taskList) return;
-    taskList.innerHTML = '';
+    const list = document.getElementById('task-list');
+    list.innerHTML = '';
     
-    // Cek Nama
     if (!userName) {
         userName = prompt("Siapa namamu?") || "Hamba Allah";
         localStorage.setItem('amalaUserName', userName);
     }
     document.querySelector('.tagline').innerText = `Semangat beramal, ${userName}!`;
 
-    tasks.forEach(task => {
+    tasks.forEach(t => {
         const div = document.createElement('div');
-        div.className = `task-item ${task.done ? 'done' : ''}`;
+        div.className = `task-item ${t.done ? 'done' : ''}`;
         div.innerHTML = `
-            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
-            <span>${task.text}</span>
-            <span class="info-btn" onclick="alert('${keutamaan[task.text] || keutamaan['default']}')">ⓘ</span>
+            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${t.id})">
+            <span>${t.text}</span>
         `;
-        taskList.appendChild(div);
+        list.appendChild(div);
     });
-    
     updateUI();
 }
 
 function updateUI() {
-    const completed = tasks.filter(t => t.done).length;
-    const percent = tasks.length ? Math.round((completed / tasks.length) * 100) : 0;
-    
+    const done = tasks.filter(t => t.done).length;
+    const percent = Math.round((done / tasks.length) * 100);
     document.getElementById('progress-fill').style.width = percent + '%';
     document.getElementById('progress-percent').innerText = percent + '%';
-
     document.getElementById('total-days').innerText = history.length;
-    const points = history.reduce((sum, h) => sum + h.score, 0) + percent;
-    document.getElementById('total-points').innerText = points;
-
+    const pts = history.reduce((s, h) => s + h.score, 0) + percent;
+    document.getElementById('total-points').innerText = pts;
     localStorage.setItem('amalaTasks', JSON.stringify(tasks));
 }
 
 function resetDay() {
-    if (confirm("Simpan rekap dan mulai hari baru?")) {
+    if(confirm("Selesaikan hari ini dan simpan rekap?")) {
         const score = Math.round((tasks.filter(t => t.done).length / tasks.length) * 100);
-        history.unshift({ date: new Date().toLocaleDateString('id-ID'), score: score });
+        history.unshift({ date: new Date().toLocaleDateString(), score: score });
         localStorage.setItem('amalaHistory', JSON.stringify(history));
-        
         tasks = defaultTasks.map(t => ({...t, done: false}));
         renderTasks();
     }
 }
 
-// DARK MODE
 function toggleDarkMode() {
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('amalaTheme', theme);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
 }
 
 document.addEventListener('DOMContentLoaded', renderTasks);
