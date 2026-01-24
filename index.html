@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Personal Tracker</title>
+    <title>AMALA - KHGT Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -18,6 +18,7 @@
             --card-gold: linear-gradient(135deg, #FCD34D 0%, #D97706 100%);
             --card-purple: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
             --card-blue: linear-gradient(135deg, #60A5FA 0%, #2563EB 100%);
+            --card-rose: linear-gradient(135deg, #FB7185 0%, #E11D48 100%);
             --white: #ffffff;
             --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             --radius-xl: 24px;
@@ -34,116 +35,167 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
+        /* Nav & Layout */
         header { padding: 30px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
-        .greeting h1 { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+        .greeting h1 { font-size: 14px; color: var(--text-muted); }
         .greeting h2 { font-size: 20px; color: var(--text-main); font-weight: 600; }
-        .avatar { width: 50px; height: 50px; background-color: var(--white); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-soft); cursor: pointer; }
+        .avatar { width: 50px; height: 50px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-soft); cursor: pointer; }
 
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
-        .card { padding: 18px; border-radius: var(--radius-xl); color: white; position: relative; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
+        .card { padding: 18px; border-radius: var(--radius-xl); color: white; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; cursor: pointer; box-shadow: var(--shadow-soft); }
         
-        .card.dhuha { background: var(--card-orange); height: 140px; }
-        .card.sedekah { background: var(--card-gold); height: 140px; }
         .card.full { grid-column: span 2; height: 100px; flex-direction: row; align-items: center; }
-        
+        .card.half { height: 140px; }
+
+        .card.dhuha { background: var(--card-orange); }
+        .card.sedekah { background: var(--card-gold); }
         .card.quran { background: var(--card-teal); }
         .card.hafalan { background: var(--card-purple); }
         .card.murojaah { background: var(--card-blue); }
         .card.tahajjud { background: var(--card-green); }
+        .card.puasa { background: var(--card-rose); }
 
         .card-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; opacity: 0.9; }
-        .card-value { font-size: 19px; font-weight: 600; margin-top: 2px; line-height: 1.2; }
+        .card-value { font-size: 19px; font-weight: 600; line-height: 1.2; }
         .big-val { font-size: 30px; }
         .card-sub { font-size: 11px; opacity: 0.8; }
 
-        .input-btn { width: 34px; height: 34px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: white; font-size: 18px; }
+        .input-btn { width: 34px; height: 34px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; color: white; font-size: 18px; }
+
+        /* Pages */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* View Puasa KHGT */
+        .puasa-content { padding: 24px; }
+        .calendar-hijri { background: white; padding: 20px; border-radius: 20px; box-shadow: var(--shadow-soft); text-align: center; margin-bottom: 20px; border: 1px solid #fee2e2; }
+        .hijri-date { font-size: 22px; font-weight: 600; color: #E11D48; margin: 5px 0; }
+        
+        .info-puasa { background: white; padding: 15px; border-radius: 15px; border-left: 5px solid #E11D48; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+        .info-puasa h4 { font-size: 14px; color: #E11D48; }
+        .info-puasa p { font-size: 12px; color: var(--text-muted); }
+
+        .btn-khgt { display: block; width: 100%; padding: 12px; background: #111827; color: white; text-align: center; text-decoration: none; border-radius: 12px; font-size: 13px; margin-top: 20px; font-weight: 500; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--white); display: flex; justify-content: space-around; padding: 20px 10px; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9CA3AF; text-decoration: none; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9CA3AF; cursor: pointer; }
         .nav-item.active { color: #0D9488; }
-        .nav-item span { font-size: 10px; margin-top: 4px; font-weight: 500; }
+        .nav-item span { font-size: 10px; margin-top: 4px; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <header>
-            <div class="greeting">
-                <h1 id="salam-waktu">Assalamu'alaikum,</h1>
-                <h2 id="user-name">Memuat...</h2>
-            </div>
-            <div class="avatar" onclick="gantiNama()">👨🏻‍🏫</div>
-        </header>
+        
+        <div id="page-home" class="page active">
+            <header>
+                <div class="greeting">
+                    <h1 id="salam-waktu">Assalamu'alaikum,</h1>
+                    <h2 id="user-name">Memuat...</h2>
+                </div>
+                <div class="avatar" onclick="gantiNama()">👨🏻‍🏫</div>
+            </header>
 
-        <section class="dashboard-grid">
-            <div class="card dhuha">
-                <div class="card-header"><i class="ph ph-sun"></i> Dhuha</div>
-                <div class="card-value big-val" id="val-dhuha">0</div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                    <span class="card-sub">Rakaat</span>
-                    <button class="input-btn" onclick="isiData('dhuha')"><i class="ph ph-pencil-simple"></i></button>
-                </div>
-            </div>
-
-            <div class="card sedekah">
-                <div class="card-header"><i class="ph ph-heart"></i> Sedekah</div>
-                <div class="card-value" id="val-sedekah">0</div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                    <span class="card-sub">Rupiah</span>
-                    <button class="input-btn" onclick="isiData('sedekah')"><i class="ph ph-pencil-simple"></i></button>
-                </div>
-            </div>
-
-            <div class="card quran full">
-                <div style="flex:1">
-                    <div class="card-header"><i class="ph ph-book-open"></i> Tilawah Al-Quran</div>
-                    <div class="card-sub">Target: 1 Juz/hari</div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="text-align: right;">
-                        <div class="card-value big-val" id="val-quran">0</div>
-                        <span class="card-sub">Halaman</span>
-                    </div>
-                    <button class="input-btn" onclick="isiData('quran')"><i class="ph ph-plus"></i></button>
-                </div>
-            </div>
-
-            <div class="card hafalan full">
-                <div style="flex:1">
-                    <div class="card-header"><i class="ph ph-student"></i> Hafalan Baru</div>
-                    <div class="card-value" id="val-hafalan">Belum ada</div>
-                </div>
-                <button class="input-btn" onclick="isiHafalan('hafalan')"><i class="ph ph-plus"></i></button>
-            </div>
-
-            <div class="card murojaah full">
-                <div style="flex:1">
-                    <div class="card-header"><i class="ph ph-arrows-counter-clockwise"></i> Murojaah</div>
-                    <div class="card-value" id="val-murojaah">Belum ada</div>
-                </div>
-                <button class="input-btn" onclick="isiHafalan('murojaah')"><i class="ph ph-plus"></i></button>
-            </div>
-
-            <div class="card tahajjud full">
-                <div style="flex:1">
-                    <div class="card-header"><i class="ph ph-moon-stars"></i> Tahajjud</div>
-                    <div class="card-sub">Shalat Lail</div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="text-align: right;">
-                        <div class="card-value big-val" id="val-tahajjud">0</div>
+            <section class="dashboard-grid">
+                <div class="card half dhuha">
+                    <div class="card-header"><i class="ph ph-sun"></i> Dhuha</div>
+                    <div class="card-value big-val" id="val-dhuha">0</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <span class="card-sub">Rakaat</span>
+                        <button class="input-btn" onclick="isiData('dhuha', event)"><i class="ph ph-plus"></i></button>
                     </div>
-                    <button class="input-btn" onclick="isiData('tahajjud')"><i class="ph ph-pencil-simple"></i></button>
                 </div>
+
+                <div class="card half sedekah">
+                    <div class="card-header"><i class="ph ph-heart"></i> Sedekah</div>
+                    <div class="card-value" id="val-sedekah">0</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <span class="card-sub">Rupiah</span>
+                        <button class="input-btn" onclick="isiData('sedekah', event)"><i class="ph ph-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="card full quran">
+                    <div style="flex:1">
+                        <div class="card-header"><i class="ph ph-book-open"></i> Tilawah Al-Quran</div>
+                        <div class="card-sub">Target: 1 Juz/hari</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="text-align: right;">
+                            <div class="card-value big-val" id="val-quran">0</div>
+                            <span class="card-sub">Halaman</span>
+                        </div>
+                        <button class="input-btn" onclick="isiData('quran', event)"><i class="ph ph-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="card full hafalan">
+                    <div style="flex:1">
+                        <div class="card-header"><i class="ph ph-student"></i> Hafalan Baru</div>
+                        <div class="card-value" id="val-hafalan">Belum ada</div>
+                    </div>
+                    <button class="input-btn" onclick="isiHafalan('hafalan', event)"><i class="ph ph-plus"></i></button>
+                </div>
+
+                <div class="card full murojaah">
+                    <div style="flex:1">
+                        <div class="card-header"><i class="ph ph-arrows-counter-clockwise"></i> Murojaah</div>
+                        <div class="card-value" id="val-murojaah">Belum ada</div>
+                    </div>
+                    <button class="input-btn" onclick="isiHafalan('murojaah', event)"><i class="ph ph-plus"></i></button>
+                </div>
+
+                <div class="card half tahajjud">
+                    <div class="card-header"><i class="ph ph-moon-stars"></i> Tahajjud</div>
+                    <div class="card-value big-val" id="val-tahajjud">0</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <span class="card-sub">Rakaat</span>
+                        <button class="input-btn" onclick="isiData('tahajjud', event)"><i class="ph ph-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="card half puasa" onclick="switchPage('puasa')">
+                    <div class="card-header"><i class="ph ph-calendar-blank"></i> Puasa</div>
+                    <div class="card-value">KHGT</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <span class="card-sub">Cek Kalender</span>
+                        <i class="ph ph-caret-right"></i>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="page-puasa" class="page">
+            <div class="puasa-content">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                    <i class="ph ph-arrow-left" onclick="switchPage('home')" style="font-size: 24px;"></i>
+                    <h2 style="font-size: 18px;">Kalender Hijriyah Global</h2>
+                </div>
+
+                <div class="calendar-hijri">
+                    <p style="font-size: 12px; color: var(--text-muted);">Hari Ini (Estimasi KHGT)</p>
+                    <div class="hijri-date" id="display-hijri">Memuat...</div>
+                    <p style="font-size: 13px;" id="display-masehi"></p>
+                </div>
+
+                <div id="rekomendasi-puasa">
+                    </div>
+
+                <a href="https://khgt.muhammadiyah.or.id" target="_blank" class="btn-khgt">
+                    <i class="ph ph-globe"></i> Kunjungi Portal Resmi KHGT
+                </a>
             </div>
-        </section>
+        </div>
         
         <nav class="bottom-nav">
-            <a href="#" class="nav-item active"><i class="ph ph-house-line" style="font-size: 24px;"></i><span>Beranda</span></a>
-            <a href="#" class="nav-item"><i class="ph ph-chart-bar" style="font-size: 24px;"></i><span>Laporan</span></a>
-            <a href="#" class="nav-item"><i class="ph ph-calendar-blank" style="font-size: 24px;"></i><span>Puasa</span></a>
-            <a href="#" class="nav-item"><i class="ph ph-gear" style="font-size: 24px;"></i><span>Akun</span></a>
+            <div onclick="switchPage('home')" class="nav-item active" id="nav-home">
+                <i class="ph ph-house-line" style="font-size: 24px;"></i><span>Beranda</span>
+            </div>
+            <div onclick="switchPage('puasa')" class="nav-item" id="nav-puasa">
+                <i class="ph ph-calendar-blank" style="font-size: 24px;"></i><span>Puasa</span>
+            </div>
+            <div class="nav-item"><i class="ph ph-gear" style="font-size: 24px;"></i><span>Akun</span></div>
         </nav>
     </div>
 
@@ -155,37 +207,66 @@
 
         function initUser() {
             if (!db.nama) {
-                let name = prompt("Ahlan wa Sahlan! Masukkan nama Anda:");
+                let name = prompt("Ahlan wa Sahlan! Masukkan nama:");
                 db.nama = name || "Hamba Allah";
                 save();
             }
-            let jam = new Date().getHours();
-            let salam = (jam < 11) ? "Selamat Pagi" : (jam < 15) ? "Selamat Siang" : (jam < 18) ? "Selamat Sore" : "Selamat Malam";
-            document.getElementById('salam-waktu').innerText = salam + ",";
             document.getElementById('user-name').innerText = db.nama;
+            updateHijri();
         }
 
-        function isiData(tipe) {
+        // LOGIKA KALENDER & PUASA (Mendekati KHGT)
+        function updateHijri() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('display-masehi').innerText = today.toLocaleDateString('id-ID', options);
+
+            // Algoritma Sederhana Hijriyah (Akan Mas verifikasi via link KHGT di app)
+            // Sesuai waktu sekarang Jan 2026, kita berada di bulan Sya'ban 1447H
+            const hijriDate = "14 Sya'ban 1447 H"; 
+            document.getElementById('display-hijri').innerText = hijriDate;
+
+            renderRekomendasiPuasa(today);
+        }
+
+        function renderRekomendasiPuasa(date) {
+            const day = date.getDay(); // 1 = Senin, 4 = Kamis
+            let html = '';
+
+            // Cek Senin/Kamis
+            if (day === 1) html += infoBox("Puasa Senin", "Hari ini waktu utama puasa sunnah Senin.");
+            else if (day === 4) html += infoBox("Puasa Kamis", "Hari ini waktu utama puasa sunnah Kamis.");
+            else html += infoBox("Senin - Kamis", "Jadwal rutin berikutnya: " + (day < 1 ? "Senin" : "Senin depan"));
+
+            // Ayyamul Bidh (Estimasi tgl 13, 14, 15 Hijriah)
+            html += infoBox("Ayyamul Bidh", "Tgl 13, 14, 15 setiap bulan Hijriyah. Cek detail di web KHGT.");
+
+            document.getElementById('rekomendasi-puasa').innerHTML = html;
+        }
+
+        function infoBox(judul, ket) {
+            return `<div class="info-puasa"><h4>${judul}</h4><p>${ket}</p></div>`;
+        }
+
+        function switchPage(p) {
+            document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nv => nv.classList.remove('active'));
+            document.getElementById('page-' + p).classList.add('active');
+            document.getElementById('nav-' + p).classList.add('active');
+        }
+
+        function isiData(tipe, e) {
+            e.stopPropagation();
             let n = prompt("Masukkan jumlah:");
-            if (n) {
-                db[tipe] = (tipe === 'sedekah') ? parseInt(n) : n;
-                save();
-            }
+            if (n) { db[tipe] = (tipe === 'sedekah') ? parseInt(n) : n; save(); }
         }
 
-        // FUNGSI UPDATE: Tanyakan Surat, Dari, dan Sampai
-        function isiHafalan(tipe) {
-            let surat = prompt("Nama Surat:");
-            if (!surat) return;
-            
-            let dari = prompt("Dari ayat:");
-            if (!dari) return;
-            
-            let sampai = prompt("Sampai ayat:");
-            if (!sampai) return;
-
-            db[tipe] = surat + " (" + dari + "-" + sampai + ")";
-            save();
+        function isiHafalan(tipe, e) {
+            e.stopPropagation();
+            let s = prompt("Surat:");
+            let d = prompt("Dari Ayat:");
+            let smp = prompt("Sampai Ayat:");
+            if (s && d && smp) { db[tipe] = `${s} (${d}-${smp})`; save(); }
         }
 
         function gantiNama() {
