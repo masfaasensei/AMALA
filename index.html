@@ -98,4 +98,128 @@
 
                 <div class="card full quran">
                     <div style="flex:1"><div class="card-header"><i class="ph ph-book-open"></i> Tilawah Al-Quran</div><div class="card-sub">Target: 1 Juz/hari</div></div>
-                    <div style="text-align: right; margin-right: 15px;"><div class="card-value big-val" id="
+                    <div style="text-align: right; margin-right: 15px;"><div class="card-value big-val" id="val-quran">0</div><span class="card-sub">Halaman</span></div>
+                    <button class="input-btn" onclick="isiData('quran', event)"><i class="ph ph-plus"></i></button>
+                </div>
+
+                <div class="card full hafalan">
+                    <div style="flex:1"><div class="card-header"><i class="ph ph-student"></i> Hafalan Baru</div><div class="card-value" id="val-hafalan">Belum ada</div></div>
+                    <button class="input-btn" onclick="isiHafalan('hafalan', event)"><i class="ph ph-plus"></i></button>
+                </div>
+
+                <div class="card full murojaah">
+                    <div style="flex:1"><div class="card-header"><i class="ph ph-arrows-counter-clockwise"></i> Murojaah</div><div class="card-value" id="val-murojaah">Belum ada</div></div>
+                    <button class="input-btn" onclick="isiHafalan('murojaah', event)"><i class="ph ph-plus"></i></button>
+                </div>
+
+                <div class="card half tahajjud">
+                    <div class="card-header"><i class="ph ph-moon-stars"></i> Tahajjud</div>
+                    <div class="card-value big-val" id="val-tahajjud">0</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;"><span class="card-sub">Rakaat</span><button class="input-btn" onclick="isiData('tahajjud', event)"><i class="ph ph-plus"></i></button></div>
+                </div>
+
+                <div class="card half puasa" onclick="switchPage('puasa')">
+                    <div class="card-header"><i class="ph ph-calendar-blank"></i> Puasa</div>
+                    <div class="card-value big-val" id="count-puasa">0</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;"><span class="card-sub">Hari di Jan 2026</span><i class="ph ph-caret-right"></i></div>
+                </div>
+            </section>
+        </div>
+
+        <div id="page-puasa" class="page">
+            <h2 style="margin-bottom: 20px; font-size: 18px;"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i> Kalender KHGT</h2>
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <strong style="font-size: 16px;">Januari 2026 / 1447 H</strong>
+                    <p style="font-size: 10px; color: #6B7280;">Klik tanggal untuk absen puasa</p>
+                </div>
+                <div class="calendar-grid" id="calendar-body">
+                    </div>
+            </div>
+            <div style="margin-top: 20px; font-size: 11px; color: #6B7280; line-height: 1.6;">
+                <p>💡 <strong>Info KHGT:</strong></p>
+                <p>• 22-24 Jan: Ayyamul Bidh (13-15 Sya'ban)</p>
+                <p>• Setiap Senin & Kamis: Puasa Sunnah</p>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <div onclick="switchPage('home')" class="nav-item active" id="nav-home"><i class="ph ph-house-line" style="font-size: 24px;"></i></div>
+            <div onclick="switchPage('puasa')" class="nav-item" id="nav-puasa"><i class="ph ph-calendar-blank" style="font-size: 24px;"></i></div>
+        </nav>
+    </div>
+
+    <script>
+        // Database
+        let db = JSON.parse(localStorage.getItem('amala_db')) || {
+            dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0, 
+            hafalan: "Belum ada", murojaah: "Belum ada", nama: "",
+            puasaDates: [] // Menyimpan tanggal masehi yang dipilih
+        };
+
+        // Inisialisasi Kalender KHGT Januari 2026
+        // 1 Januari 2026 jatuh pada hari Kamis
+        const jan2026 = [
+            {m: 1, h: 12}, {m: 2, h: 13}, {m: 3, h: 14}, {m: 4, h: 15}, {m: 5, h: 16}, {m: 6, h: 17}, {m: 7, h: 18},
+            {m: 8, h: 19}, {m: 9, h: 20}, {m: 10, h: 21}, {m: 11, h: 22}, {m: 12, h: 23}, {m: 13, h: 24}, {m: 14, h: 25},
+            {m: 15, h: 26}, {m: 16, h: 27}, {m: 17, h: 28}, {m: 18, h: 29}, {m: 19, h: 1}, {m: 20, h: 2}, {m: 21, h: 3},
+            {m: 22, h: 4}, {m: 23, h: 5}, {m: 24, h: 6}, {m: 25, h: 7}, {m: 26, h: 8}, {m: 27, h: 9}, {m: 28, h: 10},
+            {m: 29, h: 11}, {m: 30, h: 12}, {m: 31, h: 13}
+        ];
+
+        function buildCalendar() {
+            const grid = document.getElementById('calendar-body');
+            const dayNames = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+            grid.innerHTML = dayNames.map(d => `<div class="day-name">${d}</div>`).join('');
+            
+            // Padding kosong (Jan 2026 mulai Kamis = index 4)
+            for(let i=0; i<4; i++) grid.innerHTML += '<div></div>';
+
+            jan2026.forEach(day => {
+                const isFast = db.puasaDates.includes(day.m);
+                const isBidh = (day.h >= 13 && day.h <= 15);
+                grid.innerHTML += `
+                    <div class="date-cell ${isFast ? 'active-fast' : ''}" onclick="togglePuasa(${day.m})">
+                        ${day.m}
+                        <span class="hijri-small ${isBidh ? 'bidh-mark' : ''}">${day.h}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function togglePuasa(date) {
+            const index = db.puasaDates.indexOf(date);
+            if (index > -1) db.puasaDates.splice(index, 1);
+            else db.puasaDates.push(date);
+            save();
+            buildCalendar();
+        }
+
+        function switchPage(p) {
+            document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nv => nv.classList.remove('active'));
+            document.getElementById('page-' + p).classList.add('active');
+            document.getElementById('nav-' + p).classList.add('active');
+        }
+
+        function isiData(t, e) { e.stopPropagation(); let n = prompt("Jumlah:"); if(n) { db[t] = (t==='sedekah')?parseInt(n):n; save(); } }
+        function isiHafalan(t, e) { e.stopPropagation(); let s=prompt("Surat:"), d=prompt("Dari:"), m=prompt("Sampai:"); if(s&&d&&m){ db[t]=`${s} (${d}-${m})`; save(); } }
+        function gantiNama() { let n=prompt("Nama:", db.nama); if(n){ db.nama=n; save(); } }
+        function save() { localStorage.setItem('amala_db', JSON.stringify(db)); render(); }
+
+        function render() {
+            document.getElementById('val-dhuha').innerText = db.dhuha;
+            document.getElementById('val-tahajjud').innerText = db.tahajjud;
+            document.getElementById('val-quran').innerText = db.quran;
+            document.getElementById('val-sedekah').innerText = (db.sedekah || 0).toLocaleString('id-ID');
+            document.getElementById('val-hafalan').innerText = db.hafalan;
+            document.getElementById('val-murojaah').innerText = db.murojaah;
+            document.getElementById('count-puasa').innerText = db.puasaDates.length;
+            document.getElementById('user-name').innerText = db.nama || "Hamba Allah";
+        }
+
+        if(!db.nama) { db.nama = prompt("Masukkan Nama Anda:") || "Hamba Allah"; save(); }
+        buildCalendar(); render();
+    </script>
+</body>
+</html>
