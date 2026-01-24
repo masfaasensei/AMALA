@@ -3,165 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Statistik Puasa KHGT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>AMALA - Personal Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-green: #6B8E7B;
-            --dark-green: #2D5A41;
-            --bg-color: #F0F4F2;
-            --card-bg: #E3EDE7;
-            --text-main: #3D4E44;
-            --text-sub: #7F8C8D;
-            --border-color: #D1DED6;
-            --accent-gold: #D4AC0D;
+            --forest-deep: #1B4332;
+            --sage-medium: #74C69D;
+            --soft-mint: #D8F3DC;
+            --bg-neutral: #F8F9FA;
+            --text-dark: #2D3436;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0; padding-bottom: 120px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-neutral);
+            color: var(--text-dark);
+            margin: 0; padding-bottom: 100px;
             display: flex; justify-content: center;
         }
 
-        .app-container { width: 100%; max-width: 450px; padding: 20px; }
+        .app-container { width: 100%; max-width: 450px; padding: 25px; }
 
-        header { text-align: center; margin-bottom: 25px; }
-        h1 { font-family: 'Quicksand', sans-serif; color: var(--primary-green); margin: 0; letter-spacing: 2px; }
+        /* Header Style Baru */
+        header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .user-info h2 { font-family: 'Quicksand'; margin: 0; font-size: 1.3rem; }
+        .user-info p { margin: 0; font-size: 0.8rem; color: #636E72; }
+        .avatar { width: 45px; height: 45px; background: var(--sage-medium); border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        .overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:1000;
+        /* Dashboard Amalan */
+        .section-label { font-family: 'Quicksand'; font-weight: 700; font-size: 1rem; margin-bottom: 15px; display: block; color: var(--forest-deep); }
+        
+        /* Grid Amalan Berdasarkan Gambar */
+        .amalan-grid { display: flex; flex-direction: column; gap: 15px; }
+
+        /* Card Style - Menghindari kemiripan dengan gambar asli */
+        .amalan-card {
+            background: white; border-radius: 24px; padding: 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .modal {
-            background: var(--bg-color); padding: 20px; border-radius: 30px;
-            width: 90%; max-width: 400px; text-align: center;
-            max-height: 90vh; overflow-y: auto;
-        }
+        .amalan-card.active { border-left: 6px solid var(--forest-deep); background: #f0fdf4; }
 
-        /* Kalender */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 15px 0; }
-        .cal-day { 
-            font-size: 0.8rem; padding: 10px 0; border-radius: 12px; 
-            background: #fff; cursor: pointer; transition: 0.2s; position: relative;
-        }
-        .is-sun-mon { background: #e8f5e9; color: #2e7d32; font-weight: bold; }
-        .is-ayyamul { border: 1px solid var(--accent-gold); color: var(--accent-gold); font-weight: bold; }
-        .has-fasted { background: var(--dark-green) !important; color: white !important; transform: scale(1.05); }
+        .card-info { flex: 1; }
+        .card-info h3 { margin: 0; font-size: 0.95rem; font-family: 'Quicksand'; }
+        .card-info p { margin: 4px 0 0; font-size: 0.75rem; color: #b2bec3; font-style: italic; }
 
-        /* Statistik Box */
-        .stats-container {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            margin-top: 20px; padding: 15px; background: #fff; border-radius: 20px;
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+        .check-btn {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: 2px solid var(--soft-mint);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
         }
-        .stat-item { text-align: center; }
-        .stat-value { display: block; font-size: 1.2rem; font-weight: 700; color: var(--primary-green); }
-        .stat-label { font-size: 0.6rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
+        .check-btn.done { background: var(--forest-deep); border-color: var(--forest-deep); }
+        .check-btn.done::after { content: '✓'; color: white; font-weight: bold; font-size: 14px; }
 
-        .btn-done { margin-top: 20px; width: 100%; padding: 12px; border-radius: 15px; border: none; background: var(--primary-green); color: white; font-weight: bold; cursor: pointer; }
-        .task-item { background: var(--card-bg); padding: 16px; border-radius: 20px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color); }
+        /* Floating Input Area (Halaman & Kalender) */
+        .special-card {
+            background: linear-gradient(135deg, var(--forest-deep), #2D6A4F);
+            color: white; border-radius: 28px; padding: 22px; margin-bottom: 25px;
+        }
+        .special-card h3 { margin: 0; font-size: 0.9rem; opacity: 0.9; }
+        .counter-display { font-size: 1.8rem; font-weight: 700; margin: 10px 0; display: block; }
+        .action-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; backdrop-filter: blur(5px); }
+
+        /* Bottom Nav - Clean & Floating */
+        .nav-dock {
+            position: fixed; bottom: 20px; width: 85%; max-width: 380px;
+            background: white; border-radius: 25px; padding: 12px;
+            display: flex; justify-content: space-around;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .nav-link { color: #b2bec3; font-size: 1.2rem; cursor: pointer; text-align: center; }
+        .nav-link.active { color: var(--forest-deep); }
+        .nav-link span { display: block; font-size: 0.6rem; font-weight: 700; margin-top: 2px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <header>
-        <h1>AMALA</h1>
-        <div style="font-size: 0.8rem; opacity: 0.7;">Muhasabah & Tracker</div>
+        <div class="user-info">
+            <p>Assalamu'alaikum,</p>
+            <h2>Guru Fajar</h2>
+        </div>
+        <div class="avatar"></div>
     </header>
 
-    <div id="main-content">
-        <div class="task-item" onclick="openPuasa()">
-            <div style="width:20px; height:20px; border:2px solid var(--primary-green); border-radius:6px; background: var(--card-bg);"></div>
-            <span style="flex:1; margin-left:15px; font-weight: 600;">Puasa Sunnah & Kalender</span>
-            <span style="font-size: 0.7rem; color: var(--primary-green);">Buka Kalender ❯</span>
+    <div class="special-card">
+        <h3>Tilawah Al-Qur'an</h3>
+        <span class="counter-display" id="page-count">0 <small style="font-size: 0.8rem; font-weight: 400;">Halaman</small></span>
+        <button class="action-btn" onclick="updateTilawah()">+ Update Bacaan</button>
+    </div>
+
+    <span class="section-label">Dzikir & Shalat Harian</span>
+    <div class="amalan-grid">
+        <div class="amalan-card" id="card-0">
+            <div class="card-info">
+                <h3>Shalat Ashar</h3>
+                <p>Bacaan setelah shalat Ashar</p>
+            </div>
+            <div class="check-btn" onclick="toggleAmalan(0)"></div>
+        </div>
+
+        <div class="amalan-card" id="card-1">
+            <div class="card-info" onclick="openCalendar()">
+                <h3>Puasa Bangun & Tidur</h3>
+                <p>Bukan hari puasa panka</p>
+            </div>
+            <div style="font-size: 1.2rem; opacity: 0.3;">📅</div>
+        </div>
+
+        <div class="amalan-card" id="card-2" style="background: #FFF9E6;">
+            <div class="card-info">
+                <h3>Dzikir Pagi</h3>
+                <p>Infaq Sedekah Harian</p>
+            </div>
+            <div class="check-btn" onclick="toggleAmalan(2)"></div>
+        </div>
+
+        <div class="amalan-card" id="card-3" style="background: #F3E5F5;">
+            <div class="card-info">
+                <h3>Dzikir Petang</h3>
+                <p>Bacaan setelah shalat Subuh</p>
+            </div>
+            <div class="check-btn" onclick="toggleAmalan(3)"></div>
         </div>
     </div>
 </div>
 
-<div id="modal-puasa" class="overlay">
-    <div class="modal">
-        <h3 style="font-family: Quicksand; margin: 0;">Jejak Puasa KHGT</h3>
-        <p style="font-size: 0.7rem; color: var(--text-sub); margin-bottom: 5px;">Rajab 1447 H</p>
-        
-        <div class="calendar-grid" id="calendar-body"></div>
-
-        <div class="stats-container">
-            <div class="stat-item">
-                <span class="stat-value" id="stat-month">0</span>
-                <span class="stat-label">Bulan Ini</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="stat-year">0</span>
-                <span class="stat-label">Tahun Ini</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">140</span>
-                <span class="stat-label">Target/Thn</span>
-            </div>
-        </div>
-
-        <button class="btn-done" onclick="closePuasa()">Tutup & Simpan</button>
-    </div>
+<div class="nav-dock">
+    <div class="nav-link active">🏠<span>Beranda</span></div>
+    <div class="nav-link">✨<span>Aktivitas</span></div>
+    <div class="nav-link">🌙<span>Puasa</span></div>
+    <div class="nav-link">📊<span>Statistik</span></div>
+    <div class="nav-link">⚙️<span>Profil</span></div>
 </div>
 
 <script>
-    // Data Jejak Puasa (LocalStorage)
-    // Struktur data: array berisi ID unik (misal: "2026-01-13")
-    let fastingData = JSON.parse(localStorage.getItem('amala-fasting-v1')) || [];
+    let db = JSON.parse(localStorage.getItem('amala_fajar_db')) || {
+        tilawah: 0,
+        checks: [false, false, false, false]
+    };
 
-    function openPuasa() {
-        document.getElementById('modal-puasa').style.display = 'flex';
-        renderCalendar();
+    function toggleAmalan(idx) {
+        db.checks[idx] = !db.checks[idx];
+        save();
+        render();
     }
 
-    function closePuasa() {
-        document.getElementById('modal-puasa').style.display = 'none';
-    }
-
-    function renderCalendar() {
-        const body = document.getElementById('calendar-body');
-        body.innerHTML = '';
-        const headers = ['Mi', 'Sn', 'Sl', 'Ra', 'Ka', 'Ju', 'Sa'];
-        headers.forEach(h => body.innerHTML += `<div style="font-size:0.7rem; font-weight:bold; color:var(--text-sub)">${h}</div>`);
-
-        // Simulasi Kalender 30 Hari
-        for (let i = 1; i <= 30; i++) {
-            let dayOfWeek = i % 7;
-            let dateKey = `1447-07-${i}`; // ID unik untuk tanggal ini
-            let classes = ['cal-day'];
-            
-            if (dayOfWeek === 2 || dayOfWeek === 5) classes.push('is-sun-mon');
-            if (i === 13 || i === 14 || i === 15) classes.push('is-ayyamul');
-            if (fastingData.includes(dateKey)) classes.push('has-fasted');
-
-            body.innerHTML += `<div class="${classes.join(' ')}" onclick="toggleFasting('${dateKey}')">${i}</div>`;
+    function updateTilawah() {
+        let val = prompt("Jumlah halaman hari ini:", db.tilawah);
+        if (val !== null) {
+            db.tilawah = val;
+            save();
+            render();
         }
-        updateStats();
     }
 
-    function toggleFasting(dateKey) {
-        const index = fastingData.indexOf(dateKey);
-        if (index > -1) {
-            fastingData.splice(index, 1);
-        } else {
-            fastingData.push(dateKey);
-        }
-        localStorage.setItem('amala-fasting-v1', JSON.stringify(fastingData));
-        renderCalendar();
+    function openCalendar() {
+        alert("Membuka Kalender Puasa KHGT...");
     }
 
-    function updateStats() {
-        // Hitung Bulan Ini (Filter ID yang mengandung bulan Rajab '07')
-        const monthCount = fastingData.filter(d => d.includes('-07-')).length;
-        // Hitung Tahun Ini (Semua data di tahun 1447)
-        const yearCount = fastingData.length;
-
-        document.getElementById('stat-month').innerText = monthCount;
-        document.getElementById('stat-year').innerText = yearCount;
+    function save() {
+        localStorage.setItem('amala_fajar_db', JSON.stringify(db));
     }
+
+    function render() {
+        document.getElementById('page-count').innerHTML = `${db.tilawah} <small style="font-size: 0.8rem; font-weight: 400;">Halaman</small>`;
+        
+        db.checks.forEach((status, i) => {
+            const card = document.getElementById(`card-${i}`);
+            if(card) {
+                const btn = card.querySelector('.check-btn');
+                if(btn) {
+                    status ? btn.classList.add('done') : btn.classList.remove('done');
+                    status ? card.classList.add('active') : card.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    render();
 </script>
 
 </body>
