@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Buku Saku Guru Ngaji</title>
+    <title>AMALA - Personal Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -18,74 +18,52 @@
             --card-gold: linear-gradient(135deg, #FCD34D 0%, #D97706 100%);
             --white: #ffffff;
             --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            --radius-xl: 20px;
+            --radius-xl: 24px;
             --radius-md: 12px;
         }
 
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #eef2f5; display: flex; justify-content: center; min-height: 100vh; }
 
         .app-container {
             background-color: var(--bg-app);
             width: 100%; max-width: 480px;
             min-height: 100vh; position: relative;
-            padding-bottom: 90px;
+            padding-bottom: 100px;
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        header { padding: 24px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
+        header { padding: 30px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
         .greeting h1 { font-size: 14px; color: var(--text-muted); font-weight: 400; }
         .greeting h2 { font-size: 20px; color: var(--text-main); font-weight: 600; }
-        .avatar { width: 48px; height: 48px; background-color: #E0F2FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .avatar { width: 50px; height: 50px; background-color: var(--white); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-soft); }
 
+        /* Dashboard Layout Baru */
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
-        .card { padding: 16px; border-radius: var(--radius-xl); color: white; position: relative; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between; height: 140px; transition: transform 0.2s ease; }
-        .card:active { transform: scale(0.98); }
-        .card-header { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
-        .card-value { font-size: 32px; font-weight: 600; margin-top: 4px; }
-        .card-sub { font-size: 12px; opacity: 0.9; }
+        .card { padding: 20px; border-radius: var(--radius-xl); color: white; position: relative; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; overflow: hidden; }
+        
+        /* Tata Letak Baru Sesuai Instruksi Mas Fajar */
+        .card.dhuha { grid-column: span 1; height: 140px; background: var(--card-orange); }
+        .card.sedekah { grid-column: span 1; height: 140px; background: var(--card-gold); }
+        .card.quran { grid-column: span 2; height: 110px; background: var(--card-teal); flex-direction: row; align-items: center; }
+        .card.tahajjud { grid-column: span 2; height: 110px; background: var(--card-green); flex-direction: row; align-items: center; }
 
-        .input-btn {
-            position: absolute; bottom: 16px; right: 16px;
-            width: 32px; height: 32px;
-            background: rgba(255,255,255,0.25);
-            backdrop-filter: blur(4px); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; border: none; color: white;
-        }
+        .card-header { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; opacity: 0.9; }
+        .card-value { font-size: 32px; font-weight: 600; }
+        .card-sub { font-size: 12px; opacity: 0.8; }
 
-        .card.dhuha { background: var(--card-orange); }
-        .card.tahajjud { background: var(--card-green); }
-        .card.quran { grid-column: span 2; background: var(--card-teal); height: 100px; flex-direction: row; align-items: center; }
-        .card.sedekah { grid-column: span 2; background: var(--card-gold); height: 100px; flex-direction: row; align-items: center; }
+        .input-btn { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: white; font-size: 18px; }
 
-        .card.quran .content-left, .card.sedekah .content-left { display: flex; flex-direction: column; }
-        .card.quran .card-value, .card.sedekah .card-value { margin-top: 0; font-size: 24px; }
-
-        .section-title { padding: 0 24px; margin-bottom: 12px; font-size: 16px; font-weight: 600; color: var(--text-main); }
+        /* Isi List Amalan */
+        .section-title { padding: 0 24px; margin: 20px 0 12px; font-size: 16px; font-weight: 600; }
         .list-container { padding: 0 24px; display: flex; flex-direction: column; gap: 12px; }
-        .list-item { background: var(--white); padding: 16px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        
-        .list-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 16px; color: white; }
-        .bg-blue { background-color: #3B82F6; }
-        .bg-indigo { background-color: #6366F1; }
-        .bg-teal { background-color: #14B8A6; }
+        .list-item { background: var(--white); padding: 16px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .list-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
 
-        .list-text { flex: 1; }
-        .list-text h4 { font-size: 14px; font-weight: 500; color: var(--text-main); }
-        .list-text p { font-size: 11px; color: var(--text-muted); }
-
-        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: var(--white); display: flex; justify-content: space-around; padding: 16px 10px; border-top-left-radius: 24px; border-top-right-radius: 24px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #9CA3AF; font-size: 24px; text-decoration: none; cursor: pointer; }
-        .nav-item span { font-size: 10px; font-weight: 500; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--white); display: flex; justify-content: space-around; padding: 20px 10px; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9CA3AF; text-decoration: none; }
         .nav-item.active { color: #0D9488; }
-        
-        .fab { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; background: var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); border: 4px solid var(--bg-app); cursor: pointer; }
+        .nav-item span { font-size: 10px; margin-top: 4px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -102,84 +80,81 @@
         <section class="dashboard-grid">
             <div class="card dhuha">
                 <div class="card-header"><i class="ph ph-sun"></i> Dhuha</div>
-                <div>
-                    <div class="card-value" id="val-dhuha">0</div>
-                    <div class="card-sub">Rakaat</div>
+                <div class="card-value" id="val-dhuha">0</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <span class="card-sub">Rakaat</span>
+                    <button class="input-btn" onclick="isiData('dhuha')"><i class="ph ph-pencil-simple"></i></button>
                 </div>
-                <button class="input-btn" onclick="isiData('dhuha')"><i class="ph ph-pencil-simple"></i></button>
             </div>
 
-            <div class="card tahajjud">
-                <div class="card-header"><i class="ph ph-moon-stars"></i> Tahajjud</div>
-                <div>
-                    <div class="card-value" id="val-tahajjud">0</div>
-                    <div class="card-sub">Rakaat</div>
+            <div class="card sedekah">
+                <div class="card-header"><i class="ph ph-heart"></i> Sedekah</div>
+                <div class="card-value" id="val-sedekah">Rp 0</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <span class="card-sub">Al-Maun</span>
+                    <button class="input-btn" onclick="isiData('sedekah')"><i class="ph ph-pencil-simple"></i></button>
                 </div>
-                <button class="input-btn" onclick="isiData('tahajjud')"><i class="ph ph-pencil-simple"></i></button>
             </div>
 
             <div class="card quran">
-                <div class="content-left">
+                <div style="flex:1">
                     <div class="card-header"><i class="ph ph-book-open"></i> Al-Quran</div>
-                    <div class="card-sub" style="margin-top: 4px;">Target: 1 Juz/hari</div>
+                    <div class="card-sub">Target: 1 Juz/hari</div>
                 </div>
-                <div class="content-right" style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
-                    <div class="card-value" id="val-quran">0</div>
-                    <span style="font-size: 14px;">Halaman</span>
-                    <button class="input-btn" style="position: static;" onclick="isiData('quran')"><i class="ph ph-plus"></i></button>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="text-align: right;">
+                        <div class="card-value" id="val-quran">0</div>
+                        <span class="card-sub">Halaman</span>
+                    </div>
+                    <button class="input-btn" onclick="isiData('quran')"><i class="ph ph-plus"></i></button>
                 </div>
             </div>
 
-             <div class="card sedekah">
-                <div class="content-left">
-                    <div class="card-header"><i class="ph ph-heart"></i> Sedekah</div>
-                    <div class="card-sub" style="margin-top: 4px;">Gerakan Al-Maun</div>
+            <div class="card tahajjud">
+                <div style="flex:1">
+                    <div class="card-header"><i class="ph ph-moon-stars"></i> Tahajjud</div>
+                    <div class="card-sub">Shalat Lail</div>
                 </div>
-                <div class="content-right" style="margin-left: auto;">
-                    <div class="card-value" id="val-sedekah">Rp 0</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="text-align: right;">
+                        <div class="card-value" id="val-tahajjud">0</div>
+                        <span class="card-sub">Rakaat</span>
+                    </div>
+                    <button class="input-btn" onclick="isiData('tahajjud')"><i class="ph ph-pencil-simple"></i></button>
                 </div>
-                <button class="input-btn" onclick="isiData('sedekah')"><i class="ph ph-pencil-simple"></i></button>
             </div>
         </section>
 
-        <div class="section-title">Dzikir Rutin Harian</div>
+        <div class="section-title">Dzikir Harian</div>
         <section class="list-container">
             <div class="list-item">
-                <div class="list-icon bg-blue"><i class="ph ph-sun-horizon"></i></div>
-                <div class="list-text">
-                    <h4>Dzikir Pagi</h4>
-                    <p>Dibaca setelah shalat Subuh</p>
+                <div class="list-icon" style="background: #3B82F6;"><i class="ph ph-sun-horizon"></i></div>
+                <div style="flex:1; margin-left: 15px;">
+                    <h4 style="font-size: 14px;">Dzikir Pagi</h4>
+                    <p style="font-size: 11px; color: var(--text-muted);">Setelah Subuh</p>
                 </div>
-                <i class="ph ph-caret-right" style="color: #ccc;"></i>
+                <i class="ph ph-check-circle" style="font-size: 24px; color: #E5E7EB;"></i>
             </div>
-            </section>
+        </section>
         
         <nav class="bottom-nav">
-            <a href="#" class="nav-item active"><i class="ph ph-house-line"></i><span>Beranda</span></a>
-            <a href="#" class="nav-item"><i class="ph ph-chart-bar"></i><span>Laporan</span></a>
-            <div class="fab"><i class="ph ph-plus"></i></div>
-            <a href="#" class="nav-item"><i class="ph ph-users"></i><span>Santri</span></a>
-            <a href="#" class="nav-item"><i class="ph ph-gear"></i><span>Akun</span></a>
+            <a href="#" class="nav-item active"><i class="ph ph-house-line" style="font-size: 24px;"></i><span>Beranda</span></a>
+            <a href="#" class="nav-item"><i class="ph ph-chart-bar" style="font-size: 24px;"></i><span>Laporan</span></a>
+            <a href="#" class="nav-item"><i class="ph ph-calendar-blank" style="font-size: 24px;"></i><span>Puasa</span></a>
+            <a href="#" class="nav-item"><i class="ph ph-gear" style="font-size: 24px;"></i><span>Akun</span></a>
         </nav>
     </div>
 
     <script>
-        // Load data dari memori HP
-        let data = JSON.parse(localStorage.getItem('amala_fajar')) || {
-            dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0
-        };
+        let data = JSON.parse(localStorage.getItem('amala_fajar')) || { dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0 };
 
         function isiData(tipe) {
             let n = prompt("Masukkan jumlah:");
             if (n !== null && n !== "") {
                 data[tipe] = (tipe === 'sedekah') ? parseInt(n) : n;
-                simpan();
+                localStorage.setItem('amala_fajar', JSON.stringify(data));
+                tampilkan();
             }
-        }
-
-        function simpan() {
-            localStorage.setItem('amala_fajar', JSON.stringify(data));
-            tampilkan();
         }
 
         function tampilkan() {
@@ -189,7 +164,6 @@
             document.getElementById('val-sedekah').innerText = "Rp " + (data.sedekah || 0).toLocaleString('id-ID');
         }
 
-        // Jalankan saat aplikasi dibuka
         tampilkan();
     </script>
 </body>
