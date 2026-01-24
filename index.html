@@ -30,71 +30,64 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding-bottom: 90px;
+            padding-bottom: 100px;
             display: flex;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
         .app-container { width: 100%; max-width: 450px; padding: 20px; }
 
-        header { text-align: center; position: relative; margin-bottom: 25px; }
-        h1 { color: var(--primary-green); font-size: 1.8rem; margin: 0; font-weight: 700; }
-        #hijri-date { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; }
+        header { text-align: center; position: relative; margin-bottom: 20px; }
+        h1 { color: var(--primary-green); margin: 0; font-weight: 700; }
+        #hijri-date { font-size: 0.8rem; color: var(--text-sub); }
 
-        #theme-toggle { position: absolute; right: 0; top: 5px; background: none; border: none; font-size: 1.3rem; cursor: pointer; }
+        #theme-toggle { position: absolute; right: 0; top: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
 
-        /* Card & Content Management */
-        .content-section { display: none; animation: fadeIn 0.4s ease; }
-        .content-section.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Section Management */
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card { 
             background: var(--card-bg); 
-            padding: 18px; 
-            border-radius: 22px; 
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.03); 
-            margin-bottom: 18px;
+            padding: 15px; 
+            border-radius: 20px; 
+            margin-bottom: 15px;
             border: 1px solid var(--border-color);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.02);
         }
 
+        /* Input Area */
+        .add-task-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        #new-task-input { 
+            flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-main); font-family: inherit;
+        }
+        .btn-add { background: var(--primary-green); color: white; border: none; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-weight: bold; }
+
+        /* Task Item */
         .task-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 18px;
-            margin-bottom: 12px;
-            border-radius: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: var(--card-bg); padding: 12px; border-radius: 15px; 
+            display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color);
         }
-        
-        .btn-wa { 
-            background: #25D366; 
-            color: white; 
-            border: none; 
-            padding: 10px 16px; 
-            border-radius: 12px; 
-            font-size: 0.8rem; 
-            cursor: pointer;
-            font-weight: bold;
-        }
+        .task-item.done { opacity: 0.6; text-decoration: line-through; }
+        .task-text { flex: 1; margin-left: 10px; cursor: pointer; }
+        .btn-del { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1rem; }
 
-        /* Bottom Navigation */
+        /* Progress Bar */
+        .progress-bar { background: #D1DED6; height: 12px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        #progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: 0.5s; }
+
+        /* Bottom Nav */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; max-width: 450px;
             background: var(--card-bg); display: flex; justify-content: space-around;
-            padding: 15px 0; border-top: 2px solid var(--border-color);
-            border-radius: 25px 25px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+            padding: 15px 0; border-top: 2px solid var(--border-color); border-radius: 20px 20px 0 0;
         }
-
-        .nav-item { text-align: center; font-size: 0.75rem; color: var(--text-sub); cursor: pointer; flex: 1; }
+        .nav-item { text-align: center; font-size: 0.7rem; color: var(--text-sub); cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--primary-green); font-weight: bold; }
-        .nav-icon { font-size: 1.4rem; display: block; }
+        .nav-icon { font-size: 1.3rem; display: block; }
     </style>
 </head>
 <body>
@@ -107,109 +100,141 @@
     </header>
 
     <div id="beranda" class="content-section active">
-        <div class="card" style="background: var(--pastel-blue); border:none; color: #2C3E50;">
-            <small style="font-weight: bold; opacity: 0.7;">📍 JADWAL SHALAT (TARJIH -18°)</small>
-            <div style="display:flex; justify-content: space-between; font-weight: bold; margin-top:5px;">
-                <span>Subuh 04:15</span>
-                <span>Dzuhur 11:55</span>
-                <span>Ashar 15:15</span>
+        <div class="card" style="background: var(--pastel-blue); border:none;">
+            <small><b>JADWAL SHALAT (TARJIH -18°)</b></small>
+            <div style="display:flex; justify-content: space-between; margin-top:5px; font-weight:bold;">
+                <span>Subuh 04:15</span> <span>Dzuhur 11:55</span> <span>Ashar 15:15</span>
             </div>
         </div>
-        <div class="card" style="border-left: 8px solid var(--primary-green);">
-            <i>"Sebaik-baik kalian adalah yang belajar Al-Qur'an dan mengajarkannya."</i>
+
+        <div class="card">
+            <small>Progres Tugas Hari Ini</small>
+            <div class="progress-bar"><div id="progress-fill"></div></div>
+            <div id="stats-text" style="font-size: 0.7rem;">0 tugas selesai</div>
         </div>
+
         <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 3rem;">🌱</div>
-            <p>Selamat Beraktivitas, Guru!</p>
+            <div id="plant-container" style="font-size: 3rem;">🌱</div>
+            <p id="garden-status">Mari mulai amalan hari ini!</p>
         </div>
+    </div>
+
+    <div id="tugas" class="content-section">
+        <h3>Daftar Amalan & Tugas</h3>
+        <div class="add-task-container">
+            <input type="text" id="new-task-input" placeholder="Tambah amalan baru...">
+            <button class="btn-add" onclick="addTask()">+</button>
+        </div>
+        <div id="task-list">
+            </div>
+        <button id="reset-btn" onclick="resetTasks()" style="width:100%; padding:10px; border-radius:12px; border:none; background:#95a5a6; color:white; cursor:pointer;">Reset Semua</button>
     </div>
 
     <div id="setoran" class="content-section">
-        <h3>Setoran Santri Hari Ini</h3>
-        <div class="task-item" style="border-left: 8px solid var(--pastel-blue);">
-            <div>
-                <div style="font-weight: 700;">Ahmad</div>
-                <div style="font-size: 0.8rem; color: var(--text-sub);">Ziyadah: An-Naba' 1-10</div>
-            </div>
-            <button class="btn-wa" onclick="sendWA('Ahmad', 'Ziyadah', 'An-Naba 1-10')">LAPOR</button>
-        </div>
-        <div class="task-item" style="border-left: 8px solid var(--pastel-orange);">
-            <div>
-                <div style="font-weight: 700;">Sarah</div>
-                <div style="font-size: 0.8rem; color: var(--text-sub);">Murojaah: Juz 30</div>
-            </div>
-            <button class="btn-wa" onclick="sendWA('Sarah', 'Murojaah', 'Juz 30')">LAPOR</button>
-        </div>
-    </div>
-
-    <div id="muhasabah" class="content-section">
-        <h3>Muhasabah Guru</h3>
+        <h3>Laporan WA Santri</h3>
         <div class="card">
-            <input type="checkbox"> Shalat Berjamaah (HPT)<br><br>
-            <input type="checkbox"> Tilawah 1 Juz<br><br>
-            <input type="checkbox"> Infaq/Sedekah Al-Maun
+            <p>Fitur laporan WhatsApp akan muncul otomatis berdasarkan data santri Mas.</p>
         </div>
-    </div>
-
-    <div id="menu" class="content-section">
-        <h3>Pengaturan</h3>
-        <div class="card">Data Santri</div>
-        <div class="card">Riwayat Laporan</div>
-        <div class="card">Tentang AMALA</div>
     </div>
 
 </div>
 
 <div class="bottom-nav">
-    <div class="nav-item active" onclick="showSection('beranda', this)">
+    <div class="nav-item active" onclick="showTab('beranda', this)">
         <span class="nav-icon">🏠</span>Beranda
     </div>
-    <div class="nav-item" onclick="showSection('setoran', this)">
+    <div class="nav-item" onclick="showTab('tugas', this)">
+        <span class="nav-icon">⭐</span>Tugas
+    </div>
+    <div class="nav-item" onclick="showTab('setoran', this)">
         <span class="nav-icon">📖</span>Setoran
-    </div>
-    <div class="nav-item" onclick="showSection('muhasabah', this)">
-        <span class="nav-icon">⭐</span>Muhasabah
-    </div>
-    <div class="nav-item" onclick="showSection('menu', this)">
-        <span class="nav-icon">⚙️</span>Menu
     </div>
 </div>
 
 <script>
-    // Fungsi Pindah Halaman (Tab)
-    function showSection(sectionId, element) {
-        // Sembunyikan semua section
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
-        });
-        // Tampilkan section yang dipilih
-        document.getElementById(sectionId).classList.add('active');
-        
-        // Atur status aktif pada menu bawah
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        element.classList.add('active');
+    // 1. LOGIKA TAB (PINDAH HALAMAN)
+    function showTab(tabId, el) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        el.classList.add('active');
     }
 
-    // Toggle Dark Mode
-    const toggle = document.getElementById('theme-toggle');
-    toggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            toggle.innerText = '🌙';
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            toggle.innerText = '☀️';
+    // 2. LOGIKA DARK MODE
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.onclick = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        themeBtn.innerText = isDark ? '🌙' : '☀️';
+    };
+
+    // 3. LOGIKA MANAJEMEN TUGAS
+    let tasks = JSON.parse(localStorage.getItem('amala-tasks')) || [
+        { text: "Shalat Subuh Berjamaah", done: false },
+        { text: "Tilawah Al-Qur'an", done: false }
+    ];
+
+    function renderTasks() {
+        const list = document.getElementById('task-list');
+        list.innerHTML = '';
+        tasks.forEach((task, index) => {
+            const item = document.createElement('div');
+            item.className = `task-item ${task.done ? 'done' : ''}`;
+            item.innerHTML = `
+                <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${index})">
+                <span class="task-text" onclick="toggleTask(${index})">${task.text}</span>
+                <button class="btn-del" onclick="deleteTask(${index})">✕</button>
+            `;
+            list.appendChild(item);
+        });
+        updateProgress();
+        localStorage.setItem('amala-tasks', JSON.stringify(tasks));
+    }
+
+    function addTask() {
+        const input = document.getElementById('new-task-input');
+        if (input.value.trim() !== '') {
+            tasks.push({ text: input.value, done: false });
+            input.value = '';
+            renderTasks();
         }
-    });
-
-    // Fungsi WhatsApp
-    function sendWA(nama, jenis, materi) {
-        const pesan = `Assalamu'alaikum Ayah/Bunda, berikut laporan ananda *${nama}* hari ini:\n\n📖 *${jenis}*: ${materi}\nAlhamdulillah lancar.\n\n_Dikirim via AMALA_`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
     }
+
+    function toggleTask(index) {
+        tasks[index].done = !tasks[index].done;
+        renderTasks();
+    }
+
+    function deleteTask(index) {
+        tasks.splice(index, 1);
+        renderTasks();
+    }
+
+    function resetTasks() {
+        if(confirm("Reset semua amalan hari ini?")) {
+            tasks.forEach(t => t.done = false);
+            renderTasks();
+        }
+    }
+
+    function updateProgress() {
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.done).length;
+        const percent = total === 0 ? 0 : (completed / total) * 100;
+        
+        document.getElementById('progress-fill').style.width = percent + '%';
+        document.getElementById('stats-text').innerText = `${completed} dari ${total} amalan selesai`;
+        
+        // Animasi Tanaman
+        const plant = document.getElementById('plant-container');
+        if (percent === 0) plant.innerText = '🌱';
+        else if (percent < 50) plant.innerText = '🌿';
+        else if (percent < 100) plant.innerText = '🌳';
+        else plant.innerText = '🌸';
+    }
+
+    // Inisialisasi awal
+    renderTasks();
 </script>
 
 </body>
