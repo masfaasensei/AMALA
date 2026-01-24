@@ -3,145 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Guru Fajar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>AMALA - Buku Saku Guru Ngaji</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
         :root {
-            --teal-blue: #19748A;
-            --mint-green: #A6F5C0;
-            --dark-navy: #0A2E4A;
-            --light-cyan: #B8FAFF;
-            --pale-blue: #E7F2F7;
-            --white: #FFFFFF;
+            --bg-app: #F0FdfA;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --card-orange: linear-gradient(135deg, #FDBA74 0%, #FB923C 100%);
+            --card-green: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
+            --card-teal: linear-gradient(135deg, #2DD4BF 0%, #0D9488 100%);
+            --card-gold: linear-gradient(135deg, #FCD34D 0%, #D97706 100%);
+            --white: #ffffff;
+            --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --radius-xl: 20px;
+            --radius-md: 12px;
         }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--pale-blue);
-            margin: 0; padding-bottom: 110px;
-            color: var(--dark-navy);
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #eef2f5; display: flex; justify-content: center; min-height: 100vh; }
+
+        .app-container {
+            background-color: var(--bg-app);
+            width: 100%; max-width: 480px;
+            min-height: 100vh; position: relative;
+            padding-bottom: 90px; box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            overflow-x: hidden;
         }
 
-        .container { max-width: 450px; margin: auto; padding: 20px; }
+        header { padding: 24px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .greeting h1 { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+        .greeting h2 { font-size: 20px; color: var(--text-main); font-weight: 600; }
+        .avatar { width: 48px; height: 48px; background-color: #E0F2FE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
-        /* Header */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .header h2 { font-family: 'Quicksand'; margin: 0; font-size: 1.2rem; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
+        .card { padding: 16px; border-radius: var(--radius-xl); color: white; position: relative; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between; height: 140px; }
+        .card-header { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+        .card-value { font-size: 30px; font-weight: 600; margin-top: 4px; }
+        .card-sub { font-size: 12px; opacity: 0.9; }
 
-        /* Grid Atas (Dhuha & Tahajjud) - Inspirasi Gambar 2 */
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .card { padding: 20px; border-radius: 28px; color: white; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .bg-dhuha { background: linear-gradient(135deg, #19748A, #248ea8); }
-        .bg-tahajjud { background: linear-gradient(135deg, #0A2E4A, #19748A); }
+        .input-btn { width: 32px; height: 32px; background: rgba(255,255,255,0.25); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: white; }
+
+        .card.dhuha { background: var(--card-orange); }
+        .card.tahajjud { background: var(--card-green); }
+        .card.quran { grid-column: span 2; background: var(--card-teal); height: 100px; flex-direction: row; align-items: center; }
+        .card.sedekah { grid-column: span 2; background: var(--card-gold); height: 100px; flex-direction: row; align-items: center; }
+
+        .section-title { padding: 0 24px; margin-bottom: 12px; font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .list-container { padding: 0 24px; display: flex; flex-direction: column; gap: 12px; }
+        .list-item { background: var(--white); padding: 16px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .list-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 16px; color: white; }
         
-        .card-label { font-family: 'Quicksand'; font-weight: 700; font-size: 0.9rem; }
-        .card-val { display: block; font-size: 2rem; font-weight: 800; margin: 10px 0; }
-        .edit-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 12px; border-radius: 10px; font-size: 0.7rem; cursor: pointer; }
+        .bg-blue { background-color: #3B82F6; }
+        .bg-indigo { background-color: #6366F1; }
+        .bg-teal { background-color: #14B8A6; }
 
-        /* List Amalan - Inspirasi Gambar 3 */
-        .list-container { background: white; border-radius: 30px; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
-        .item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; }
-        .item:last-child { border: none; }
-        .icon { width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--white); display: flex; justify-content: space-around; padding: 16px 10px; border-top-left-radius: 24px; border-top-right-radius: 24px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #9CA3AF; font-size: 24px; text-decoration: none; }
+        .nav-item span { font-size: 10px; font-weight: 500; }
+        .nav-item.active { color: #0D9488; }
         
-        .info { flex: 1; }
-        .info h4 { margin: 0; font-size: 0.9rem; font-weight: 700; }
-        .info p { margin: 2px 0 0; font-size: 0.7rem; color: #7f8c8d; }
+        .fab { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; background: var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); border: 4px solid var(--bg-app); cursor: pointer; }
 
-        /* Counter Box */
-        .counter-box { text-align: right; min-width: 60px; }
-        .counter-box b { font-size: 1rem; color: var(--teal-blue); }
+        /* Modal Kalender Puasa */
+        #calendar-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 30px; padding: 25px; text-align: center; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
+        .cal-day { padding: 10px 0; font-size: 12px; border-radius: 10px; cursor: pointer; border: 1px solid #f0f0f0; }
+        .fasting-done { background: #0D9488 !important; color: white !important; }
+        .stats-row { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
+        .stat-box { flex: 1; }
+        .stat-box b { display: block; font-size: 18px; color: #0D9488; }
+        .stat-box span { font-size: 10px; color: #888; }
 
-        /* Checkbox Custom */
-        .check-pill { width: 25px; height: 25px; border: 2px solid var(--mint-green); border-radius: 8px; cursor: pointer; }
-        .check-pill.active { background: var(--mint-green); }
-
-        /* Navigasi - Inspirasi Gambar 1 & 3 */
-        .nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: var(--dark-navy); padding: 15px; border-radius: 25px; display: flex; justify-content: space-around; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .nav-link { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.65rem; text-align: center; }
-        .nav-link.active { color: var(--mint-green); font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <div>
-            <p style="margin:0; font-size:0.8rem; opacity:0.6">Assalamu'alaikum,</p>
-            <h2>Guru Fajar</h2>
-        </div>
-        <div style="background:var(--mint-green); padding:10px; border-radius:15px">👤</div>
-    </div>
-
-    <div class="main-grid">
-        <div class="card bg-dhuha">
-            <span class="card-label">Dhuha</span>
-            <span class="card-val" id="dhuha-count">0</span>
-            <button class="edit-btn" onclick="updateVal('dhuha')">Input Rakaat</button>
-        </div>
-        <div class="card bg-tahajjud">
-            <span class="card-label">Tahajjud</span>
-            <span class="card-val" id="tahajjud-count">0</span>
-            <button class="edit-btn" onclick="updateVal('tahajjud')">Input Rakaat</button>
-        </div>
-    </div>
-
-    <div class="list-container" style="margin-bottom: 20px;">
-        <div class="item" onclick="updateVal('quran')">
-            <div class="icon" style="background:var(--mint-green)">📖</div>
-            <div class="info">
-                <h4>Al-Qur'an</h4>
-                <p>Target bacaan harian</p>
+    <div class="app-container">
+        <header>
+            <div class="greeting">
+                <h1>Assalamu'alaikum,</h1>
+                <h2>Mas Fajar</h2>
             </div>
-            <div class="counter-box"><b id="quran-count">0</b> <small>Juz</small></div>
-        </div>
-        <div class="item" onclick="updateVal('sedekah')">
-            <div class="icon" style="background:var(--light-cyan)">💰</div>
-            <div class="info">
-                <h4>Sedekah</h4>
-                <p>Infaq harian rutin</p>
+            <div class="avatar">👨🏻‍🏫</div>
+        </header>
+
+        <section class="dashboard-grid">
+            <div class="card dhuha">
+                <div class="card-header"><i class="ph ph-sun"></i> Dhuha</div>
+                <div>
+                    <div class="card-value" id="val-dhuha">0</div>
+                    <div class="card-sub">Rakaat</div>
+                </div>
+                <button class="input-btn" onclick="updateVal('dhuha')"><i class="ph ph-pencil-simple"></i></button>
             </div>
-            <div class="counter-box"><b id="sedekah-count">Rp 0</b></div>
+
+            <div class="card tahajjud">
+                <div class="card-header"><i class="ph ph-moon-stars"></i> Tahajjud</div>
+                <div>
+                    <div class="card-value" id="val-tahajjud">0</div>
+                    <div class="card-sub">Rakaat</div>
+                </div>
+                <button class="input-btn" onclick="updateVal('tahajjud')"><i class="ph ph-pencil-simple"></i></button>
+            </div>
+
+            <div class="card quran">
+                <div class="content-left">
+                    <div class="card-header"><i class="ph ph-book-open"></i> Al-Quran</div>
+                    <div class="card-sub" style="margin-top: 4px;">Target: 1 Juz/hari</div>
+                </div>
+                <div class="content-right" style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
+                    <div class="card-value" id="val-quran">0</div>
+                    <span style="font-size: 14px;">Hal</span>
+                    <button class="input-btn" onclick="updateVal('quran')"><i class="ph ph-plus"></i></button>
+                </div>
+            </div>
+
+             <div class="card sedekah">
+                <div class="content-left">
+                    <div class="card-header"><i class="ph ph-heart"></i> Sedekah</div>
+                    <div class="card-sub" style="margin-top: 4px;">Gerakan Al-Maun</div>
+                </div>
+                <div class="content-right" style="margin-left: auto; text-align: right;">
+                    <div class="card-value" id="val-sedekah">Rp 0</div>
+                    <button class="input-btn" onclick="updateVal('sedekah')" style="margin-top: 5px; margin-left: auto;"><i class="ph ph-pencil-simple"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-title">Dzikir Rutin Harian</div>
+        <section class="list-container">
+            <div class="list-item">
+                <div class="list-icon bg-blue"><i class="ph ph-sun-horizon"></i></div>
+                <div class="list-text"><h4>Dzikir Pagi</h4><p>Dibaca setelah shalat Subuh</p></div>
+                <i class="ph ph-caret-right" style="color: #ccc;"></i>
+            </div>
+            <div class="list-item">
+                <div class="list-icon bg-indigo"><i class="ph ph-moon"></i></div>
+                <div class="list-text"><h4>Dzikir Petang</h4><p>Menjelang Maghrib</p></div>
+                <i class="ph ph-caret-right" style="color: #ccc;"></i>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active"><i class="ph ph-house-line"></i><span>Beranda</span></a>
+            <a href="#" class="nav-item"><i class="ph ph-chart-bar"></i><span>Laporan</span></a>
+            <div class="fab" onclick="toggleCalendar()"><i class="ph ph-calendar-check"></i></div>
+            <a href="#" class="nav-item"><i class="ph ph-users"></i><span>Santri</span></a>
+            <a href="#" class="nav-item"><i class="ph ph-gear"></i><span>Akun</span></a>
+        </nav>
+    </div>
+
+    <div id="calendar-modal">
+        <div class="modal-content">
+            <h3 style="font-family: Quicksand; color: var(--text-main);">Tracker Puasa</h3>
+            <p style="font-size: 11px; color: #888;">Januari 2026 / Rajab 1447</p>
+            <div class="cal-grid" id="cal-body"></div>
+            <div class="stats-row">
+                <div class="stat-box"><b id="stat-month">0</b><span>Bulan Ini</span></div>
+                <div class="stat-box"><b id="stat-year">0</b><span>Tahun Ini</span></div>
+                <div class="stat-box"><b>140</b><span>Target Thn</span></div>
+            </div>
+            <button onclick="toggleCalendar()" style="margin-top:20px; width:100%; padding:12px; border-radius:15px; border:none; background:var(--text-main); color:white; font-weight:600;">Tutup</button>
         </div>
     </div>
 
-    <h3 style="font-family:'Quicksand'; font-size:1rem; margin-bottom:15px">Dzikir Rutin</h3>
-    <div class="list-container">
-        <div class="item">
-            <div class="icon" style="background:var(--pale-blue)">☀️</div>
-            <div class="info"><h4>Dzikir Pagi</h4><p>Setelah shalat Subuh</p></div>
-            <div class="check-pill" onclick="this.classList.toggle('active')"></div>
-        </div>
-        <div class="item">
-            <div class="icon" style="background:var(--pale-blue)">🌑</div>
-            <div class="info"><h4>Dzikir Petang</h4><p>Sebelum Maghrib</p></div>
-            <div class="check-pill" onclick="this.classList.toggle('active')"></div>
-        </div>
-        <div class="item" style="background: var(--dark-navy); color: white; border-radius: 20px; margin: 5px;">
-            <div class="icon" style="background:rgba(255,255,255,0.1)">🌙</div>
-            <div class="info"><h4 style="color:white">Puasa</h4><p style="color:rgba(255,255,255,0.5)">Cek Kalender</p></div>
-            <div style="font-size:1.2rem">📅</div>
-        </div>
-    </div>
-</div>
+    <script>
+        // Data State
+        let amalaData = JSON.parse(localStorage.getItem('amala_db')) || {
+            dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0, fasting: []
+        };
 
-<nav class="nav">
-    <a href="#" class="nav-link active">🏠<br>Beranda</a>
-    <a href="#" class="nav-link">📅<br>Aktivitas</a>
-    <a href="#" class="nav-link">🌙<br>Puasa</a>
-    <a href="#" class="nav-link">📊<br>Statistik</a>
-</nav>
-
-<script>
-    function updateVal(type) {
-        let val = prompt("Masukkan jumlah:");
-        if (val !== null) {
-            let display = val;
-            if(type === 'sedekah') display = "Rp " + parseInt(val).toLocaleString();
-            document.getElementById(type + '-count').innerText = display;
+        // Fungsi Update Nilai
+        function updateVal(type) {
+            let msg = "Masukkan jumlah rakaat:";
+            if(type === 'quran') msg = "Berapa halaman hari ini?";
+            if(type === 'sedekah') msg = "Jumlah sedekah (Rp):";
+            
+            let val = prompt(msg);
+            if(val !== null) {
+                if(type === 'sedekah') amalaData[type] = parseInt(val) || 0;
+                else amalaData[type] = val;
+                saveData();
+            }
         }
-    }
-</script>
 
+        function saveData() {
+            localStorage.setItem('amala_db', JSON.stringify(amalaData));
+            renderUI();
+        }
+
+        function renderUI() {
+            document.getElementById('val-dhuha').innerText = amalaData.dhuha;
+            document.getElementById('val-tahajjud').innerText = amalaData.tahajjud;
+            document.getElementById('val-quran').innerText = amalaData.quran;
+            document.getElementById('val-sedekah').innerText = "Rp " + (amalaData.sedekah || 0).toLocaleString('id-ID');
+            
+            // Render Kalender
+            const calBody = document.getElementById('cal-body');
+            calBody.innerHTML = '';
+            for(let i=1; i<=31; i++) {
+                let dateKey = `2026-01-${i}`;
+                let isDone = amalaData.fasting.includes(dateKey);
+                calBody.innerHTML += `<div class="cal-day ${isDone ? 'fasting-done' : ''}" onclick="toggleFast('${dateKey}')">${i}</div>`;
+            }
+            document.getElementById('stat-month').innerText = amalaData.fasting.length;
+            document.getElementById('stat-year').innerText = amalaData.fasting.length;
+        }
+
+        function toggleFast(date) {
+            let index = amalaData.fasting.indexOf(date);
+            if(index > -1) amalaData.fasting.splice(index, 1);
+            else amalaData.fasting.push(date);
+            saveData();
+        }
+
+        function toggleCalendar() {
+            const modal = document.getElementById('calendar-modal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Jalankan saat start
+        renderUI();
+    </script>
 </body>
 </html>
