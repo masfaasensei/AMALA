@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AMALA - Muhammadiyah Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Palette Pastel yang Diperhalus */
             --primary-green: #6B8E7B;
-            --bg-color: #F0F4F2;
-            --card-bg: #E3EDE7;
-            --text-main: #34495E;
+            --bg-color: #F0F4F2;        /* Mint Cream */
+            --card-bg: #E3EDE7;         /* Soft Sage */
+            --text-main: #3D4E44;
             --text-sub: #7F8C8D;
             --border-color: #D1DED6;
-            --pastel-blue: #AED6F1;
+            --pastel-blue: #D6EAF8;
+            --pastel-yellow: #FCF3CF;
+            --pastel-pink: #FADBD8;
         }
 
         [data-theme="dark"] {
-            --bg-color: #1F2321;
-            --card-bg: #2C3330;
+            --bg-color: #1A1E1C;
+            --card-bg: #252B28;
             --text-main: #E0E5E2;
             --text-sub: #94A39B;
-            --border-color: #38423D;
+            --border-color: #2F3833;
         }
 
         body {
@@ -36,117 +39,192 @@
 
         .app-container { width: 100%; max-width: 450px; padding: 20px; }
 
-        header { text-align: center; position: relative; margin-bottom: 20px; }
-        h1 { color: var(--primary-green); margin: 0; font-weight: 700; letter-spacing: 1px; }
-        #hijri-date { font-size: 0.8rem; color: var(--text-sub); margin-top: 5px; }
-        #theme-toggle { position: absolute; right: 0; top: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        /* Header Estetik */
+        header { 
+            text-align: center; 
+            position: relative; 
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+        h1 { 
+            font-family: 'Quicksand', sans-serif;
+            color: var(--primary-green); 
+            margin: 0; 
+            font-weight: 700; 
+            letter-spacing: 3px;
+            font-size: 1.8rem;
+        }
+        #hijri-date { font-size: 0.8rem; color: var(--text-sub); margin-top: 5px; opacity: 0.8; }
+        
+        #theme-toggle { 
+            position: absolute; right: 0; top: 10px; 
+            background: var(--card-bg); border: none; 
+            width: 40px; height: 40px; border-radius: 50%;
+            font-size: 1.2rem; cursor: pointer;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Welcome Card dengan Gradasi Lembut */
+        .welcome-card { 
+            background: linear-gradient(135deg, var(--card-bg), #EBF5EE);
+            padding: 20px; 
+            border-radius: 25px; 
+            margin-bottom: 20px; 
+            border-bottom: 4px solid var(--primary-green);
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.02);
+        }
+        .welcome-card h2 { margin: 0; font-size: 1.1rem; font-family: 'Quicksand', sans-serif; }
+        .welcome-card p { margin: 5px 0 0; font-size: 0.85rem; opacity: 0.8; }
+
+        /* Card Shalat Style Kapsul */
+        .shalat-card {
+            background: var(--pastel-blue);
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .shalat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+        .shalat-item {
+            background: rgba(255,255,255,0.3);
+            padding: 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Task Item Style */
+        .task-item { 
+            background: var(--card-bg); 
+            padding: 16px; 
+            border-radius: 20px; 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            border: 1px solid var(--border-color);
+            transition: 0.2s;
+        }
+        .task-item:active { transform: scale(0.97); }
+        .task-item.done { background: #F8FAF9; opacity: 0.6; border-color: transparent; }
+        
+        .custom-checkbox {
+            width: 22px; height: 22px;
+            border-radius: 7px;
+            border: 2px solid var(--primary-green);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+        }
+        .task-item.done .custom-checkbox { background: var(--primary-green); }
+        .task-item.done .custom-checkbox::after { content: '✓'; color: white; font-size: 14px; }
+
+        .task-text { flex: 1; margin-left: 15px; font-size: 0.9rem; font-weight: 500; }
+        .btn-del { color: #E74C3C; opacity: 0.3; transition: 0.3s; padding: 5px; }
+        .task-item:hover .btn-del { opacity: 1; }
+
+        /* Progress Bar Tebal */
+        .progress-container { background: var(--card-bg); padding: 15px; border-radius: 20px; margin-bottom: 20px; }
+        .progress-bar { background: #D1DED6; height: 16px; border-radius: 20px; overflow: hidden; }
+        #progress-fill { background: linear-gradient(90deg, var(--primary-green), #94B49F); height: 100%; transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        /* Navigation Bawah Floating */
+        .bottom-nav {
+            position: fixed; bottom: 20px; width: 90%; max-width: 400px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            display: flex; justify-content: space-around;
+            padding: 12px 0; border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .nav-item { text-align: center; color: var(--text-sub); transition: 0.3s; }
+        .nav-item.active { color: var(--primary-green); transform: translateY(-5px); }
+        .nav-icon { font-size: 1.5rem; display: block; }
+        .nav-text { font-size: 0.7rem; font-weight: bold; }
 
         .content-section { display: none; }
-        .content-section.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Welcome Greeting */
-        .welcome-card { background: var(--card-bg); padding: 15px; border-radius: 20px; margin-bottom: 15px; text-align: left; border-left: 8px solid var(--primary-green); }
-        .welcome-card h2 { margin: 0; font-size: 1rem; color: var(--primary-green); }
-        .welcome-card p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-main); }
-
-        .card { 
-            background: var(--card-bg); padding: 15px; border-radius: 20px; 
-            margin-bottom: 15px; border: 1px solid var(--border-color);
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.02);
-        }
-
-        /* Customize Bar */
-        .add-task-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        #new-task-input { 
-            flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);
-            background: var(--card-bg); color: var(--text-main); font-family: inherit;
-        }
-        .btn-add { background: var(--primary-green); color: white; border: none; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-weight: bold; }
-
-        /* Task Items */
-        .task-item { 
-            background: var(--card-bg); padding: 12px; border-radius: 15px; 
-            display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color);
-        }
-        .task-item.done { opacity: 0.5; text-decoration: line-through; }
-        .task-text { flex: 1; margin-left: 10px; font-size: 0.85rem; cursor: pointer; }
-        .btn-del { background: none; border: none; color: #E74C3C; cursor: pointer; font-weight: bold; padding: 5px 10px; font-size: 1.1rem; }
-
-        .progress-bar { background: #D1DED6; height: 12px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        #progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: 0.5s; }
-
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; max-width: 450px;
-            background: var(--card-bg); display: flex; justify-content: space-around;
-            padding: 15px 0; border-top: 2px solid var(--border-color); border-radius: 20px 20px 0 0;
-            box-shadow: 0 -5px 10px rgba(0,0,0,0.05);
-        }
-        .nav-item { text-align: center; font-size: 0.75rem; color: var(--text-sub); cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary-green); font-weight: bold; }
-        .nav-icon { font-size: 1.4rem; display: block; }
+        .content-section.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <header>
-        <button id="theme-toggle">🌙</button>
         <h1>AMALA</h1>
         <div id="hijri-date">15 Rajab 1447 H | KHGT</div>
+        <button id="theme-toggle">🌙</button>
     </header>
 
     <div id="beranda" class="content-section active">
         <div class="welcome-card">
             <h2 id="greeting-salam">Assalamu'alaikum, Guru</h2>
-            <p id="greeting-time">Semangat mengabdi di pagi hari ini.</p>
+            <p id="greeting-time">Semangat mengabdi di pagi hari.</p>
         </div>
 
-        <div class="card" style="background: var(--pastel-blue); border:none;">
-            <small><b>JADWAL SHALAT (TARJIH -18°)</b></small>
-            <div style="display:flex; justify-content: space-between; margin-top:5px; font-weight:bold; font-size: 0.9rem;">
-                <span>Subuh 04:15</span> <span>Dzuhur 11:55</span> <span>Ashar 15:15</span>
+        <div class="shalat-card">
+            <small style="font-weight: 800; opacity: 0.6; letter-spacing: 1px;">JADWAL SHALAT TARJIH</small>
+            <div class="shalat-grid">
+                <div class="shalat-item">Subuh<br>04:15</div>
+                <div class="shalat-item">Dzuhur<br>11:55</div>
+                <div class="shalat-item">Ashar<br>15:15</div>
             </div>
         </div>
 
-        <div class="card">
-            <small>Progres Amalan Hari Ini</small>
+        <div class="progress-container">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.8rem; font-weight: bold;">Progres Amalan</span>
+                <span id="stats-text" style="font-size: 0.8rem; font-weight: bold; color: var(--primary-green);">0/19</span>
+            </div>
             <div class="progress-bar"><div id="progress-fill"></div></div>
-            <div id="stats-text" style="font-size: 0.75rem;">0 amalan selesai</div>
         </div>
 
-        <div style="text-align: center; padding: 20px;">
-            <div id="plant-container" style="font-size: 4rem;">🌱</div>
-            <p id="garden-status" style="font-weight: 600; font-size: 0.9rem;">Ayo segarkan taman amalanmu!</p>
+        <div style="text-align: center; margin-top: 30px;">
+            <div id="plant-container" style="font-size: 4.5rem; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.05));">🌱</div>
+            <p id="garden-status" style="font-weight: 700; color: var(--primary-green); margin-top: 15px;">Ayo mulai amalanmu!</p>
         </div>
     </div>
 
     <div id="tugas" class="content-section">
-        <h3>Muhasabah & Customize</h3>
-        <div class="add-task-container">
-            <input type="text" id="new-task-input" placeholder="Tulis amalan baru...">
-            <button class="btn-add" onclick="addTask()">TAMBAH</button>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-family: 'Quicksand';">Daftar Amalan</h3>
+            <button onclick="resetTasks()" style="background: none; border: none; color: var(--text-sub); font-size: 0.7rem; font-weight: bold; cursor: pointer;">RESET SEMUA</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+            <input type="text" id="new-task-input" placeholder="Tambah amalan custom..." style="flex: 1; padding: 14px; border-radius: 15px; border: 1px solid var(--border-color); background: var(--card-bg); font-family: inherit;">
+            <button onclick="addTask()" style="background: var(--primary-green); color: white; border: none; width: 50px; border-radius: 15px; font-weight: bold; font-size: 1.2rem;">+</button>
         </div>
         
         <div id="task-list"></div>
-        <button onclick="resetTasks()" style="width:100%; padding:12px; border-radius:12px; border:none; background:#BDC3C7; color:white; font-weight:bold; cursor:pointer; margin-top:10px;">RESET PROGRESS HARI INI</button>
     </div>
 
     <div id="setoran" class="content-section">
-        <h3>Laporan Santri</h3>
-        <div class="card">Fitur laporan otomatis WhatsApp sedang disiapkan.</div>
+        <div class="welcome-card" style="text-align: center; border-left: none; border-bottom: 4px solid var(--pastel-blue);">
+            <div style="font-size: 3rem;">📖</div>
+            <h2>Laporan Santri</h2>
+            <p>Fitur otomatisasi laporan WhatsApp sedang dalam tahap penyempurnaan.</p>
+        </div>
     </div>
 </div>
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showTab('beranda', this)">
-        <span class="nav-icon">🏠</span>Beranda
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Beranda</span>
     </div>
     <div class="nav-item" onclick="showTab('tugas', this)">
-        <span class="nav-icon">⭐</span>Muhasabah
+        <span class="nav-icon">✨</span>
+        <span class="nav-text">Amalan</span>
     </div>
     <div class="nav-item" onclick="showTab('setoran', this)">
-        <span class="nav-icon">📖</span>Setoran
+        <span class="nav-icon">💬</span>
+        <span class="nav-text">Laporan</span>
     </div>
 </div>
 
@@ -158,7 +236,6 @@
         el.classList.add('active');
     }
 
-    // Toggle Theme
     const themeBtn = document.getElementById('theme-toggle');
     themeBtn.onclick = () => {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -166,27 +243,6 @@
         themeBtn.innerText = isDark ? '🌙' : '☀️';
     };
 
-    // Dinamis Greeting berdasarkan Waktu
-    function updateGreeting() {
-        const now = new Date();
-        const hour = now.getHours();
-        const salamEl = document.getElementById('greeting-salam');
-        const timeEl = document.getElementById('greeting-time');
-        
-        salamEl.innerText = "Assalamu'alaikum, Guru";
-        
-        if (hour >= 4 && hour < 11) {
-            timeEl.innerText = "Semangat menebar ilmu di pagi hari ini.";
-        } else if (hour >= 11 && hour < 15) {
-            timeEl.innerText = "Tetap istiqomah di tengah kesibukan siang ini.";
-        } else if (hour >= 15 && hour < 18) {
-            timeEl.innerText = "Selamat menanti waktu berbuka atau beristirahat sore ini.";
-        } else {
-            timeEl.innerText = "Semoga istirahat malam ini menjadi ibadah.";
-        }
-    }
-
-    // Data Amalan Utama
     const initialTasks = [
         "Shalat Tahajjud/Lail (HPT)", "Shalat Subuh Berjamaah", "Dzikir Pagi", "Shalat Isyraq/Dhuha",
         "Shalat Dzuhur Berjamaah", "Shalat Ashar Berjamaah", "Dzikir Petang", "Shalat Maghrib Berjamaah",
@@ -195,7 +251,7 @@
         "Berdoa untuk Orang Tua", "Tidur Awal Waktu", "Infaq Subuh"
     ];
 
-    let tasks = JSON.parse(localStorage.getItem('amala-v2')) || initialTasks.map(t => ({ text: t, done: false }));
+    let tasks = JSON.parse(localStorage.getItem('amala-v3')) || initialTasks.map(t => ({ text: t, done: false }));
 
     function renderTasks() {
         const list = document.getElementById('task-list');
@@ -204,14 +260,14 @@
             const item = document.createElement('div');
             item.className = `task-item ${task.done ? 'done' : ''}`;
             item.innerHTML = `
-                <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${index})">
+                <div class="custom-checkbox" onclick="toggleTask(${index})"></div>
                 <span class="task-text" onclick="toggleTask(${index})">${task.text}</span>
-                <button class="btn-del" onclick="deleteTask(${index})">✕</button>
+                <span class="btn-del" onclick="deleteTask(${index})">✕</span>
             `;
             list.appendChild(item);
         });
         updateProgress();
-        localStorage.setItem('amala-v2', JSON.stringify(tasks));
+        localStorage.setItem('amala-v3', JSON.stringify(tasks));
     }
 
     function addTask() {
@@ -229,14 +285,12 @@
     }
 
     function deleteTask(index) {
-        if(confirm("Hapus amalan ini?")) {
-            tasks.splice(index, 1);
-            renderTasks();
-        }
+        tasks.splice(index, 1);
+        renderTasks();
     }
 
     function resetTasks() {
-        if(confirm("Reset progres semua amalan?")) {
+        if(confirm("Mulai baru hari ini?")) {
             tasks.forEach(t => t.done = false);
             renderTasks();
         }
@@ -247,17 +301,16 @@
         const completed = tasks.filter(t => t.done).length;
         const percent = total === 0 ? 0 : (completed / total) * 100;
         document.getElementById('progress-fill').style.width = percent + '%';
-        document.getElementById('stats-text').innerText = `${completed} dari ${total} amalan selesai`;
+        document.getElementById('stats-text').innerText = `${completed}/${total}`;
         
         const plant = document.getElementById('plant-container');
-        if (percent === 0) plant.innerText = '🌱';
-        else if (percent < 50) plant.innerText = '🌿';
-        else if (percent < 100) plant.innerText = '🌳';
-        else plant.innerText = '🌸';
+        const status = document.getElementById('garden-status');
+        if (percent === 0) { plant.innerText = '🌱'; status.innerText = 'Mari mulai amalanmu!'; }
+        else if (percent < 50) { plant.innerText = '🌿'; status.innerText = 'Tamanmu mulai tumbuh!'; }
+        else if (percent < 100) { plant.innerText = '🌳'; status.innerText = 'Luar biasa, hampir penuh!'; }
+        else { plant.innerText = '🌸'; status.innerText = 'Tamanmu mekar sempurna!'; }
     }
 
-    // Init
-    updateGreeting();
     renderTasks();
 </script>
 
