@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Dzikir & Tracker</title>
+    <title>AMALA - Dzikir Lengkap Tarjih</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         :root {
-            --bg-app: #F0FdfA;
-            --text-main: #1F2937;
+            --bg-app: #F8FAFC;
+            --text-main: #1E293B;
             --card-orange: linear-gradient(135deg, #FDBA74 0%, #FB923C 100%);
             --card-green: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
             --card-teal: linear-gradient(135deg, #2DD4BF 0%, #0D9488 100%);
@@ -25,58 +25,48 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #eef2f5; display: flex; justify-content: center; min-height: 100vh; }
+        body { background-color: #e2e8f0; display: flex; justify-content: center; min-height: 100vh; }
 
-        .app-container { background-color: var(--bg-app); width: 100%; max-width: 480px; min-height: 100vh; position: relative; padding-bottom: 100px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .app-container { background-color: var(--bg-app); width: 100%; max-width: 480px; min-height: 100vh; position: relative; padding-bottom: 100px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
 
+        /* Header & Cards */
         header { padding: 30px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
-        .greeting h1 { font-size: 14px; color: #6B7280; }
         .greeting h2 { font-size: 20px; color: var(--text-main); font-weight: 600; }
-        .avatar { width: 50px; height: 50px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-soft); cursor: pointer; }
-
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
-        .card { padding: 18px; border-radius: var(--radius-xl); color: white; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-soft); cursor: pointer; transition: 0.2s; }
-        .card:active { transform: scale(0.97); }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px 24px; }
+        .card { padding: 18px; border-radius: var(--radius-xl); color: white; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-soft); cursor: pointer; }
         .card.full { grid-column: span 2; height: 90px; flex-direction: row; align-items: center; }
         .card.half { height: 130px; }
-
+        
+        /* Specific Colors */
         .card.dhuha { background: var(--card-orange); }
         .card.sedekah { background: var(--card-gold); }
         .card.quran { background: var(--card-teal); }
         .card.hafalan { background: var(--card-purple); }
         .card.murojaah { background: var(--card-blue); }
-        .card.dz-pagi { background: #facc15; color: #854d0e; } /* Kuning Cerah */
-        .card.dz-petang { background: var(--card-night); } /* Biru Malam */
+        .card.dz-pagi { background: #EAB308; color: #422006; }
+        .card.dz-petang { background: var(--card-night); }
         .card.tahajjud { background: var(--card-green); }
         .card.puasa { background: var(--card-rose); }
 
-        .card-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; opacity: 0.9; }
+        .card-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
         .card-value { font-size: 18px; font-weight: 600; }
         .big-val { font-size: 28px; }
-        .card-sub { font-size: 11px; opacity: 0.8; }
 
-        .input-btn { width: 34px; height: 34px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; color: inherit; }
+        .input-btn { width: 34px; height: 34px; background: rgba(255,255,255,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; color: inherit; }
 
-        /* TAB & CONTENT SYSTEM */
-        .page { display: none; padding: 20px; }
-        .page.active { display: block; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* Pages & Dzikir Content */
+        .page { display: none; padding-bottom: 50px; }
+        .page.active { display: block; }
+        .dzikir-container { padding: 20px; }
+        .dzikir-item { background: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .arab { font-family: 'Amiri', serif; font-size: 26px; text-align: right; direction: rtl; line-height: 2.2; margin-bottom: 15px; color: #0F172A; }
+        .terjemah { font-size: 13px; color: #64748B; line-height: 1.6; border-top: 1px solid #F1F5F9; padding-top: 10px; }
+        .label { font-size: 11px; font-weight: 600; color: #0D9488; margin-bottom: 8px; display: block; text-transform: uppercase; }
 
-        /* DZIKIR VIEW */
-        .dzikir-item { background: white; padding: 20px; border-radius: 18px; margin-bottom: 15px; box-shadow: var(--shadow-soft); }
-        .arab { font-family: 'Amiri', serif; font-size: 24px; text-align: right; direction: rtl; line-height: 1.8; margin-bottom: 12px; color: #111827; }
-        .terjemah { font-size: 12px; color: #4B5563; font-style: italic; line-height: 1.5; }
-        .instruksi { font-size: 10px; font-weight: 600; color: #0D9488; margin-bottom: 5px; text-transform: uppercase; }
-
-        /* CALENDAR KHGT */
-        .calendar-container { background: white; border-radius: 20px; padding: 15px; box-shadow: var(--shadow-soft); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
-        .date-cell { padding: 10px 2px; border-radius: 12px; font-size: 12px; cursor: pointer; border: 1px solid #f3f4f6; }
-        .date-cell.active-fast { background: #fee2e2; border-color: #fb7185; color: #e11d48; font-weight: 600; }
-        .hijri-small { font-size: 8px; display: block; opacity: 0.6; }
+        .nav-dzikir { position: sticky; top: 0; background: var(--bg-app); padding: 20px; z-index: 10; display: flex; align-items: center; gap: 15px; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--white); display: flex; justify-content: space-around; padding: 18px 10px; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9CA3AF; cursor: pointer; }
+        .nav-item { color: #9CA3AF; cursor: pointer; }
         .nav-item.active { color: #0D9488; }
     </style>
 </head>
@@ -84,9 +74,9 @@
 
     <div class="app-container">
         
-        <div id="page-home" class="page active" style="padding:0">
+        <div id="page-home" class="page active">
             <header>
-                <div class="greeting"><h1>Assalamu'alaikum,</h1><h2 id="user-name">Memuat...</h2></div>
+                <div class="greeting"><h1>Assalamu'alaikum,</h1><h2 id="user-name">...</h2></div>
                 <div class="avatar" onclick="gantiNama()">👨🏻‍🏫</div>
             </header>
 
@@ -94,102 +84,121 @@
                 <div class="card half dhuha">
                     <div class="card-header"><i class="ph ph-sun"></i> Dhuha</div>
                     <div class="card-value big-val" id="val-dhuha">0</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;"><span class="card-sub">Rakaat</span><button class="input-btn" onclick="isiData('dhuha', event)"><i class="ph ph-plus"></i></button></div>
+                    <button class="input-btn" onclick="isiData('dhuha', event)"><i class="ph ph-plus"></i></button>
                 </div>
-
                 <div class="card half sedekah">
                     <div class="card-header"><i class="ph ph-heart"></i> Sedekah</div>
                     <div class="card-value" id="val-sedekah">0</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;"><span class="card-sub">Rupiah</span><button class="input-btn" onclick="isiData('sedekah', event)"><i class="ph ph-plus"></i></button></div>
+                    <button class="input-btn" onclick="isiData('sedekah', event)"><i class="ph ph-plus"></i></button>
                 </div>
-
                 <div class="card full quran">
-                    <div style="flex:1"><div class="card-header"><i class="ph ph-book-open"></i> Tilawah Al-Quran</div><div class="card-sub">Target: 1 Juz/hari</div></div>
-                    <div style="text-align: right; margin-right: 15px;"><div class="card-value big-val" id="val-quran">0</div><span class="card-sub">Halaman</span></div>
+                    <div style="flex:1"><div class="card-header"><i class="ph ph-book-open"></i> Tilawah</div></div>
+                    <div style="text-align: right; margin-right: 15px;"><div class="card-value big-val" id="val-quran">0</div></div>
                     <button class="input-btn" onclick="isiData('quran', event)"><i class="ph ph-plus"></i></button>
                 </div>
-
                 <div class="card full hafalan">
-                    <div style="flex:1"><div class="card-header"><i class="ph ph-student"></i> Hafalan Baru</div><div class="card-value" id="val-hafalan">Belum ada</div></div>
+                    <div style="flex:1"><div class="card-header"><i class="ph ph-student"></i> Hafalan Baru</div><div class="card-value" id="val-hafalan">...</div></div>
                     <button class="input-btn" onclick="isiHafalan('hafalan', event)"><i class="ph ph-plus"></i></button>
                 </div>
-
                 <div class="card full murojaah">
-                    <div style="flex:1"><div class="card-header"><i class="ph ph-arrows-counter-clockwise"></i> Murojaah</div><div class="card-value" id="val-murojaah">Belum ada</div></div>
+                    <div style="flex:1"><div class="card-header"><i class="ph ph-arrows-counter-clockwise"></i> Murojaah</div><div class="card-value" id="val-murojaah">...</div></div>
                     <button class="input-btn" onclick="isiHafalan('murojaah', event)"><i class="ph ph-plus"></i></button>
                 </div>
 
                 <div class="card half dz-pagi" onclick="switchPage('pagi')">
                     <div class="card-header"><i class="ph ph-sun-horizon"></i> Pagi</div>
                     <div class="card-value">Dzikir Pagi</div>
-                    <div style="text-align: right;"><i class="ph ph-book-open-text" style="font-size: 24px;"></i></div>
+                    <i class="ph ph-book-open-text" style="align-self: flex-end; font-size: 24px;"></i>
                 </div>
-
                 <div class="card half dz-petang" onclick="switchPage('petang')">
                     <div class="card-header"><i class="ph ph-moon-stars"></i> Petang</div>
                     <div class="card-value">Dzikir Petang</div>
-                    <div style="text-align: right;"><i class="ph ph-book-open-text" style="font-size: 24px;"></i></div>
+                    <i class="ph ph-book-open-text" style="align-self: flex-end; font-size: 24px;"></i>
                 </div>
 
                 <div class="card half tahajjud">
                     <div class="card-header"><i class="ph ph-moon"></i> Tahajjud</div>
                     <div class="card-value big-val" id="val-tahajjud">0</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;"><span class="card-sub">Rakaat</span><button class="input-btn" onclick="isiData('tahajjud', event)"><i class="ph ph-plus"></i></button></div>
+                    <button class="input-btn" onclick="isiData('tahajjud', event)"><i class="ph ph-plus"></i></button>
                 </div>
-
                 <div class="card half puasa" onclick="switchPage('puasa')">
                     <div class="card-header"><i class="ph ph-calendar-blank"></i> Puasa</div>
                     <div class="card-value big-val" id="count-puasa">0</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;"><span class="card-sub">Hari Ini</span><i class="ph ph-caret-right"></i></div>
+                    <span style="font-size: 11px; opacity: 0.8;">Hari Terlaksana</span>
                 </div>
             </section>
         </div>
 
         <div id="page-pagi" class="page">
-            <h2 style="margin-bottom: 20px;"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i> Dzikir Pagi</h2>
-            <div class="dzikir-item">
-                <p class="instruksi">Membaca ayat kursi (1x)</p>
-                <p class="arab">اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...</p>
-                <p class="terjemah">"Allah, tidak ada Tuhan melainkan Dia Yang Hidup kekal lagi terus-menerus mengurus (makhluk-Nya)..."</p>
+            <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')" style="font-size: 24px;"></i><h2>Dzikir Pagi</h2></div>
+            <div class="dzikir-container" id="content-pagi">
+                <div class="dzikir-item">
+                    <span class="label">Membaca Ayat Kursi (1x)</span>
+                    <p class="arab">اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ...</p>
+                    <p class="terjemah">"Allah, tidak ada tuhan selain Dia. Yang Maha Hidup, yang terus menerus mengurus (makhluk-Nya)..."</p>
+                </div>
+                <div class="dzikir-item">
+                    <span class="label">Al-Ikhlas, Al-Falaq, An-Nas (3x)</span>
+                    <p class="arab">قُلْ هُوَ اللَّهُ أَحَدٌ...</p>
+                    <p class="terjemah">Masing-masing dibaca 3x pada pagi dan petang.</p>
+                </div>
+                <div class="dzikir-item">
+                    <span class="label">Sayyidul Istighfar (1x)</span>
+                    <p class="arab">اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ...</p>
+                    <p class="terjemah">"Ya Allah, Engkau adalah Tuhanku, tidak ada tuhan yang berhak disembah kecuali Engkau..."</p>
+                </div>
+                <div class="dzikir-item">
+                    <span class="label">Keselamatan & Afiat (3x)</span>
+                    <p class="arab">اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ</p>
+                    <p class="terjemah">"Ya Allah, sehatkanlah badanku, sehatkanlah pendengaranku, sehatkanlah penglihatanku..."</p>
+                </div>
+                <div class="dzikir-item">
+                    <span class="label">Perlindungan (3x)</span>
+                    <p class="arab">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</p>
+                    <p class="terjemah">"Dengan nama Allah yang tidak ada sesuatu pun di bumi dan di langit yang bisa membahayakan bersama nama-Nya..."</p>
+                </div>
+                <p style="text-align:center; color: #94A3B8; font-size: 11px; padding-bottom: 20px;">-- Sumber: Muhammadiyah.or.id --</p>
             </div>
-            <div class="dzikir-item">
-                <p class="instruksi">Doa Perlindungan (3x)</p>
-                <p class="arab">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</p>
-                <p class="terjemah">"Dengan nama Allah yang bila disebut, segala sesuatu di bumi dan langit tidak akan berbahaya..."</p>
-            </div>
-            <p style="text-align:center; font-size: 11px; color: #9CA3AF;">-- Sesuai HPT Muhammadiyah --</p>
         </div>
 
         <div id="page-petang" class="page">
-            <h2 style="margin-bottom: 20px;"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i> Dzikir Petang</h2>
-            <div class="dzikir-item">
-                <p class="instruksi">Al-Ikhlas, Al-Falaq, An-Nas (3x)</p>
-                <p class="arab">قُلْ هُوَ اللَّهُ أَحَدٌ...</p>
-                <p class="terjemah">"Katakanlah: Dialah Allah, Yang Maha Esa..."</p>
-            </div>
-            <div class="dzikir-item">
-                <p class="instruksi">Doa Keridhaan (3x)</p>
-                <p class="arab">رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا</p>
-                <p class="terjemah">"Aku ridha Allah sebagai Tuhanku, Islam sebagai agamaku, dan Muhammad sebagai Nabiku..."</p>
+            <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')" style="font-size: 24px;"></i><h2>Dzikir Petang</h2></div>
+            <div class="dzikir-container">
+                <div class="dzikir-item">
+                    <span class="label">Membaca Ayat Kursi (1x)</span>
+                    <p class="arab">اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...</p>
+                </div>
+                <div class="dzikir-item">
+                    <span class="label">Perlindungan dari Kejahatan Makhluk (3x)</span>
+                    <p class="arab">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ</p>
+                    <p class="terjemah">"Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari kejahatan apa yang diciptakan-Nya."</p>
+                </div>
+                <div class="dzikir-item">
+                    <span class="label">Dzikir Sore</span>
+                    <p class="arab">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ</p>
+                    <p class="terjemah">"Kami telah memasuki waktu sore, dan kerajaan hanya milik Allah..."</p>
+                </div>
+                <p style="text-align:center; color: #94A3B8; font-size: 11px;">(Sama seperti dzikir pagi lainnya)</p>
             </div>
         </div>
 
         <div id="page-puasa" class="page">
-            <h2 style="margin-bottom: 20px;"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i> Kalender KHGT</h2>
-            <div class="calendar-container">
-                <div class="calendar-grid" id="calendar-body"></div>
+            <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')" style="font-size: 24px;"></i><h2>Absen Puasa KHGT</h2></div>
+            <div style="padding: 20px;">
+                <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: var(--shadow-soft);" id="calendar-body"></div>
             </div>
         </div>
 
         <nav class="bottom-nav">
-            <div onclick="switchPage('home')" class="nav-item active" id="nav-home"><i class="ph ph-house-line" style="font-size: 24px;"></i></div>
-            <div onclick="switchPage('puasa')" class="nav-item" id="nav-puasa"><i class="ph ph-calendar-blank" style="font-size: 24px;"></i></div>
+            <div onclick="switchPage('home')" class="nav-item active" id="nav-home"><i class="ph ph-house-line" style="font-size: 26px;"></i></div>
+            <div onclick="switchPage('puasa')" class="nav-item" id="nav-puasa"><i class="ph ph-calendar-blank" style="font-size: 26px;"></i></div>
         </nav>
     </div>
 
     <script>
         let db = JSON.parse(localStorage.getItem('amala_db')) || {
-            dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0, hafalan: "Belum ada", murojaah: "Belum ada", nama: "", puasaDates: []
+            dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0, 
+            hafalan: "Belum isi", murojaah: "Belum isi", nama: "", puasaDates: []
         };
 
         function switchPage(p) {
@@ -200,12 +209,16 @@
 
         function buildCalendar() {
             const grid = document.getElementById('calendar-body');
-            grid.innerHTML = ['M','S','S','R','K','J','S'].map(d => `<div style="font-size:10px; font-weight:600; color:#9CA3AF">${d}</div>`).join('');
-            for(let i=0; i<4; i++) grid.innerHTML += '<div></div>';
-            for(let m=1; m<=31; m++) {
-                const isF = db.puasaDates.includes(m);
-                grid.innerHTML += `<div class="date-cell ${isF?'active-fast':''}" onclick="toggleP(${m})">${m}<span class="hijri-small">${m+11}</span></div>`;
-            }
+            grid.innerHTML = `<div style="display:grid; grid-template-columns:repeat(7,1fr); gap:10px; text-align:center;">
+                ${['M','S','S','R','K','J','S'].map(d=>`<small style="font-weight:600; color:#94A3B8">${d}</small>`).join('')}
+                ${Array(4).fill('<div></div>').join('')}
+                ${Array.from({length:31}, (_,i)=>i+1).map(m=>{
+                    const isF = db.puasaDates.includes(m);
+                    return `<div onclick="toggleP(${m})" style="padding:10px 0; border-radius:12px; font-size:14px; border:1px solid ${isF?'#FB7185':'#F1F5F9'}; background:${isF?'#FFF1F2':'none'}; color:${isF?'#E11D48':''}">
+                        ${m}<br><small style="font-size:9px; opacity:0.6">${m+11}</small>
+                    </div>`
+                }).join('')}
+            </div>`;
         }
 
         function toggleP(m) {
@@ -214,23 +227,20 @@
             save(); buildCalendar();
         }
 
-        function isiData(t, e) { e.stopPropagation(); let n = prompt("Jumlah:"); if(n) { db[t] = n; save(); } }
-        function isiHafalan(t, e) { e.stopPropagation(); let s=prompt("Surat:"), d=prompt("Dari:"), smp=prompt("Sampai:"); if(s&&d&&smp){ db[t]=`${s} (${d}-${smp})`; save(); } }
+        function isiData(t, e) { e.stopPropagation(); let n = prompt("Input angka:"); if(n) { db[t] = n; save(); } }
+        function isiHafalan(t, e) { e.stopPropagation(); let s=prompt("Surat:"), d=prompt("Ayat:"); if(s&&d){ db[t]=`${s} (${d})`; save(); } }
         function gantiNama() { let n=prompt("Nama:", db.nama); if(n){ db.nama=n; save(); } }
         function save() { localStorage.setItem('amala_db', JSON.stringify(db)); render(); }
 
         function render() {
-            document.getElementById('val-dhuha').innerText = db.dhuha;
-            document.getElementById('val-tahajjud').innerText = db.tahajjud;
-            document.getElementById('val-quran').innerText = db.quran;
-            document.getElementById('val-sedekah').innerText = db.sedekah;
-            document.getElementById('val-hafalan').innerText = db.hafalan;
-            document.getElementById('val-murojaah').innerText = db.murojaah;
+            ['dhuha','tahajjud','quran','sedekah','hafalan','murojaah'].forEach(k => {
+                if(document.getElementById('val-'+k)) document.getElementById('val-'+k).innerText = db[k];
+            });
             document.getElementById('count-puasa').innerText = db.puasaDates.length;
             document.getElementById('user-name').innerText = db.nama || "Hamba Allah";
         }
 
-        if(!db.nama) { db.nama = prompt("Nama Anda:") || "Hamba Allah"; save(); }
+        if(!db.nama) { db.nama = prompt("Siapa nama Anda?"); save(); }
         buildCalendar(); render();
     </script>
 </body>
