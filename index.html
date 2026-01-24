@@ -7,19 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Palet Pastel Ramah Mata (Tanpa Putih #FFFFFF) */
-            --primary-green: #6B8E7B;   /* Hijau Muhammadiyah Soft */
-            --bg-color: #F0F4F2;        /* Mint sangat muda */
-            --card-bg: #E3EDE7;         /* Pastel Mint untuk card */
+            --primary-green: #6B8E7B;
+            --bg-color: #F0F4F2;
+            --card-bg: #E3EDE7;
             --text-main: #34495E;
             --text-sub: #7F8C8D;
             --border-color: #D1DED6;
-            
-            /* Warna Variatif untuk Anak-anak */
             --pastel-blue: #AED6F1;
-            --pastel-yellow: #F9E79F;
-            --pastel-pink: #F5B7B1;
-            --pastel-purple: #D7BDE2;
+            --pastel-orange: #F9E79F;
         }
 
         [data-theme="dark"] {
@@ -35,47 +30,45 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding-bottom: 80px; /* Ruang untuk bottom nav */
+            padding-bottom: 90px;
             display: flex;
             justify-content: center;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
         .app-container { width: 100%; max-width: 450px; padding: 20px; }
 
-        header { text-align: center; position: relative; margin-bottom: 20px; }
-        h1 { color: var(--primary-green); font-size: 1.5rem; margin: 0; letter-spacing: 1px; }
-        #hijri-date { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
+        header { text-align: center; position: relative; margin-bottom: 25px; }
+        h1 { color: var(--primary-green); font-size: 1.8rem; margin: 0; font-weight: 700; }
+        #hijri-date { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; }
 
-        #theme-toggle { position: absolute; right: 0; top: 0; background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+        #theme-toggle { position: absolute; right: 0; top: 5px; background: none; border: none; font-size: 1.3rem; cursor: pointer; }
 
-        /* Card Styling - Playful & Rounded */
+        /* Card & Content Management */
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .card { 
             background: var(--card-bg); 
-            padding: 15px; 
-            border-radius: 20px; 
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.02); 
-            margin-bottom: 15px;
+            padding: 18px; 
+            border-radius: 22px; 
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.03); 
+            margin-bottom: 18px;
             border: 1px solid var(--border-color);
         }
 
-        .quote-card { border-left: 6px solid var(--primary-green); font-style: italic; font-size: 0.9rem; }
-
-        /* Dashboard Grid */
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        
-        /* Progress Bar */
-        .progress-bar { background: #D1DED6; height: 12px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-        #progress-fill { background: linear-gradient(90deg, var(--primary-green), #A9DFBF); width: 60%; height: 100%; transition: 0.5s; }
-
-        /* Task/Santri Item */
         .task-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 20px;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
         }
@@ -84,38 +77,24 @@
             background: #25D366; 
             color: white; 
             border: none; 
-            padding: 8px 12px; 
-            border-radius: 10px; 
-            font-size: 0.75rem; 
+            padding: 10px 16px; 
+            border-radius: 12px; 
+            font-size: 0.8rem; 
             cursor: pointer;
             font-weight: bold;
         }
 
         /* Bottom Navigation */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 450px;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 2px solid var(--border-color);
-            border-radius: 20px 20px 0 0;
+            position: fixed; bottom: 0; width: 100%; max-width: 450px;
+            background: var(--card-bg); display: flex; justify-content: space-around;
+            padding: 15px 0; border-top: 2px solid var(--border-color);
+            border-radius: 25px 25px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
         }
 
-        .nav-item { text-align: center; font-size: 0.7rem; color: var(--text-sub); cursor: pointer; }
+        .nav-item { text-align: center; font-size: 0.75rem; color: var(--text-sub); cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--primary-green); font-weight: bold; }
-        .nav-icon { font-size: 1.2rem; display: block; }
-
-        /* Animation */
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        .pop-effect:active { animation: pop 0.2s ease; }
+        .nav-icon { font-size: 1.4rem; display: block; }
     </style>
 </head>
 <body>
@@ -124,71 +103,96 @@
     <header>
         <button id="theme-toggle">🌙</button>
         <h1>AMALA</h1>
-        <div id="hijri-date">Memuat Kalender KHGT...</div>
+        <div id="hijri-date">15 Rajab 1447 H | KHGT</div>
     </header>
 
-    <div class="card" style="background: var(--pastel-blue); border:none;">
-        <small style="display:block; margin-bottom: 5px;">📍 Jadwal Shalat (Hisab Tarjih -18°)</small>
-        <div style="display:flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem;">
-            <span>Subuh: 04:15</span>
-            <span>Dzuhur: 11:55</span>
-            <span>Ashar: 15:15</span>
+    <div id="beranda" class="content-section active">
+        <div class="card" style="background: var(--pastel-blue); border:none; color: #2C3E50;">
+            <small style="font-weight: bold; opacity: 0.7;">📍 JADWAL SHALAT (TARJIH -18°)</small>
+            <div style="display:flex; justify-content: space-between; font-weight: bold; margin-top:5px;">
+                <span>Subuh 04:15</span>
+                <span>Dzuhur 11:55</span>
+                <span>Ashar 15:15</span>
+            </div>
+        </div>
+        <div class="card" style="border-left: 8px solid var(--primary-green);">
+            <i>"Sebaik-baik kalian adalah yang belajar Al-Qur'an dan mengajarkannya."</i>
+        </div>
+        <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 3rem;">🌱</div>
+            <p>Selamat Beraktivitas, Guru!</p>
         </div>
     </div>
 
-    <div class="card quote-card">
-        "Sebaik-baik kalian adalah yang belajar Al-Qur'an dan mengajarkannya."
+    <div id="setoran" class="content-section">
+        <h3>Setoran Santri Hari Ini</h3>
+        <div class="task-item" style="border-left: 8px solid var(--pastel-blue);">
+            <div>
+                <div style="font-weight: 700;">Ahmad</div>
+                <div style="font-size: 0.8rem; color: var(--text-sub);">Ziyadah: An-Naba' 1-10</div>
+            </div>
+            <button class="btn-wa" onclick="sendWA('Ahmad', 'Ziyadah', 'An-Naba 1-10')">LAPOR</button>
+        </div>
+        <div class="task-item" style="border-left: 8px solid var(--pastel-orange);">
+            <div>
+                <div style="font-weight: 700;">Sarah</div>
+                <div style="font-size: 0.8rem; color: var(--text-sub);">Murojaah: Juz 30</div>
+            </div>
+            <button class="btn-wa" onclick="sendWA('Sarah', 'Murojaah', 'Juz 30')">LAPOR</button>
+        </div>
     </div>
 
-    <div class="dashboard-grid">
+    <div id="muhasabah" class="content-section">
+        <h3>Muhasabah Guru</h3>
         <div class="card">
-            <small>Progres Hari Ini</small>
-            <div class="progress-bar"><div id="progress-fill"></div></div>
-            <div style="font-size: 0.7rem; margin-top: 5px;">6 dari 10 Murid Selesai</div>
-        </div>
-        <div class="card" style="text-align: center;">
-            <div id="plant-container">🌱</div>
-            <div style="font-size: 0.7rem; color: var(--text-sub);">Taman Amalan</div>
+            <input type="checkbox"> Shalat Berjamaah (HPT)<br><br>
+            <input type="checkbox"> Tilawah 1 Juz<br><br>
+            <input type="checkbox"> Infaq/Sedekah Al-Maun
         </div>
     </div>
 
-    <h3>Daftar Setoran Murid</h3>
-    
-    <div class="task-item pop-effect" style="border-left: 5px solid var(--pastel-blue);">
-        <div>
-            <div style="font-weight: bold;">Ahmad</div>
-            <div style="font-size: 0.7rem; color: var(--text-sub);">Ziyadah: An-Naba' 1-10</div>
-        </div>
-        <button class="btn-wa" onclick="sendWA('Ahmad', 'Ziyadah', 'An-Naba 1-10')">Kirim WA</button>
-    </div>
-
-    <div class="task-item pop-effect" style="border-left: 5px solid var(--pastel-orange);">
-        <div>
-            <div style="font-weight: bold;">Sarah</div>
-            <div style="font-size: 0.7rem; color: var(--text-sub);">Murojaah: Juz 30</div>
-        </div>
-        <button class="btn-wa" onclick="sendWA('Sarah', 'Murojaah', 'Juz 30')">Kirim WA</button>
+    <div id="menu" class="content-section">
+        <h3>Pengaturan</h3>
+        <div class="card">Data Santri</div>
+        <div class="card">Riwayat Laporan</div>
+        <div class="card">Tentang AMALA</div>
     </div>
 
 </div>
 
 <div class="bottom-nav">
-    <div class="nav-item">
+    <div class="nav-item active" onclick="showSection('beranda', this)">
         <span class="nav-icon">🏠</span>Beranda
     </div>
-    <div class="nav-item active">
+    <div class="nav-item" onclick="showSection('setoran', this)">
         <span class="nav-icon">📖</span>Setoran
     </div>
-    <div class="nav-item">
-        <span class="nav-icon">🧘</span>Muhasabah
+    <div class="nav-item" onclick="showSection('muhasabah', this)">
+        <span class="nav-icon">⭐</span>Muhasabah
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="showSection('menu', this)">
         <span class="nav-icon">⚙️</span>Menu
     </div>
 </div>
 
 <script>
-    // Fitur Dark Mode
+    // Fungsi Pindah Halaman (Tab)
+    function showSection(sectionId, element) {
+        // Sembunyikan semua section
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        // Tampilkan section yang dipilih
+        document.getElementById(sectionId).classList.add('active');
+        
+        // Atur status aktif pada menu bawah
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        element.classList.add('active');
+    }
+
+    // Toggle Dark Mode
     const toggle = document.getElementById('theme-toggle');
     toggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -197,4 +201,16 @@
             toggle.innerText = '🌙';
         } else {
             document.documentElement.setAttribute('data-theme', 'dark');
-            toggle.innerText = '☀️
+            toggle.innerText = '☀️';
+        }
+    });
+
+    // Fungsi WhatsApp
+    function sendWA(nama, jenis, materi) {
+        const pesan = `Assalamu'alaikum Ayah/Bunda, berikut laporan ananda *${nama}* hari ini:\n\n📖 *${jenis}*: ${materi}\nAlhamdulillah lancar.\n\n_Dikirim via AMALA_`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
