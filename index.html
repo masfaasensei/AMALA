@@ -42,11 +42,8 @@
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
         .card { padding: 18px; border-radius: var(--radius-xl); color: white; position: relative; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
         
-        /* Layout Atas Tetap Kecil */
         .card.dhuha { background: var(--card-orange); height: 140px; }
         .card.sedekah { background: var(--card-gold); height: 140px; }
-
-        /* Layout Amalan Quran & Tahajjud Memanjang (Full Width) */
         .card.full { grid-column: span 2; height: 100px; flex-direction: row; align-items: center; }
         
         .card.quran { background: var(--card-teal); }
@@ -55,11 +52,8 @@
         .card.tahajjud { background: var(--card-green); }
 
         .card-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; opacity: 0.9; }
-        .card-value { font-size: 20px; font-weight: 600; margin-top: 2px; }
-        
-        /* Font khusus angka besar untuk dhuha/quran/tahajjud */
+        .card-value { font-size: 19px; font-weight: 600; margin-top: 2px; line-height: 1.2; }
         .big-val { font-size: 30px; }
-
         .card-sub { font-size: 11px; opacity: 0.8; }
 
         .input-btn { width: 34px; height: 34px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: white; font-size: 18px; }
@@ -179,13 +173,19 @@
             }
         }
 
+        // FUNGSI UPDATE: Tanyakan Surat, Dari, dan Sampai
         function isiHafalan(tipe) {
             let surat = prompt("Nama Surat:");
-            let ayat = prompt("Ayat:");
-            if (surat && ayat) {
-                db[tipe] = surat + " (" + ayat + ")";
-                save();
-            }
+            if (!surat) return;
+            
+            let dari = prompt("Dari ayat:");
+            if (!dari) return;
+            
+            let sampai = prompt("Sampai ayat:");
+            if (!sampai) return;
+
+            db[tipe] = surat + " (" + dari + "-" + sampai + ")";
+            save();
         }
 
         function gantiNama() {
