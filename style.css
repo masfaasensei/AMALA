@@ -1,93 +1,284 @@
-:root {
-    --primary-green: #89a894;
-    --bg-color: #f9fbf9;
-    --card-bg: #ffffff;
-    --text-main: #333;
-    --text-sub: #777;
-    --border-color: #eee;
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMALA - Buku Saku Guru Ngaji</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* BAGIAN CSS YANG DIUBAH TOTAL */
+        :root {
+            /* Menghindari Putih Murni (#FFFFFF), diganti dengan Mint & Sage Pastel */
+            --primary-green: #6B8E7B;   /* Hijau Muhammadiyah Soft */
+            --bg-color: #F0F4F2;        /* Mint sangat muda (Sangat nyaman di mata) */
+            --card-bg: #E3EDE7;         /* Pastel Mint sedikit lebih gelap dari BG */
+            --text-main: #34495E;
+            --text-sub: #7F8C8D;
+            --border-color: #D1DED6;
+            
+            /* Warna Pastel Variatif untuk Elemen Anak-anak */
+            --pastel-blue: #AED6F1;
+            --pastel-yellow: #F9E79F;
+            --pastel-pink: #F5B7B1;
+            --pastel-orange: #F9E79F;
+            --pastel-purple: #D7BDE2;
+        }
 
-[data-theme="dark"] {
-    --bg-color: #1a1c1a;
-    --card-bg: #2d302d;
-    --text-main: #e0e0e0;
-    --text-sub: #a0a0a0;
-    --border-color: #3d423d;
-}
+        /* Mode Gelap (Dark Mode) */
+        [data-theme="dark"] {
+            --bg-color: #1F2321;
+            --card-bg: #2C3330;
+            --text-main: #E0E5E2;
+            --text-sub: #94A39B;
+            --border-color: #38423D;
+        }
 
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    transition: 0.3s;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 90px; /* Ruang agar tidak tertutup menu bawah */
+            display: flex;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
 
-.app-container { width: 100%; max-width: 450px; padding: 20px; }
+        .app-container { 
+            width: 100%; 
+            max-width: 450px; 
+            padding: 20px; 
+        }
 
-header { text-align: center; position: relative; margin-bottom: 20px; }
-h1 { color: var(--primary-green); margin: 0; letter-spacing: 2px; }
-#theme-toggle { position: absolute; right: 0; top: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        header { 
+            text-align: center; 
+            position: relative; 
+            margin-bottom: 25px; 
+        }
 
-.quote-card { background: var(--card-bg); padding: 15px; border-radius: 15px; border-left: 5px solid var(--primary-green); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; }
+        h1 { 
+            color: var(--primary-green); 
+            font-size: 1.8rem; 
+            margin: 0; 
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
 
-.dashboard-grid { display: grid; grid-template-columns: 1fr 120px; gap: 10px; margin-bottom: 20px; }
-.progress-section, .garden-section, .stats-section { background: var(--card-bg); padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        #hijri-date { 
+            font-size: 0.85rem; 
+            color: var(--text-sub); 
+            font-weight: 600;
+            margin-top: 5px;
+        }
 
-.progress-bar { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-#progress-fill { background: var(--primary-green); width: 0%; height: 100%; transition: 0.5s; }
+        #theme-toggle { 
+            position: absolute; 
+            right: 0; 
+            top: 5px; 
+            background: none; 
+            border: none; 
+            font-size: 1.3rem; 
+            cursor: pointer; 
+        }
 
-#plant-container { font-size: 45px; text-align: center; }
-#garden-status { font-size: 0.7rem; text-align: center; color: var(--text-sub); margin: 5px 0 0; }
+        /* Card Styling: Lebih Bulat (20px) & Playful */
+        .card { 
+            background: var(--card-bg); 
+            padding: 18px; 
+            border-radius: 22px; 
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.03); 
+            margin-bottom: 18px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
 
-.stats-grid { display: flex; gap: 10px; margin-bottom: 10px; }
-.stat-card { flex: 1; background: var(--bg-color); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid var(--border-color); }
-.stat-value { display: block; font-size: 1.2rem; font-weight: bold; color: var(--primary-green); }
-.stat-label { font-size: 0.7rem; color: var(--text-sub); }
+        .quote-card { 
+            border-left: 8px solid var(--primary-green); 
+            font-style: italic; 
+            font-size: 0.95rem; 
+            background: var(--card-bg);
+        }
 
-.history-item { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
+        /* Dashboard Grid */
+        .dashboard-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+        }
+        
+        /* Progress Bar Modern */
+        .progress-bar { 
+            background: #D1DED6; 
+            height: 14px; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            margin-top: 12px; 
+        }
+        #progress-fill { 
+            background: linear-gradient(90deg, var(--primary-green), #A9DFBF); 
+            width: 60%; 
+            height: 100%; 
+            transition: 0.5s; 
+        }
 
-.add-task-container { display: flex; gap: 10px; margin-bottom: 15px; }
-#new-task-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); }
-.add-task-container button { background: var(--primary-green); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* List Item Murid */
+        .task-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.02);
+        }
+        
+        .btn-wa { 
+            background: #25D366; 
+            color: white; 
+            border: none; 
+            padding: 10px 16px; 
+            border-radius: 12px; 
+            font-size: 0.8rem; 
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+        }
 
-.task-item { background: var(--card-bg); padding: 12px; border-radius: 12px; display: flex; align-items: center; margin-bottom: 10px; border: 1px solid var(--border-color); }
-.task-item.done { opacity: 0.5; text-decoration: line-through; }
+        /* Menu Navigasi Bawah yang Estetik */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 2px solid var(--border-color);
+            border-radius: 25px 25px 0 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
 
-#reset-btn { width: 100%; padding: 15px; background: var(--primary-green); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .nav-item { 
+            text-align: center; 
+            font-size: 0.75rem; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .nav-item.active { 
+            color: var(--primary-green); 
+            font-weight: bold; 
+            transform: translateY(-3px);
+        }
+        .nav-icon { 
+            font-size: 1.4rem; 
+            display: block; 
+            margin-bottom: 2px;
+        }
 
-/* Toast Notification Styles */
-#toast-container {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    width: 80%;
-    max-width: 320px;
-    pointer-events: none;
-}
+        /* Animasi Pop saat diklik */
+        .pop-effect:active { 
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
 
-.toast {
-    background: var(--primary-green);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    margin-top: 10px;
-    font-size: 0.85rem;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    animation: slideUp 0.4s ease, fadeOut 0.5s 3s forwards;
-    white-space: pre-line;
-}
+<div class="app-container">
+    <header>
+        <button id="theme-toggle">🌙</button>
+        <h1>AMALA</h1>
+        <div id="hijri-date">Memuat Kalender KHGT...</div>
+    </header>
 
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+    <div class="card" style="background: var(--pastel-blue); border:none; color: #2C3E50;">
+        <small style="display:block; margin-bottom: 5px; font-weight: bold; opacity: 0.7;">📍 JADWAL SHALAT (TARJIH -18°)</small>
+        <div style="display:flex; justify-content: space-between; font-weight: bold; font-size: 1rem;">
+            <span>Subuh 04:15</span>
+            <span>Dzuhur 11:55</span>
+            <span>Ashar 15:15</span>
+        </div>
+    </div>
 
-@keyframes fadeOut {
-    to { opacity: 0; }
-}
+    <div class="card quote-card">
+        "Sebaik-baik kalian adalah yang belajar Al-Qur'an dan mengajarkannya."
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="card">
+            <small style="font-weight: 600;">Progres Setoran</small>
+            <div class="progress-bar"><div id="progress-fill"></div></div>
+            <div style="font-size: 0.75rem; margin-top: 8px; font-weight: 500;">6 dari 10 Murid</div>
+        </div>
+        <div class="card" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+            <div id="plant-container" style="font-size: 2rem;">🌱</div>
+            <div style="font-size: 0.7rem; color: var(--text-sub); font-weight: 600;">TAMAN AMALAN</div>
+        </div>
+    </div>
+
+    <h3 style="font-size: 1.1rem; margin-left: 5px;">Setoran Santri Hari Ini</h3>
+    
+    <div class="task-item pop-effect" style="border-left: 8px solid var(--pastel-blue);">
+        <div>
+            <div style="font-weight: 700; font-size: 1rem;">Ahmad</div>
+            <div style="font-size: 0.8rem; color: var(--text-sub);">Ziyadah: An-Naba' 1-10</div>
+        </div>
+        <button class="btn-wa" onclick="sendWA('Ahmad', 'Ziyadah', 'An-Naba 1-10')">LAPOR</button>
+    </div>
+
+    <div class="task-item pop-effect" style="border-left: 8px solid var(--pastel-orange);">
+        <div>
+            <div style="font-weight: 700; font-size: 1rem;">Sarah</div>
+            <div style="font-size: 0.8rem; color: var(--text-sub);">Murojaah: Juz 30</div>
+        </div>
+        <button class="btn-wa" onclick="sendWA('Sarah', 'Murojaah', 'Juz 30')">LAPOR</button>
+    </div>
+
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-item">
+        <span class="nav-icon">🏠</span>Beranda
+    </div>
+    <div class="nav-item active">
+        <span class="nav-icon">📖</span>Setoran
+    </div>
+    <div class="nav-item">
+        <span class="nav-icon">⭐</span>Muhasabah
+    </div>
+    <div class="nav-item">
+        <span class="nav-icon">⚙️</span>Menu
+    </div>
+</div>
+
+<script>
+    // Fitur Dark Mode yang Konsisten
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            toggle.innerText = '🌙';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.innerText = '☀️';
+        }
+    });
+
+    // Simulasi Tanggal KHGT
+    document.getElementById('hijri-date').innerText = "Sabtu, 15 Rajab 1447 H | KHGT";
+
+    // Fungsi Kirim WhatsApp Format Tarjih
+    function sendWA(nama, jenis, materi) {
+        const pesan = `Assalamu'alaikum Ayah/Bunda, berikut laporan ananda *${nama}* hari ini:\n\n📖 *${jenis}*: ${materi}\nAlhamdulillah lancar.\n\n_Dikirim via AMALA - Buku Saku Guru Ngaji_`;
+        const url = `https://wa.me/?text=${encodeURIComponent(pesan)}`;
+        window.open(url, '_blank');
+    }
+</script>
+
+</body>
+</html>
