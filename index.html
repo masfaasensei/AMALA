@@ -3,189 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Personal Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>AMALA - Guru Fajar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --forest-deep: #1B4332;
-            --sage-medium: #74C69D;
-            --soft-mint: #D8F3DC;
-            --bg-neutral: #F8F9FA;
-            --text-dark: #2D3436;
+            --teal-blue: #19748A;
+            --mint-green: #A6F5C0;
+            --dark-navy: #0A2E4A;
+            --light-cyan: #B8FAFF;
+            --pale-blue: #E7F2F7;
+            --white: #FFFFFF;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-neutral);
-            color: var(--text-dark);
-            margin: 0; padding-bottom: 100px;
-            display: flex; justify-content: center;
+            background-color: var(--pale-blue);
+            margin: 0; padding-bottom: 110px;
+            color: var(--dark-navy);
         }
 
-        .app-container { width: 100%; max-width: 450px; padding: 25px; }
+        .container { max-width: 450px; margin: auto; padding: 20px; }
 
-        /* Header Style Baru */
-        header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .user-info h2 { font-family: 'Quicksand'; margin: 0; font-size: 1.3rem; }
-        .user-info p { margin: 0; font-size: 0.8rem; color: #636E72; }
-        .avatar { width: 45px; height: 45px; background: var(--sage-medium); border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header h2 { font-family: 'Quicksand'; margin: 0; font-size: 1.2rem; }
 
-        /* Dashboard Amalan */
-        .section-label { font-family: 'Quicksand'; font-weight: 700; font-size: 1rem; margin-bottom: 15px; display: block; color: var(--forest-deep); }
+        /* Grid Atas (Dhuha & Tahajjud) - Inspirasi Gambar 2 */
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .card { padding: 20px; border-radius: 28px; color: white; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .bg-dhuha { background: linear-gradient(135deg, #19748A, #248ea8); }
+        .bg-tahajjud { background: linear-gradient(135deg, #0A2E4A, #19748A); }
         
-        /* Grid Amalan Berdasarkan Gambar */
-        .amalan-grid { display: flex; flex-direction: column; gap: 15px; }
+        .card-label { font-family: 'Quicksand'; font-weight: 700; font-size: 0.9rem; }
+        .card-val { display: block; font-size: 2rem; font-weight: 800; margin: 10px 0; }
+        .edit-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 12px; border-radius: 10px; font-size: 0.7rem; cursor: pointer; }
 
-        /* Card Style - Menghindari kemiripan dengan gambar asli */
-        .amalan-card {
-            background: white; border-radius: 24px; padding: 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .amalan-card.active { border-left: 6px solid var(--forest-deep); background: #f0fdf4; }
+        /* List Amalan - Inspirasi Gambar 3 */
+        .list-container { background: white; border-radius: 30px; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        .item:last-child { border: none; }
+        .icon { width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
+        
+        .info { flex: 1; }
+        .info h4 { margin: 0; font-size: 0.9rem; font-weight: 700; }
+        .info p { margin: 2px 0 0; font-size: 0.7rem; color: #7f8c8d; }
 
-        .card-info { flex: 1; }
-        .card-info h3 { margin: 0; font-size: 0.95rem; font-family: 'Quicksand'; }
-        .card-info p { margin: 4px 0 0; font-size: 0.75rem; color: #b2bec3; font-style: italic; }
+        /* Counter Box */
+        .counter-box { text-align: right; min-width: 60px; }
+        .counter-box b { font-size: 1rem; color: var(--teal-blue); }
 
-        .check-btn {
-            width: 32px; height: 32px; border-radius: 50%;
-            border: 2px solid var(--soft-mint);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s;
-        }
-        .check-btn.done { background: var(--forest-deep); border-color: var(--forest-deep); }
-        .check-btn.done::after { content: '✓'; color: white; font-weight: bold; font-size: 14px; }
+        /* Checkbox Custom */
+        .check-pill { width: 25px; height: 25px; border: 2px solid var(--mint-green); border-radius: 8px; cursor: pointer; }
+        .check-pill.active { background: var(--mint-green); }
 
-        /* Floating Input Area (Halaman & Kalender) */
-        .special-card {
-            background: linear-gradient(135deg, var(--forest-deep), #2D6A4F);
-            color: white; border-radius: 28px; padding: 22px; margin-bottom: 25px;
-        }
-        .special-card h3 { margin: 0; font-size: 0.9rem; opacity: 0.9; }
-        .counter-display { font-size: 1.8rem; font-weight: 700; margin: 10px 0; display: block; }
-        .action-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; backdrop-filter: blur(5px); }
-
-        /* Bottom Nav - Clean & Floating */
-        .nav-dock {
-            position: fixed; bottom: 20px; width: 85%; max-width: 380px;
-            background: white; border-radius: 25px; padding: 12px;
-            display: flex; justify-content: space-around;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-        .nav-link { color: #b2bec3; font-size: 1.2rem; cursor: pointer; text-align: center; }
-        .nav-link.active { color: var(--forest-deep); }
-        .nav-link span { display: block; font-size: 0.6rem; font-weight: 700; margin-top: 2px; }
+        /* Navigasi - Inspirasi Gambar 1 & 3 */
+        .nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: var(--dark-navy); padding: 15px; border-radius: 25px; display: flex; justify-content: space-around; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .nav-link { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.65rem; text-align: center; }
+        .nav-link.active { color: var(--mint-green); font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <div class="user-info">
-            <p>Assalamu'alaikum,</p>
+<div class="container">
+    <div class="header">
+        <div>
+            <p style="margin:0; font-size:0.8rem; opacity:0.6">Assalamu'alaikum,</p>
             <h2>Guru Fajar</h2>
         </div>
-        <div class="avatar"></div>
-    </header>
-
-    <div class="special-card">
-        <h3>Tilawah Al-Qur'an</h3>
-        <span class="counter-display" id="page-count">0 <small style="font-size: 0.8rem; font-weight: 400;">Halaman</small></span>
-        <button class="action-btn" onclick="updateTilawah()">+ Update Bacaan</button>
+        <div style="background:var(--mint-green); padding:10px; border-radius:15px">👤</div>
     </div>
 
-    <span class="section-label">Dzikir & Shalat Harian</span>
-    <div class="amalan-grid">
-        <div class="amalan-card" id="card-0">
-            <div class="card-info">
-                <h3>Shalat Ashar</h3>
-                <p>Bacaan setelah shalat Ashar</p>
-            </div>
-            <div class="check-btn" onclick="toggleAmalan(0)"></div>
+    <div class="main-grid">
+        <div class="card bg-dhuha">
+            <span class="card-label">Dhuha</span>
+            <span class="card-val" id="dhuha-count">0</span>
+            <button class="edit-btn" onclick="updateVal('dhuha')">Input Rakaat</button>
         </div>
-
-        <div class="amalan-card" id="card-1">
-            <div class="card-info" onclick="openCalendar()">
-                <h3>Puasa Bangun & Tidur</h3>
-                <p>Bukan hari puasa panka</p>
-            </div>
-            <div style="font-size: 1.2rem; opacity: 0.3;">📅</div>
+        <div class="card bg-tahajjud">
+            <span class="card-label">Tahajjud</span>
+            <span class="card-val" id="tahajjud-count">0</span>
+            <button class="edit-btn" onclick="updateVal('tahajjud')">Input Rakaat</button>
         </div>
+    </div>
 
-        <div class="amalan-card" id="card-2" style="background: #FFF9E6;">
-            <div class="card-info">
-                <h3>Dzikir Pagi</h3>
-                <p>Infaq Sedekah Harian</p>
+    <div class="list-container" style="margin-bottom: 20px;">
+        <div class="item" onclick="updateVal('quran')">
+            <div class="icon" style="background:var(--mint-green)">📖</div>
+            <div class="info">
+                <h4>Al-Qur'an</h4>
+                <p>Target bacaan harian</p>
             </div>
-            <div class="check-btn" onclick="toggleAmalan(2)"></div>
+            <div class="counter-box"><b id="quran-count">0</b> <small>Juz</small></div>
         </div>
-
-        <div class="amalan-card" id="card-3" style="background: #F3E5F5;">
-            <div class="card-info">
-                <h3>Dzikir Petang</h3>
-                <p>Bacaan setelah shalat Subuh</p>
+        <div class="item" onclick="updateVal('sedekah')">
+            <div class="icon" style="background:var(--light-cyan)">💰</div>
+            <div class="info">
+                <h4>Sedekah</h4>
+                <p>Infaq harian rutin</p>
             </div>
-            <div class="check-btn" onclick="toggleAmalan(3)"></div>
+            <div class="counter-box"><b id="sedekah-count">Rp 0</b></div>
+        </div>
+    </div>
+
+    <h3 style="font-family:'Quicksand'; font-size:1rem; margin-bottom:15px">Dzikir Rutin</h3>
+    <div class="list-container">
+        <div class="item">
+            <div class="icon" style="background:var(--pale-blue)">☀️</div>
+            <div class="info"><h4>Dzikir Pagi</h4><p>Setelah shalat Subuh</p></div>
+            <div class="check-pill" onclick="this.classList.toggle('active')"></div>
+        </div>
+        <div class="item">
+            <div class="icon" style="background:var(--pale-blue)">🌑</div>
+            <div class="info"><h4>Dzikir Petang</h4><p>Sebelum Maghrib</p></div>
+            <div class="check-pill" onclick="this.classList.toggle('active')"></div>
+        </div>
+        <div class="item" style="background: var(--dark-navy); color: white; border-radius: 20px; margin: 5px;">
+            <div class="icon" style="background:rgba(255,255,255,0.1)">🌙</div>
+            <div class="info"><h4 style="color:white">Puasa</h4><p style="color:rgba(255,255,255,0.5)">Cek Kalender</p></div>
+            <div style="font-size:1.2rem">📅</div>
         </div>
     </div>
 </div>
 
-<div class="nav-dock">
-    <div class="nav-link active">🏠<span>Beranda</span></div>
-    <div class="nav-link">✨<span>Aktivitas</span></div>
-    <div class="nav-link">🌙<span>Puasa</span></div>
-    <div class="nav-link">📊<span>Statistik</span></div>
-    <div class="nav-link">⚙️<span>Profil</span></div>
-</div>
+<nav class="nav">
+    <a href="#" class="nav-link active">🏠<br>Beranda</a>
+    <a href="#" class="nav-link">📅<br>Aktivitas</a>
+    <a href="#" class="nav-link">🌙<br>Puasa</a>
+    <a href="#" class="nav-link">📊<br>Statistik</a>
+</nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('amala_fajar_db')) || {
-        tilawah: 0,
-        checks: [false, false, false, false]
-    };
-
-    function toggleAmalan(idx) {
-        db.checks[idx] = !db.checks[idx];
-        save();
-        render();
-    }
-
-    function updateTilawah() {
-        let val = prompt("Jumlah halaman hari ini:", db.tilawah);
+    function updateVal(type) {
+        let val = prompt("Masukkan jumlah:");
         if (val !== null) {
-            db.tilawah = val;
-            save();
-            render();
+            let display = val;
+            if(type === 'sedekah') display = "Rp " + parseInt(val).toLocaleString();
+            document.getElementById(type + '-count').innerText = display;
         }
     }
-
-    function openCalendar() {
-        alert("Membuka Kalender Puasa KHGT...");
-    }
-
-    function save() {
-        localStorage.setItem('amala_fajar_db', JSON.stringify(db));
-    }
-
-    function render() {
-        document.getElementById('page-count').innerHTML = `${db.tilawah} <small style="font-size: 0.8rem; font-weight: 400;">Halaman</small>`;
-        
-        db.checks.forEach((status, i) => {
-            const card = document.getElementById(`card-${i}`);
-            if(card) {
-                const btn = card.querySelector('.check-btn');
-                if(btn) {
-                    status ? btn.classList.add('done') : btn.classList.remove('done');
-                    status ? card.classList.add('active') : card.classList.remove('active');
-                }
-            }
-        });
-    }
-
-    render();
 </script>
 
 </body>
