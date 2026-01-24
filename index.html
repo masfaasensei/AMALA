@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMALA - Personal Tracker</title>
+    <title>AMALA - Buku Saku Guru Ngaji</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -36,23 +36,22 @@
         header { padding: 30px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
         .greeting h1 { font-size: 14px; color: var(--text-muted); font-weight: 400; }
         .greeting h2 { font-size: 20px; color: var(--text-main); font-weight: 600; }
-        .avatar { width: 50px; height: 50px; background-color: var(--white); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-soft); }
+        .avatar { width: 50px; height: 50px; background-color: var(--white); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: var(--shadow-soft); cursor: pointer; }
 
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 24px; }
         .card { padding: 20px; border-radius: var(--radius-xl); color: white; position: relative; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; overflow: hidden; }
         
+        /* TATA LETAK SESUAI INSTRUKSI */
         .card.dhuha { grid-column: span 1; height: 140px; background: var(--card-orange); }
         .card.sedekah { grid-column: span 1; height: 140px; background: var(--card-gold); }
         .card.quran { grid-column: span 2; height: 110px; background: var(--card-teal); flex-direction: row; align-items: center; }
         .card.tahajjud { grid-column: span 2; height: 110px; background: var(--card-green); flex-direction: row; align-items: center; }
 
         .card-header { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; opacity: 0.9; }
-        
-        /* Font angka umum */
         .card-value { font-size: 32px; font-weight: 600; }
         
-        /* KOREKSI: Khusus font sedekah diperkecil */
-        .card.sedekah .card-value { font-size: 18px; margin-bottom: 5px; }
+        /* KOREKSI UKURAN FONT SEDEKAH */
+        .card.sedekah .card-value { font-size: 18px; margin-top: 5px; }
         
         .card-sub { font-size: 12px; opacity: 0.8; }
 
@@ -74,10 +73,10 @@
     <div class="app-container">
         <header>
             <div class="greeting">
-                <h1>Assalamu'alaikum,</h1>
-                <h2>Mas Fajar</h2>
+                <h1 id="salam-waktu">Assalamu'alaikum,</h1>
+                <h2 id="user-name">Memuat...</h2>
             </div>
-            <div class="avatar">👨🏻‍🏫</div>
+            <div class="avatar" onclick="gantiNama()">👨🏻‍🏫</div>
         </header>
 
         <section class="dashboard-grid">
@@ -149,25 +148,63 @@
     </div>
 
     <script>
-        let data = JSON.parse(localStorage.getItem('amala_fajar')) || { dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0 };
+        // DATA STATE
+        let db = JSON.parse(localStorage.getItem('amala_db')) || {
+            dhuha: 0, tahajjud: 0, quran: 0, sedekah: 0, nama: ""
+        };
 
-        function isiData(tipe) {
-            let n = prompt("Masukkan jumlah:");
-            if (n !== null && n !== "") {
-                data[tipe] = (tipe === 'sedekah') ? parseInt(n) : n;
-                localStorage.setItem('amala_fajar', JSON.stringify(data));
-                tampilkan();
+        // FUNGSI IDENTIFIKASI NAMA
+        function initUser() {
+            if (!db.nama) {
+                let name = prompt("Ahlan wa Sahlan! Masukkan nama Anda:");
+                db.nama = name || "Hamba Allah";
+                save();
+            }
+            document.getElementById('user-name').innerText = db.nama;
+            
+            // Salam otomatis berdasarkan waktu
+            let jam = new Date().getHours();
+            let salam = "Assalamu'alaikum";
+            if (jam >= 4 && jam < 11) salam = "Selamat Pagi";
+            else if (jam >= 11 && jam < 15) salam = "Selamat Siang";
+            else if (jam >= 15 && jam < 18) salam = "Selamat Sore";
+            else salam = "Selamat Malam";
+            document.getElementById('salam-waktu').innerText = salam + ",";
+        }
+
+        function gantiNama() {
+            let name = prompt("Ganti nama profil:", db.nama);
+            if (name) {
+                db.nama = name;
+                save();
             }
         }
 
-        function tampilkan() {
-            document.getElementById('val-dhuha').innerText = data.dhuha;
-            document.getElementById('val-tahajjud').innerText = data.tahajjud;
-            document.getElementById('val-quran').innerText = data.quran;
-            document.getElementById('val-sedekah').innerText = "Rp " + (data.sedekah || 0).toLocaleString('id-ID');
+        // FUNGSI INPUT DATA
+        function isiData(tipe) {
+            let n = prompt("Masukkan jumlah terbaru:");
+            if (n !== null && n !== "") {
+                db[tipe] = (tipe === 'sedekah') ? parseInt(n) : n;
+                save();
+            }
         }
 
-        tampilkan();
+        function save() {
+            localStorage.setItem('amala_db', JSON.stringify(db));
+            render();
+        }
+
+        function render() {
+            document.getElementById('val-dhuha').innerText = db.dhuha;
+            document.getElementById('val-tahajjud').innerText = db.tahajjud;
+            document.getElementById('val-quran').innerText = db.quran;
+            document.getElementById('val-sedekah').innerText = "Rp " + (db.sedekah || 0).toLocaleString('id-ID');
+            document.getElementById('user-name').innerText = db.nama;
+        }
+
+        // JALANKAN SAAT START
+        initUser();
+        render();
     </script>
 </body>
 </html>
