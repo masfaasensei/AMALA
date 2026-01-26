@@ -57,12 +57,14 @@
         .big-val { font-size: 26px; }
         .input-btn { width: 32px; height: 32px; background: rgba(255,255,255,0.3); border: none; border-radius: 8px; color: inherit; display: flex; align-items: center; justify-content: center; }
 
-        /* Dzikir Style */
-        .nav-dzikir { position: sticky; top: 0; background: white; padding: 15px 20px; z-index: 100; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .dzikir-scroll { padding: 20px; }
-        .dzikir-item { background: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #F1F5F9; }
+        /* --- STYLE KOTAK-KOTAK SESUAI GAMBAR --- */
+        .nav-dzikir { position: sticky; top: 0; background: #0D9488; color: white; padding: 20px; z-index: 100; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .dzikir-scroll { padding: 16px; background: #f0f4f7; }
+        .dzikir-item { background: white; padding: 20px; border-radius: 12px; margin-bottom: 16px; border: 1px solid #e2e8f0; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .dzikir-title { color: #0D9488; font-size: 14px; font-weight: 600; display: block; margin-bottom: 10px; }
+        .counter-badge { position: absolute; top: 15px; right: 15px; background: #f1f5f9; padding: 4px 10px; border-radius: 8px; font-size: 12px; color: #64748b; display: flex; align-items: center; gap: 5px; }
         .arab { font-family: 'Amiri', serif; font-size: 24px; text-align: right; direction: rtl; line-height: 2.3; color: #1E293B; margin-bottom: 10px; }
-        .terjemah { font-size: 12px; color: #64748B; font-style: italic; line-height: 1.5; border-top: 1px solid #F1F5F9; padding-top: 8px; }
+        .terjemah { font-size: 12px; color: #64748B; font-style: normal; line-height: 1.5; border-top: 1px solid #F1F5F9; padding-top: 10px; margin-top: 10px; }
 
         /* Calendar Style */
         .calendar-container { background: white; border-radius: 24px; padding: 15px; margin: 20px; box-shadow: var(--shadow-soft); }
@@ -130,20 +132,28 @@
     </div>
 
     <div id="page-pagi" class="page">
-        <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i><h2>Dzikir Pagi Lengkap</h2></div>
+        <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i><h2>Dzikir Pagi Sugro</h2></div>
         <div class="dzikir-scroll">
             <div class="dzikir-item">
+                <span class="dzikir-title">Ayat Kursi</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 1</div>
                 <p class="arab">اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهما ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ</p>
                 <p class="terjemah">Membaca Ayat Kursi (1x)</p>
             </div>
             <div class="dzikir-item">
-                <p class="arab">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ</p>
+                <span class="dzikir-title">Sayyidul Istighfar</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 1</div>
+                <p class="arab">اللَّهُمَّ أَنْتَ Rَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ</p>
                 <p class="terjemah">Sayyidul Istighfar (1x)</p>
             </div>
             <div class="dzikir-item">
+                <span class="dzikir-title">Dzikir Pagi</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 1</div>
                 <p class="arab">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</p>
             </div>
             <div class="dzikir-item">
+                <span class="dzikir-title">Perlindungan</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 3</div>
                 <p class="arab">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</p>
                 <p class="terjemah">Perlindungan (3x)</p>
             </div>
@@ -151,15 +161,21 @@
     </div>
 
     <div id="page-petang" class="page">
-        <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i><h2>Dzikir Petang Lengkap</h2></div>
+        <div class="nav-dzikir"><i class="ph ph-arrow-left" onclick="switchPage('home')"></i><h2>Dzikir Petang Sugro</h2></div>
         <div class="dzikir-scroll">
             <div class="dzikir-item">
-                <p class="arab">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ</p>
+                <span class="dzikir-title">Sayyidul Istighfar</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 1</div>
+                <p class="arab">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ bِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ</p>
             </div>
             <div class="dzikir-item">
+                <span class="dzikir-title">Dzikir Sore</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 1</div>
                 <p class="arab">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ</p>
             </div>
             <div class="dzikir-item">
+                <span class="dzikir-title">Perlindungan</span>
+                <div class="counter-badge"><i class="ph ph-spinner"></i> 3</div>
                 <p class="arab">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ</p>
                 <p class="terjemah">Perlindungan Sore (3x)</p>
             </div>
