@@ -91,10 +91,12 @@
             <div class="avatar" onclick="gantiNama()">👨🏻‍🏫</div>
         </header>
 
-        <button onclick="kirimRaport()" style="margin: 0 24px 10px; width: calc(100% - 48px); padding: 14px; background: #059669; color: white; border: none; border-radius: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); cursor: pointer;">
-    <i class="ph ph-whatsapp-logo" style="font-size: 22px;"></i>
-    Kirim Raport ke Guru
-</button>
+      <div style="padding: 0 24px;">
+    <button onclick="kirimRaport()" style="width: 100%; padding: 12px; background: #25D366; color: white; border: none; border-radius: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: var(--shadow-soft);">
+        <i class="ph ph-whatsapp-logo" style="font-size: 20px;"></i>
+        Kirim Raport ke Orang Tua
+    </button>
+</div>
 
         <section class="dashboard-grid">
     <div class="card full hafalan">
@@ -415,19 +417,18 @@
 </div>
 
 <script>
-    // 1. Inisialisasi Database dengan proteksi agar tidak error
-    let db = JSON.parse(localStorage.getItem('amala_db')) || {
-        nama: "",
-        namaOrtu: "",
-        hpOrtu: "",
-        hafalan: "-",
-        murojaah: "-",
-        quran: 0,
-        dhuha: 0,
-        tahajjud: 0,
-        sedekah: 0,
-        puasaDates: []
-    };
+    // Pastikan bagian inisialisasi di dalam <script> seperti ini:
+let db = JSON.parse(localStorage.getItem('amala_db')) || {
+    nama: "",
+    namaOrtu: "", // Tambahan
+    hpOrtu: "",   // Tambahan
+    hafalan: "-",
+    murojaah: "-",
+    dhuha: 0,
+    tahajjud: 0,
+    sedekah: 0,
+    puasaDates: []
+};
 
     // 2. Fungsi Navigasi
     function switchPage(p) {
@@ -530,6 +531,47 @@
         if(n) { db.nama = n; save(); } 
     }
 
+    function setProfilMurid() {
+    let namaMurid = prompt("Nama Murid:", db.nama);
+    let namaOrtu = prompt("Nama Orang Tua:", db.namaOrtu);
+    let nomorWA = prompt("Nomor WA Orang Tua (Gunakan 62, contoh: 62812xxx):", db.hpOrtu);
+
+    if (namaMurid) db.nama = namaMurid;
+    if (namaOrtu) db.namaOrtu = namaOrtu;
+    if (nomorWA) db.hpOrtu = nomorWA;
+    
+    save();
+}
+
+    function kirimRaport() {
+    if (!db.hpOrtu || db.hpOrtu === "") {
+        alert("Mohon isi nomor WA Orang Tua terlebih dahulu melalui profil!");
+        setProfilMurid();
+        return;
+    }
+
+    const salam = new Date().getHours() < 12 ? "Pagi" : "Sore";
+    
+    let pesan = `*LAPORAN PERKEMBANGAN IBADAH MURID*%0A` +
+                `*AMALA - Super App*%0A%0A` +
+                `Assalamu'alaikum Warahmatullah, Ayah/Bunda *${db.namaOrtu}*%0A` +
+                `Berikut adalah laporan ananda *${db.nama}* hari ini:%0A%0A` +
+                `━━━━━━━━━━━━━━━━━━━%0A` +
+                `📖 *Tahfidz & Quran*%0A` +
+                `• Hafalan Baru: ${db.hafalan}%0A` +
+                `• Murojaah: ${db.murojaah}%0A%0A` +
+                `✨ *Ibadah Harian*%0A` +
+                `• Shalat Dhuha: ${db.dhuha} Rakaat%0A` +
+                `• Shalat Tahajjud: ${db.tahajjud} Rakaat%0A` +
+                `• Sedekah: ${db.sedekah > 0 ? 'Alhamdulillah (Terisi)' : 'Belum terisi'}%0A` +
+                `• Puasa Bulan Ini: ${db.puasaDates.length} Hari%0A` +
+                `━━━━━━━━━━━━━━━━━━━%0A%0A` +
+                `Semoga ananda istiqomah dalam kebaikan. Syukran Jazakumullah Khairan.`;
+
+    // Membuka WhatsApp dengan nomor orang tua yang tersimpan
+    window.open(`https://wa.me/${db.hpOrtu}?text=${pesan}`, '_blank');
+}
+
     function checkDailyReset() {
         const today = new Date().toDateString(); 
         const lastReset = localStorage.getItem('amala_last_reset');
@@ -557,6 +599,7 @@
 
 </body>
 </html>
+
 
 
 
