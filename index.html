@@ -400,11 +400,23 @@
     };
 
     function switchPage(p) {
-        document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
-        document.getElementById('page-' + p).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(ni => ni.classList.remove('active'));
-        window.scrollTo(0,0);
+    document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+    document.getElementById('page-' + p).classList.add('active');
+    
+    // Fitur Reset: Saat kembali ke Home, hitungan dzikir akan terulang otomatis untuk sesi berikutnya
+    if(p === 'home') {
+        document.querySelectorAll('.dzikir-item').forEach(item => {
+            item.classList.remove('done');
+            let numSpan = item.querySelector('.num');
+            // Mencari angka di dalam kurung pada terjemahan, misal: (Dibaca 3 x)
+            let match = item.querySelector('.terjemah').innerText.match(/(\d+)\s*x/);
+            if(match) numSpan.innerText = match[1];
+        });
     }
+
+    document.querySelectorAll('.nav-item').forEach(ni => ni.classList.remove('active'));
+    window.scrollTo(0,0);
+}
 
     function hitungDzikir(el, max) {
         if(el.classList.contains('done')) return;
@@ -454,6 +466,7 @@
 
 </body>
 </html>
+
 
 
 
