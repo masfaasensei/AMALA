@@ -3,183 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMALA v2.1 - KHGT Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>AMALA GURU - Professional System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
     <style>
-        :root {
-            --bg: #B6E5D2;
-            --text: #043F34;
-            --card: #AFCAB8;
-            --accent: #71967D;
-            --white: #ffffff;
-        }
-
-        [data-theme="dark"] {
-            --bg: #043F34;
-            --text: #B6E5D2;
-            --card: #2C5E53;
-            --accent: #AFCAB8;
+        :root { 
+            --primary: #0D9488; 
+            --bg: #f4f1ea; /* Warna Cream eye-care */
+            --card: #ede9df; /* Warna Card senada */
+            --text-main: #334155;
+            --accent: #d97706;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-        body { background-color: #ddd; display: flex; justify-content: center; color: var(--text); }
+        body { 
+            background-color: #e5e1d8; 
+            display: flex; 
+            justify-content: center; 
+            color: var(--text-main);
+        }
 
         .app-container { 
             background-color: var(--bg); 
-            width: 100%; max-width: 480px; 
-            min-height: 100vh; padding-bottom: 90px;
-            position: relative; box-shadow: 0 0 40px rgba(0,0,0,0.2);
-            overflow-x: hidden;
+            width: 100%; 
+            max-width: 480px; 
+            min-height: 100vh; 
+            padding-bottom: 100px; 
+            position: relative; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.05);
         }
 
-        .page { display: none; padding: 25px; animation: fadeIn 0.4s ease; }
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
-        .date-info { font-size: 13px; margin-bottom: 25px; opacity: 0.9; font-weight: 600; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* KOTAK AMALAN */
-        .grid-dzikir { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        
-        .box-dzikir { 
-            background: var(--card); border-radius: 20px; padding: 20px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; border: 1px solid rgba(0,0,0,0.05); cursor: pointer;
+        /* UI COMPONENTS */
+        .card { 
+            background: var(--card); 
+            padding: 18px; 
+            border-radius: 18px; 
+            margin-bottom: 15px; 
+            border: 1px solid rgba(0,0,0,0.05);
         }
-        .box-dzikir i { font-size: 32px; margin-bottom: 10px; }
 
-        .box-full { 
-            background: var(--card); border-radius: 20px; padding: 15px 20px; 
-            display: flex; align-items: center; gap: 15px; margin-bottom: 12px; 
-            border: 1px solid rgba(0,0,0,0.05); 
+        h2 { font-size: 20px; margin-bottom: 20px; color: var(--primary); }
+        h4 { font-size: 14px; margin-bottom: 10px; color: #64748b; }
+
+        input, select, textarea { 
+            width: 100%; padding: 12px; border-radius: 12px; 
+            border: 1.5px solid #d1ccc0; background: #faf9f6;
+            margin-bottom: 15px; outline: none;
         }
-        .info-text { flex: 1; display: flex; flex-direction: column; }
-        .info-text b { font-size: 15px; }
-        .info-text span { font-size: 10px; font-weight: bold; opacity: 0.7; }
 
-        .counter-ui { display: flex; align-items: center; gap: 12px; }
-        .btn-c { 
-            background: var(--text); color: var(--bg); border: none; 
-            width: 32px; height: 32px; border-radius: 10px; font-weight: 700; font-size: 18px; cursor: pointer;
+        .btn-primary { 
+            background: var(--primary); color: white; border: none; 
+            padding: 15px; border-radius: 12px; width: 100%; 
+            font-weight: 600; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; gap: 10px; 
         }
-        .val-display { font-size: 18px; font-weight: 700; min-width: 25px; text-align: center; }
 
-        /* STATS */
-        .chart-circle {
-            width: 150px; height: 150px; border-radius: 50%;
-            margin: 20px auto; display: flex; align-items: center; justify-content: center;
-            position: relative; border: 8px solid var(--card);
+        /* GRID AMALAN PRIBADI */
+        .amalan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .amalan-box {
+            background: var(--card); border-radius: 15px; padding: 15px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            border: 1px solid rgba(0,0,0,0.05); cursor: pointer;
         }
-        .perc-val { font-weight: 800; font-size: 28px; }
+        .amalan-box.wide { grid-column: span 2; }
+        .amalan-box i { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
+        .amalan-box span { font-size: 12px; font-weight: 500; }
+        .amalan-box b { font-size: 16px; color: var(--accent); }
+        .counter-controls { display: flex; gap: 15px; margin-top: 10px; align-items: center; }
+        .c-btn { background: var(--primary); color: white; border: none; width: 25px; height: 25px; border-radius: 5px; }
 
-        /* NAV */
+        /* NAVIGASI BAWAH */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; max-width: 480px;
-            background: var(--card); display: flex; padding: 12px 0;
-            border-top: 2px solid var(--text); z-index: 1000;
+            background: var(--card); display: flex; justify-content: space-around;
+            padding: 12px 5px; border-top: 1px solid #d1ccc0; z-index: 1000;
         }
-        .nav-item { flex: 1; text-align: center; color: var(--text); opacity: 0.5; cursor: pointer; }
-        .nav-item.active { opacity: 1; font-weight: 700; }
-        .nav-item i { font-size: 22px; display: block; }
-        .nav-item span { font-size: 9px; }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #94a3b8; cursor: pointer; gap: 4px; flex: 1;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item span { font-size: 8px; font-weight: 600; text-transform: uppercase; }
+        .nav-item.active { color: var(--primary); }
 
-        /* CALENDAR */
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .day { padding: 10px 0; border-radius: 8px; font-size: 12px; font-weight: 600; background: var(--card); }
-        .day.sunnah { background: var(--text); color: var(--bg); }
-        .day.today { border: 2px solid var(--text); }
+        /* DZIKIR STYLE */
+        .dzikir-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; }
+        .arab { font-family: 'Amiri', serif; font-size: 22px; text-align: right; direction: rtl; margin: 10px 0; }
 
-        input { background: var(--bg); border: 2px solid var(--text); color: var(--text); padding: 10px; border-radius: 12px; width: 100%; font-weight: 600; }
-        .btn-p { background: var(--text); color: var(--bg); border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        /* STATS BOX */
+        .stat-card { background: var(--primary); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 15px; }
+        .stat-val { font-size: 28px; font-weight: 700; }
     </style>
 </head>
-<body data-theme="light">
+<body>
 
 <div class="app-container">
 
-    <div id="p-amalan" class="page active">
-        <h2>Muhasabah Guru</h2>
-        <div class="date-info" id="today-date">Memuat tanggal...</div>
-
-        <div class="grid-dzikir">
-            <div class="box-dzikir" onclick="nav('pagi', this)">
-                <i class="ph-fill ph-sun-horizon"></i>
-                <b>Dzikir Pagi</b>
+    <div id="page-amalan" class="page active">
+        <h2>Muhasabah Pribadi</h2>
+        
+        <div class="amalan-grid">
+            <div class="amalan-box" onclick="openPage('pagi')">
+                <i class="ph ph-sun-horizon"></i>
+                <span>Dzikir Pagi</span>
             </div>
-            <div class="box-dzikir" onclick="nav('petang', this)">
-                <i class="ph-fill ph-moon-stars"></i>
-                <b>Dzikir Petang</b>
-            </div>
-        </div>
-
-        <div class="box-full">
-            <i class="ph-fill ph-mosque" style="font-size: 24px;"></i>
-            <div class="info-text"><b>Shalat Dhuha</b><span>RAKAAT</span></div>
-            <div class="counter-ui">
-                <button class="btn-c" onclick="upd('dhuha', -2)">-</button>
-                <div class="val-display" id="v-dhuha">0</div>
-                <button class="btn-c" onclick="upd('dhuha', 2)">+</button>
+            <div class="amalan-box" onclick="openPage('petang')">
+                <i class="ph ph-moon-stars"></i>
+                <span>Dzikir Petang</span>
             </div>
         </div>
 
-        <div class="box-full">
-            <i class="ph-fill ph-cloud-moon" style="font-size: 24px;"></i>
-            <div class="info-text"><b>Tahajjud</b><span>RAKAAT</span></div>
-            <div class="counter-ui">
-                <button class="btn-c" onclick="upd('tahajjud', -2)">-</button>
-                <div class="val-display" id="v-tahajjud">0</div>
-                <button class="btn-c" onclick="upd('tahajjud', 2)">+</button>
+        <div class="amalan-grid">
+            <div class="amalan-box">
+                <i class="ph ph-sun"></i>
+                <span>Dhuha</span>
+                <div class="counter-controls">
+                    <button class="c-btn" onclick="updatePersonal('dhuha', -2)">-</button>
+                    <b id="val-dhuha">0</b>
+                    <button class="c-btn" onclick="updatePersonal('dhuha', 2)">+</button>
+                </div>
+                <small>Rakaat</small>
+            </div>
+            <div class="amalan-box">
+                <i class="ph ph-cloud-moon"></i>
+                <span>Tahajjud</span>
+                <div class="counter-controls">
+                    <button class="c-btn" onclick="updatePersonal('tahajjud', -2)">-</button>
+                    <b id="val-tahajjud">0</b>
+                    <button class="c-btn" onclick="updatePersonal('tahajjud', 2)">+</button>
+                </div>
+                <small>Rakaat</small>
             </div>
         </div>
 
-        <div class="box-full">
-            <i class="ph-fill ph-book-open" style="font-size: 24px;"></i>
-            <div class="info-text"><b>Tilawah</b><span>HALAMAN</span></div>
-            <div class="counter-ui">
-                <button class="btn-c" onclick="upd('tilawah', -1)">-</button>
-                <div class="val-display" id="v-tilawah">0</div>
-                <button class="btn-c" onclick="upd('tilawah', 1)">+</button>
+        <div class="amalan-grid">
+            <div class="amalan-box wide">
+                <i class="ph ph-book-open"></i>
+                <span>Tilawah Al-Quran</span>
+                <div class="counter-controls">
+                    <button class="c-btn" onclick="updatePersonal('tilawah', -1)">-</button>
+                    <b id="val-tilawah">0</b>
+                    <button class="c-btn" onclick="updatePersonal('tilawah', 1)">+</button>
+                </div>
+                <small>Halaman Hari Ini</small>
             </div>
         </div>
 
-        <div class="box-full">
-            <i class="ph-fill ph-hand-heart" style="font-size: 24px;"></i>
-            <div class="info-text"><b>Shodaqoh</b><span>RUPIAH</span></div>
-            <input type="number" id="v-shodaqoh" style="width: 120px; text-align: right;" placeholder="0" onchange="updSho()">
+        <div class="amalan-grid">
+            <div class="amalan-box">
+                <i class="ph ph-calendar-check"></i>
+                <span>Puasa</span>
+                <div class="counter-controls">
+                    <button class="c-btn" onclick="updatePersonal('puasa', -1)">-</button>
+                    <b id="val-puasa">0</b>
+                    <button class="c-btn" onclick="updatePersonal('puasa', 1)">+</button>
+                </div>
+                <small>Hari (Bulan Ini)</small>
+            </div>
+            <div class="amalan-box">
+                <i class="ph ph-hand-heart"></i>
+                <span>Shodaqoh</span>
+                <div style="margin-top:5px;">
+                    <input type="number" id="val-shodaqoh" onchange="saveShodaqoh()" placeholder="Rp" style="margin-bottom:0; padding:5px; text-align:center; font-weight:bold;">
+                </div>
+                <small>Rupiah</small>
+            </div>
         </div>
     </div>
 
-    <div id="p-stats" class="page">
-        <h2>Statistik Amalan</h2>
-        <div class="chart-circle" id="circle-perc">
-            <div class="perc-val" id="perc-txt">0%</div>
+    <div id="page-murid" class="page">
+        <h2>Database Murid</h2>
+        <div class="card">
+            <button class="btn-primary" onclick="tambahMurid()">+ Tambah Murid Baru</button>
         </div>
-        <div id="stats-bars" style="margin-top: 20px;">
+        <div id="list-murid"></div>
+    </div>
+
+    <div id="page-raport" class="page">
+        <h2>Laporan Progres Murid</h2>
+        <div class="card">
+            <label>Pilih Murid:</label>
+            <select id="sel-murid-raport"></select>
+
+            <label>Tilawah Quran (Surah/Hal):</label>
+            <input type="text" id="rap-tilawah" placeholder="Misal: Al-Baqarah hal 10">
+
+            <label>Hafalan Baru:</label>
+            <input type="text" id="rap-hafalan" placeholder="Misal: An-Naba 1-5">
+
+            <label>Murojaah:</label>
+            <input type="text" id="rap-murojaah" placeholder="Misal: Juz 30">
+
+            <button class="btn-primary" onclick="kirimRaportWA()">
+                <i class="ph ph-whatsapp-logo"></i> KIRIM KE ORANG TUA
+            </button>
+        </div>
+    </div>
+
+    <div id="page-statistik" class="page">
+        <h2>Statistik Amalan Saya</h2>
+        <div class="stat-card">
+            <span style="font-size:12px;">Total Tilawah Bulan Ini</span>
+            <div class="stat-val" id="stat-tilawah">0</div>
+            <span>Halaman</span>
+        </div>
+        <div class="amalan-grid">
+            <div class="amalan-box">
+                <span id="stat-dhuha">0</span>
+                <small>Dhuha (Rkt)</small>
             </div>
-        <div class="box-full" style="margin-top: 20px; justify-content: space-between;">
-            <b>Total Shodaqoh</b>
-            <span id="t-shodaqoh">Rp 0</span>
+            <div class="amalan-box">
+                <span id="stat-tahajjud">0</span>
+                <small>Tahajjud (Rkt)</small>
+            </div>
+        </div>
+        <div class="card">
+            <h4>Pencapaian Shodaqoh</h4>
+            <h3 style="color:var(--primary)" id="stat-shodaqoh">Rp 0</h3>
         </div>
     </div>
 
-    <div id="p-cal" class="page">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <button onclick="changeMonth(-1)" class="btn-c">&lt;</button>
-            <h3 id="month-name">Januari 2026</h3>
-            <button onclick="changeMonth(1)" class="btn-c">&gt;</button>
+    <div id="page-kalender" class="page">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Kalender KHGT</h2>
+            <a href="https://khgt.muhammadiyah.or.id" target="_blank" style="font-size:12px; color:var(--primary)">Web Resmi</a>
         </div>
-        <div class="cal-grid" id="cal-days"></div>
+        <div class="card" style="text-align:center;">
+            <h3 id="cal-month">Januari 2026</h3>
+            <p style="color:var(--accent); font-weight:600;">Sya'ban 1447 H</p>
+            <div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:5px; margin-top:15px; font-size:10px; font-weight:bold;">
+                <span>AH</span><span>SE</span><span>SE</span><span>RA</span><span>KA</span><span>JU</span><span>SA</span>
+            </div>
+            <div id="calendar-days" style="display:grid; grid-template-columns: repeat(7, 1fr); gap:5px; margin-top:10px;">
+                </div>
+        </div>
+        <small>* Kalender disesuaikan dengan Kriteria Kalender Hijriah Global Tunggal (KHGT).</small>
     </div>
 
-    <div id="p-set" class="page">
+    <div id="page-setting" class="page">
         <h2>Pengaturan</h2>
-        <button class="btn-p" onclick="toggleDark()">GANTI TEMA (DARK/LIGHT)</button>
-        <p style="margin-top:30px; font-size:12px; opacity:0.6; text-align:center;">Amala v2.1 KHGT Edition</p>
-    </div>
-    
+        
+        <div class="card">
+            <h4><i class="ph ph-user"></i> Login User</h4>
+            <input type="text" placeholder="Username" value="Ustadz Ahmad">
+            <input type="password" value="********">
+            <button class="btn-primary" style="padding:10px; font-size:12px;">Update Profil</button>
+        </div>
+
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+            <h4><i class="ph ph-moon"></i> Dark Mode</h4>
+            <div style="width:40px; height:20px; background:#ccc; border-radius:10px; position:relative;">
+                <div style="width:18px; height:18px; background:white; border-radius:50%; position:absolute; left:2px; top:1px;"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4><i class="ph ph-info"></i> About App</h4>
+            <p style="font-size:11px; line-height:1.6;"><b>Amala Guru v2.0</b><br>Sistem Manajemen Amalan & Tahfidz berbasis web statis untuk kemudahan Ustadz memantau amalan pribadi dan murid secara mandiri.</p>
+        </div>
+
+        <div class="card">
+            <h4><i class="ph ph-phone"></i> Contact Person</h4>
+            <p style="font-size:12px;">WA: +62 812-xxxx-xxxx<br>Email: support@amalaguru.com</p>
+        </div>
+    </div>    
     <div id="page-pagi" class="page">
         <div class="nav-dzikir">
     <i class="ph ph-arrow-left" onclick="switchPage('home')"></i>
@@ -434,103 +528,137 @@
         </div>
     </div>
 
-      <nav class="bottom-nav">
-        <div class="nav-item active" onclick="nav('amalan', this)"><i class="ph ph-hands-praying"></i><span>AMALAN</span></div>
-        <div class="nav-item" onclick="nav('stats', this)"><i class="ph ph-chart-pie"></i><span>STATS</span></div>
-        <div class="nav-item" onclick="nav('cal', this)"><i class="ph ph-calendar"></i><span>KALENDER</span></div>
-        <div class="nav-item" onclick="nav('set', this)"><i class="ph ph-gear"></i><span>MENU</span></div>
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="openPage('amalan', this)">
+            <i class="ph ph-hands-praying"></i><span>Amalan</span>
+        </div>
+        <div class="nav-item" onclick="openPage('murid', this)">
+            <i class="ph ph-users-three"></i><span>Murid</span>
+        </div>
+        <div class="nav-item" onclick="openPage('raport', this)">
+            <i class="ph ph-article"></i><span>Raport</span>
+        </div>
+        <div class="nav-item" onclick="openPage('statistik', this)">
+            <i class="ph ph-chart-pie"></i><span>Statistik</span>
+        </div>
+        <div class="nav-item" onclick="openPage('kalender', this)">
+            <i class="ph ph-calendar-blank"></i><span>Kalender</span>
+        </div>
+        <div class="nav-item" onclick="openPage('setting', this)">
+            <i class="ph ph-gear"></i><span>Setting</span>
+        </div>
     </nav>
 
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('amala_v2_db')) || {
-        pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0 },
-        theme: 'light'
+    // DATA STORAGE
+    let db = JSON.parse(localStorage.getItem('amala_pro_db')) || {
+        murid: [],
+        pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, puasa: 0, shodaqoh: 0 }
     };
 
-    let currDate = new Date();
-
     function save() {
-        localStorage.setItem('amala_v2_db', JSON.stringify(db));
-        refreshUI();
+        localStorage.setItem('amala_pro_db', JSON.stringify(db));
+        renderMurid();
+        renderStats();
     }
 
-    function nav(pageId, el) {
+    // NAVIGATION
+    function openPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        const target = document.getElementById('p-' + pageId);
-        if(target) target.classList.add('active');
-
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if(el) el.classList.add('active');
-
-        if(pageId === 'stats') renderStats();
-        if(pageId === 'cal') renderCal();
+        document.getElementById('page-' + pageId).classList.add('active');
+        if(el) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+        window.scrollTo(0,0);
     }
 
-    function upd(key, val) {
-        db.pribadi[key] = Math.max(0, db.pribadi[key] + val);
+    // PERSONAL AMALAN LOGIC
+    function updatePersonal(key, val) {
+        db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val);
+        document.getElementById('val-' + key).innerText = db.pribadi[key];
         save();
     }
 
-    function updSho() {
-        db.pribadi.shodaqoh = parseInt(document.getElementById('v-shodaqoh').value) || 0;
+    function saveShodaqoh() {
+        db.pribadi.shodaqoh = document.getElementById('val-shodaqoh').value;
         save();
     }
 
-    function refreshUI() {
-        document.getElementById('v-dhuha').innerText = db.pribadi.dhuha;
-        document.getElementById('v-tahajjud').innerText = db.pribadi.tahajjud;
-        document.getElementById('v-tilawah').innerText = db.pribadi.tilawah;
-        document.getElementById('v-shodaqoh').value = db.pribadi.shodaqoh;
-    }
-
-    function renderStats() {
-        const target = { dhuha: 8, tahajjud: 11, tilawah: 10 };
-        const dP = Math.min((db.pribadi.dhuha / target.dhuha) * 100, 100);
-        const tP = Math.min((db.pribadi.tahajjud / target.tahajjud) * 100, 100);
-        const lP = Math.min((db.pribadi.tilawah / target.tilawah) * 100, 100);
-        const total = Math.round((dP + tP + lP) / 3);
-
-        document.getElementById('perc-txt').innerText = total + "%";
-        document.getElementById('circle-perc').style.background = `conic-gradient(var(--text) ${total}%, var(--card) 0)`;
-        document.getElementById('t-shodaqoh').innerText = "Rp " + db.pribadi.shodaqoh.toLocaleString();
-    }
-
-    function renderCal() {
-        const grid = document.getElementById('cal-days');
-        grid.innerHTML = "";
-        const mNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        document.getElementById('month-name').innerText = mNames[currDate.getMonth()] + " " + currDate.getFullYear();
-
-        const first = new Date(currDate.getFullYear(), currDate.getMonth(), 1).getDay();
-        const last = new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0).getDate();
-
-        for(let i=0; i<first; i++) grid.innerHTML += `<div></div>`;
-        for(let i=1; i<=last; i++) {
-            let d = new Date(currDate.getFullYear(), currDate.getMonth(), i).getDay();
-            let cls = (d === 1 || d === 4) ? "day sunnah" : "day";
-            grid.innerHTML += `<div class="${cls}">${i}</div>`;
+    function loadPersonal() {
+        for (let key in db.pribadi) {
+            const el = document.getElementById('val-' + key);
+            if(el) {
+                if(el.tagName === 'B') el.innerText = db.pribadi[key];
+                if(el.tagName === 'INPUT') el.value = db.pribadi[key];
+            }
         }
     }
 
-    function changeMonth(v) {
-        currDate.setMonth(currDate.getMonth() + v);
-        renderCal();
+    // MURID LOGIC
+    function tambahMurid() {
+        const nama = prompt("Nama Murid:");
+        const wa = prompt("WhatsApp Ortu (628...):");
+        if(nama && wa) {
+            db.murid.push({ nama, wa });
+            save();
+        }
     }
 
-    function toggleDark() {
-        const theme = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        document.body.setAttribute('data-theme', theme);
-        db.theme = theme;
-        save();
+    function renderMurid() {
+        const list = document.getElementById('list-murid');
+        const sel = document.getElementById('sel-murid-raport');
+        list.innerHTML = ""; sel.innerHTML = "";
+        db.murid.forEach((m, i) => {
+            list.innerHTML += `
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span><b>${m.nama}</b><br><small>${m.wa}</small></span>
+                    <button onclick="hapusMurid(${i})" style="color:red; border:none; background:none;">Hapus</button>
+                </div>`;
+            sel.innerHTML += `<option value="${i}">${m.nama}</option>`;
+        });
     }
 
+    function hapusMurid(i) {
+        if(confirm("Hapus murid ini?")) { db.murid.splice(i, 1); save(); }
+    }
+
+    // RAPORT WA
+    function kirimRaportWA() {
+        const idx = document.getElementById('sel-murid-raport').value;
+        const m = db.murid[idx];
+        const tilawah = document.getElementById('rap-tilawah').value;
+        const hafalan = document.getElementById('rap-hafalan').value;
+        const murojaah = document.getElementById('rap-murojaah').value;
+        
+        const teks = `*LAPORAN TAHFIDZ & TILAWAH*%0A%0A👤 Nama: ${m.nama}%0A📖 Tilawah: ${tilawah}%0A🌟 Hafalan: ${hafalan}%0A🔄 Murojaah: ${murojaah}%0A%0A_Barakallahu Fiikum_`;
+        window.open(`https://wa.me/${m.wa}?text=${teks}`);
+    }
+
+    // STATS
+    function renderStats() {
+        document.getElementById('stat-tilawah').innerText = db.pribadi.tilawah;
+        document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
+        document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
+        document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString();
+    }
+
+    // CALENDAR SIMPLE INJECTION
+    function renderCalendar() {
+        const container = document.getElementById('calendar-days');
+        for(let i=1; i<=31; i++) {
+            container.innerHTML += `<div style="background:var(--bg); padding:5px; border-radius:5px; font-size:12px;">${i}</div>`;
+        }
+    }
+
+    // INITIAL LOAD
     window.onload = () => {
-        document.body.setAttribute('data-theme', db.theme || 'light');
-        const now = new Date();
-        document.getElementById('today-date').innerText = now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' }) + " | 4 Sya'ban 1447 H";
-        refreshUI();
+        loadPersonal();
+        renderMurid();
+        renderStats();
+        renderCalendar();
     };
 </script>
 
