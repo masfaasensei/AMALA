@@ -66,7 +66,7 @@
             align-items: center; justify-content: center; gap: 10px; 
         }
 
-        /* GRID AMALAN PRIBADI */
+        /* GRID AMALAN */
         .amalan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
         .amalan-box {
             background: var(--card); border-radius: 15px; padding: 15px;
@@ -78,7 +78,7 @@
         .amalan-box span { font-size: 12px; font-weight: 500; }
         .amalan-box b { font-size: 16px; color: var(--accent); }
         .counter-controls { display: flex; gap: 15px; margin-top: 10px; align-items: center; }
-        .c-btn { background: var(--primary); color: white; border: none; width: 25px; height: 25px; border-radius: 5px; }
+        .c-btn { background: var(--primary); color: white; border: none; width: 25px; height: 25px; border-radius: 5px; cursor:pointer; }
 
         /* NAVIGASI BAWAH */
         .bottom-nav {
@@ -94,36 +94,23 @@
         .nav-item span { font-size: 8px; font-weight: 600; text-transform: uppercase; }
         .nav-item.active { color: var(--primary); }
 
-        /* --- STYLE BARU UNTUK DZIKIR --- */
-        .nav-dzikir { 
-            display: flex; align-items: center; gap: 15px; 
-            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #d1ccc0;
-        }
-        .nav-dzikir h2 { margin-bottom: 0; }
-
+        /* DZIKIR STYLE */
+        .nav-dzikir { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .dzikir-item { 
             background: var(--card); padding: 15px; border-radius: 15px; 
-            margin-bottom: 15px; cursor: pointer; transition: 0.3s;
-            border: 2px solid transparent; position: relative;
+            margin-bottom: 10px; cursor: pointer; position: relative; border: 2px solid transparent;
         }
         .dzikir-item.done { border-color: var(--success); background: #f0fdf4; }
-        .dzikir-title { font-weight: 600; color: var(--primary); font-size: 14px; }
-        
         .counter-badge { 
             position: absolute; top: 15px; right: 15px; 
-            background: var(--accent); color: white; 
-            padding: 2px 10px; border-radius: 20px; font-size: 12px;
-            display: flex; align-items: center; gap: 4px;
+            background: var(--accent); color: white; padding: 2px 8px; 
+            border-radius: 10px; font-size: 12px; 
         }
         .dzikir-item.done .counter-badge { background: var(--success); }
+        .arab { font-family: 'Amiri', serif; font-size: 22px; text-align: right; direction: rtl; margin: 10px 0; line-height: 1.8; }
+        .terjemah { font-size: 11px; color: #64748b; font-style: italic; }
 
-        .arab { 
-            font-family: 'Amiri', serif; font-size: 24px; text-align: right; 
-            direction: rtl; margin: 15px 0; line-height: 1.8;
-        }
-        .terjemah { font-size: 11px; font-style: italic; color: #64748b; line-height: 1.5; }
-
-        /* STATS BOX */
+        /* STATS */
         .stat-card { background: var(--primary); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 15px; }
         .stat-val { font-size: 28px; font-weight: 700; }
     </style>
@@ -134,7 +121,6 @@
 
     <div id="page-amalan" class="page active">
         <h2>Muhasabah Pribadi</h2>
-        
         <div class="amalan-grid">
             <div class="amalan-box" onclick="openPage('pagi')">
                 <i class="ph ph-sun-horizon"></i>
@@ -155,7 +141,6 @@
                     <b id="val-dhuha">0</b>
                     <button class="c-btn" onclick="updatePersonal('dhuha', 2)">+</button>
                 </div>
-                <small>Rakaat</small>
             </div>
             <div class="amalan-box">
                 <i class="ph ph-cloud-moon"></i>
@@ -165,7 +150,6 @@
                     <b id="val-tahajjud">0</b>
                     <button class="c-btn" onclick="updatePersonal('tahajjud', 2)">+</button>
                 </div>
-                <small>Rakaat</small>
             </div>
         </div>
 
@@ -178,10 +162,9 @@
                     <b id="val-tilawah">0</b>
                     <button class="c-btn" onclick="updatePersonal('tilawah', 1)">+</button>
                 </div>
-                <small>Halaman Hari Ini</small>
             </div>
         </div>
-        
+
         <div class="amalan-grid">
             <div class="amalan-box">
                 <i class="ph ph-calendar-check"></i>
@@ -191,16 +174,78 @@
                     <b id="val-puasa">0</b>
                     <button class="c-btn" onclick="updatePersonal('puasa', 1)">+</button>
                 </div>
-                <small>Hari (Bulan Ini)</small>
             </div>
             <div class="amalan-box">
                 <i class="ph ph-hand-heart"></i>
                 <span>Shodaqoh</span>
-                <div style="margin-top:5px;">
-                    <input type="number" id="val-shodaqoh" onchange="saveShodaqoh()" placeholder="Rp" style="margin-bottom:0; padding:5px; text-align:center; font-weight:bold;">
-                </div>
-                <small>Rupiah</small>
+                <input type="number" id="val-shodaqoh" onchange="saveShodaqoh()" placeholder="Rp" style="margin: 5px 0 0 0; text-align:center;">
             </div>
+        </div>
+    </div>
+
+    <div id="page-murid" class="page">
+        <h2>Database Murid</h2>
+        <div class="card">
+            <button class="btn-primary" onclick="tambahMurid()">+ Tambah Murid Baru</button>
+        </div>
+        <div id="list-murid"></div>
+    </div>
+
+    <div id="page-raport" class="page">
+        <h2>Laporan Progres Murid</h2>
+        <div class="card">
+            <label>Pilih Murid:</label>
+            <select id="sel-murid-raport"></select>
+            <label>Tilawah Quran:</label>
+            <input type="text" id="rap-tilawah" placeholder="Misal: Al-Baqarah hal 10">
+            <label>Hafalan Baru:</label>
+            <input type="text" id="rap-hafalan" placeholder="Misal: An-Naba 1-5">
+            <label>Murojaah:</label>
+            <input type="text" id="rap-murojaah" placeholder="Misal: Juz 30">
+            <button class="btn-primary" onclick="kirimRaportWA()">
+                <i class="ph ph-whatsapp-logo"></i> KIRIM KE ORANG TUA
+            </button>
+        </div>
+    </div>
+
+    <div id="page-statistik" class="page">
+        <h2>Statistik Amalan Saya</h2>
+        <div class="stat-card">
+            <span>Total Tilawah</span>
+            <div class="stat-val" id="stat-tilawah">0</div>
+            <span>Halaman</span>
+        </div>
+        <div class="amalan-grid">
+            <div class="amalan-box">
+                <span id="stat-dhuha">0</span>
+                <small>Dhuha (Rkt)</small>
+            </div>
+            <div class="amalan-box">
+                <span id="stat-tahajjud">0</span>
+                <small>Tahajjud (Rkt)</small>
+            </div>
+        </div>
+        <div class="card">
+            <h4>Pencapaian Shodaqoh</h4>
+            <h3 style="color:var(--primary)" id="stat-shodaqoh">Rp 0</h3>
+        </div>
+    </div>
+
+    <div id="page-kalender" class="page">
+        <h2>Kalender KHGT 2026</h2>
+        <div class="card" style="text-align:center;">
+            <h3 id="cal-month">Januari 2026</h3>
+            <p style="color:var(--accent); font-weight:600;">Sya'ban 1447 H</p>
+            <div id="calendar-days" style="display:grid; grid-template-columns: repeat(7, 1fr); gap:5px; margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <div id="page-setting" class="page">
+        <h2>Pengaturan</h2>
+        <div class="card">
+            <h4><i class="ph ph-user"></i> Profil Ustadz</h4>
+            <input type="text" value="Ustadz Ahmad">
+            <button class="btn-primary">Update Profil</button>
         </div>
     </div>
     
@@ -458,7 +503,7 @@
         </div>
     </div>
 
-    <nav class="bottom-nav">
+        <nav class="bottom-nav">
         <div class="nav-item active" onclick="openPage('amalan', this)">
             <i class="ph ph-hands-praying"></i><span>Amalan</span>
         </div>
@@ -482,7 +527,6 @@
 </div>
 
 <script>
-    // DATA STORAGE & CORE LOGIC
     let db = JSON.parse(localStorage.getItem('amala_pro_db')) || {
         murid: [],
         pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, puasa: 0, shodaqoh: 0 }
@@ -490,14 +534,13 @@
 
     function save() {
         localStorage.setItem('amala_pro_db', JSON.stringify(db));
+        renderMurid();
+        renderStats();
     }
 
-    // NAVIGATION
     function openPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        const targetPage = document.getElementById('page-' + pageId);
-        if(targetPage) targetPage.classList.add('active');
-        
+        document.getElementById('page-' + pageId).classList.add('active');
         if(el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
@@ -505,59 +548,88 @@
         window.scrollTo(0,0);
     }
 
-    // DZIKIR COUNTER LOGIC
+    // DZIKIR ENGINE
     function hitungDzikir(el) {
-        let numEl = el.querySelector('.num');
-        let current = parseInt(numEl.innerText);
-        
-        if (current > 0) {
-            current--;
-            numEl.innerText = current;
-            
-            // Vibrasi ringan (opsional untuk HP)
-            if (navigator.vibrate) navigator.vibrate(50);
-
-            if (current === 0) {
-                el.classList.add('done');
-            }
+        let n = el.querySelector('.num');
+        let count = parseInt(n.innerText);
+        if(count > 0) {
+            count--;
+            n.innerText = count;
+            if(count === 0) el.classList.add('done');
+            if(navigator.vibrate) navigator.vibrate(40);
         }
     }
 
-    function resetDzikir(pageId) {
-        if(!confirm("Reset hitungan dzikir ini?")) return;
-        const items = document.querySelectorAll(`#${pageId} .dzikir-item`);
-        items.forEach(item => {
-            const max = item.getAttribute('data-max');
-            item.querySelector('.num').innerText = max;
-            item.classList.remove('done');
+    function resetDzikir(pId) {
+        document.querySelectorAll(`#${pId} .dzikir-item`).forEach(it => {
+            it.querySelector('.num').innerText = it.dataset.max;
+            it.classList.remove('done');
         });
     }
 
-    // PERSONAL AMALAN LOGIC
-    function updatePersonal(key, val) {
-        db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val);
-        document.getElementById('val-' + key).innerText = db.pribadi[key];
+    // MURID & RAPORT
+    function tambahMurid() {
+        const nama = prompt("Nama Murid:");
+        const wa = prompt("WhatsApp Ortu (628...):");
+        if(nama && wa) { db.murid.push({ nama, wa }); save(); }
+    }
+
+    function renderMurid() {
+        const list = document.getElementById('list-murid');
+        const sel = document.getElementById('sel-murid-raport');
+        list.innerHTML = ""; sel.innerHTML = "";
+        db.murid.forEach((m, i) => {
+            list.innerHTML += `<div class="card" style="display:flex;justify-content:space-between">
+                <span><b>${m.nama}</b><br><small>${m.wa}</small></span>
+                <button onclick="hapusMurid(${i})" style="color:red;border:none;background:none">Hapus</button>
+            </div>`;
+            sel.innerHTML += `<option value="${i}">${m.nama}</option>`;
+        });
+    }
+
+    function hapusMurid(i) { if(confirm("Hapus?")) { db.murid.splice(i,1); save(); } }
+
+    function kirimRaportWA() {
+        const m = db.murid[document.getElementById('sel-murid-raport').value];
+        const t = document.getElementById('rap-tilawah').value;
+        const h = document.getElementById('rap-hafalan').value;
+        const r = document.getElementById('rap-murojaah').value;
+        const msg = `*LAPORAN TAHFIDZ*%0A👤: ${m.nama}%0A📖: ${t}%0A🌟: ${h}%0A🔄: ${r}`;
+        window.open(`https://wa.me/${m.wa}?text=${msg}`);
+    }
+
+    // PRIBADI
+    function updatePersonal(k, v) {
+        db.pribadi[k] = Math.max(0, (db.pribadi[k] || 0) + v);
+        document.getElementById('val-' + k).innerText = db.pribadi[k];
         save();
     }
 
-    function saveShodaqoh() {
-        db.pribadi.shodaqoh = document.getElementById('val-shodaqoh').value;
-        save();
+    function saveShodaqoh() { 
+        db.pribadi.shodaqoh = document.getElementById('val-shodaqoh').value; 
+        save(); 
     }
 
-    // (Tambahkan fungsi Murid & Raport Anda di sini agar tetap jalan)
+    function renderStats() {
+        document.getElementById('stat-tilawah').innerText = db.pribadi.tilawah;
+        document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
+        document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
+        document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString();
+    }
+
+    function renderCalendar() {
+        const c = document.getElementById('calendar-days');
+        c.innerHTML = "";
+        for(let i=1; i<=31; i++) c.innerHTML += `<div style="background:var(--card);padding:5px;border-radius:5px;font-size:10px;">${i}</div>`;
+    }
 
     window.onload = () => {
-        // Load data awal
-        for (let key in db.pribadi) {
-            const el = document.getElementById('val-' + key);
-            if(el) {
-                if(el.tagName === 'B') el.innerText = db.pribadi[key];
-                if(el.tagName === 'INPUT') el.value = db.pribadi[key];
-            }
+        for(let k in db.pribadi) {
+            let el = document.getElementById('val-'+k);
+            if(el) k==='shodaqoh'? el.value=db.pribadi[k] : el.innerText=db.pribadi[k];
         }
+        renderMurid(); renderStats(); renderCalendar();
     };
 </script>
-
 </body>
 </html>
