@@ -575,10 +575,21 @@
         save();
     }
     function updSho() {
-        db.pribadi.shodaqoh = document.getElementById('v-shodaqoh').value;
-        save();
+    let input = document.getElementById('v-shodaqoh');
+    let val = parseInt(input.value);
+    db.pribadi.shodaqoh = isNaN(val) ? 0 : val;
+    save();
+}
+    function openDzikir(tipe) {
+    const detailDiv = document.getElementById('dzikir-detail');
+    const titleH2 = document.getElementById('dzikir-title');
+    if(detailDiv && titleH2) {
+        titleH2.innerText = "Dzikir " + tipe;
+        detailDiv.style.display = 'block';
+        window.scrollTo(0,0);
     }
-
+}
+    
     function refreshUI() {
         document.getElementById('v-dhuha').innerText = db.pribadi.dhuha;
         document.getElementById('v-tahajjud').innerText = db.pribadi.tahajjud;
@@ -728,5 +739,6 @@
 
 </body>
 </html>
+
 
 
