@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMALA GURU v2.1 - KHGT Edition</title>
+    <title>AMALA v2.1 - KHGT Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -272,9 +272,9 @@
             <button class="btn-p" style="margin-top:10px; padding:10px;" onclick="savePass()">Simpan Password</button>
         </div>
         <div class="box" style="font-size:11px; display:block; opacity:0.8;">
-            <b>Amala Guru v2.1</b><br>
+            <b>Amala v2.1</b><br>
             Berbasis KHGT Muhammadiyah.<br>
-            Developer Contact: support@amalaguru.id
+            Developer Contact: amala.domain@gmail.com
         </div>
     </div>
     
@@ -697,7 +697,7 @@
     function sendWA() {
         const m = db.murid[document.getElementById('sel-m').value];
         const cat = document.getElementById('catatan').value;
-        const txt = `*LAPORAN AMALAN & TAHFIDZ*%0A👤 Murid: ${m.nama}%0A📝 Catatan: ${cat}%0A%0A_Dikirim via Amala Guru App_`;
+        const txt = `*LAPORAN AMALAN & TAHFIDZ*%0A👤 Murid: ${m.nama}%0A📝 Catatan: ${cat}%0A%0A_Dikirim via Amala App_`;
         window.open(`https://wa.me/${m.wa}?text=${txt}`);
     }
 
@@ -728,4 +728,5 @@
 
 </body>
 </html>
+
 
