@@ -112,6 +112,31 @@
 <body data-theme="light">
 
 <div class="app-container">
+<h3 style="font-size: 1.1rem; margin: 20px 0 10px 5px;">Muhasabah Pribadi</h3>
+
+<div class="grid-dzikir" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+    <div class="box-dzikir pop-effect" onclick="openDzikir('Pagi')">
+        <span style="font-size: 1.5rem; display: block;">☀️</span>
+        <b style="font-size: 0.9rem;">Dzikir Pagi</b>
+    </div>
+    <div class="box-dzikir pop-effect" onclick="openDzikir('Petang')">
+        <span style="font-size: 1.5rem; display: block;">🌙</span>
+        <b style="font-size: 0.9rem;">Dzikir Petang</b>
+    </div>
+</div>
+
+<div class="box-full">
+    <span style="font-size: 1.5rem;">🕌</span>
+    <div class="info-text">
+        <b>Shalat Dhuha</b>
+        <span>(RAKAAT)</span>
+    </div>
+    <div class="counter-ui" style="display: flex; align-items: center; gap: 10px;">
+        <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="upd('dhuha', -2)">-</button>
+        <b id="v-dhuha">0</b>
+        <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="upd('dhuha', 2)">+</button>
+    </div>
+</div>
 
 <div id="p-amalan" class="page active">
     <h2>Amala Guru</h2>
@@ -181,6 +206,71 @@
                    placeholder="0" 
                    onfocus="if(this.value=='0')this.value=''" 
                    onchange="updSho()">
+        </div>
+
+            <h3 style="font-size: 1.1rem; margin: 25px 0 15px 5px;">Muhasabah Pribadi</h3>
+    
+    <div class="dashboard-grid" style="margin-bottom: 15px;">
+        <div class="box-dzikir pop-effect" onclick="alert('Membuka Dzikir Pagi')">
+            <span style="font-size: 1.5rem; display: block;">☀️</span>
+            <b style="font-size: 0.85rem; color: var(--text-main);">Dzikir Pagi</b>
+        </div>
+        <div class="box-dzikir pop-effect" onclick="alert('Membuka Dzikir Petang')">
+            <span style="font-size: 1.5rem; display: block;">🌙</span>
+            <b style="font-size: 0.85rem; color: var(--text-main);">Dzikir Petang</b>
+        </div>
+    </div>
+
+    <div class="box-full pop-effect">
+        <span style="font-size: 1.5rem;">🕌</span>
+        <div class="info-text">
+            <b>Shalat Dhuha</b>
+            <span>(RAKAAT)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="changeVal('v-dhuha', -2)">-</button>
+            <b id="v-dhuha" style="min-width: 20px; text-align: center;">0</b>
+            <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="changeVal('v-dhuha', 2)">+</button>
+        </div>
+    </div>
+
+    <div class="box-full pop-effect">
+        <span style="font-size: 1.5rem;">🌌</span>
+        <div class="info-text">
+            <b>Shalat Tahajjud</b>
+            <span>(RAKAAT)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="changeVal('v-tahajjud', -2)">-</button>
+            <b id="v-tahajjud" style="min-width: 20px; text-align: center;">0</b>
+            <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="changeVal('v-tahajjud', 2)">+</button>
+        </div>
+    </div>
+
+    <div class="box-full pop-effect">
+        <span style="font-size: 1.5rem;">📖</span>
+        <div class="info-text">
+            <b>Tilawah Al-Quran</b>
+            <span>(HALAMAN)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="changeVal('v-tilawah', -1)">-</button>
+            <b id="v-tilawah" style="min-width: 20px; text-align: center;">0</b>
+            <button class="btn-wa" style="background: var(--primary-green); padding: 5px 12px;" onclick="changeVal('v-tilawah', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="box-full pop-effect">
+        <span style="font-size: 1.5rem;">💰</span>
+        <div class="info-text">
+            <b>Shodaqoh</b>
+            <span>(RUPIAH)</span>
+        </div>
+        <div style="position: relative; width: 130px;">
+            <span style="position: absolute; left: 10px; top: 10px; font-size: 11px; font-weight: bold; color: var(--primary-green);">Rp</span>
+            <input type="number" id="v-shodaqoh" 
+                style="width: 100%; padding: 8px 10px 8px 30px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-weight: bold; text-align: right;" 
+                placeholder="0" onfocus="if(this.value=='0')this.value=''">
         </div>
     </div>
 </div>
@@ -721,6 +811,12 @@
         save();
     }
 
+    function changeVal(id, delta) {
+        const el = document.getElementById(id);
+        let current = parseInt(el.innerText);
+        el.innerText = Math.max(0, current + delta);
+    }
+
     function updateDate() {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -739,6 +835,7 @@
 
 </body>
 </html>
+
 
 
 
