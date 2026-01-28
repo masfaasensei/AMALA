@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMALA GURU - Pro System v2.2</title>
+    <title>AMALA GURU - Pro System v2.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        /* --- CONFIG WARNA --- */
+        /* --- CONFIG WARNA (TIDAK BERUBAH) --- */
         :root {
-            /* Palette Dasar (Sesuai Permintaan) */
-            --bg-light: #B6E5D2;    /* Latar Light Mode */
-            --bg-dark: #043F34;     /* Latar Dark Mode (TETAP) */
+            /* Palette Dasar */
+            --bg-light: #B6E5D2;    
+            --bg-dark: #043F34;     
             
             /* Komponen Light Mode */
             --l-text: #043F34;
-            --l-card: #ffffff;      /* Putih bersih agar clean di atas hijau muda */
+            --l-card: #ffffff;      
             --l-btn: #043F34;
             --l-btn-text: #B6E5D2;
             --l-accent: #d97706;
 
-            /* Komponen Dark Mode (DIRACIK ULANG AGAR KONTRAS & MEWAH) */
-            --d-text: #e2e8f0;      /* Putih Gading (Nyaman di mata) */
-            --d-card: #064e41;      /* Hijau Teal Gelap (Sedikit lebih terang dari BG) */
-            --d-btn: #FCD34D;       /* Emas Pucat (Elegan & Kontras) */
-            --d-btn-text: #043F34;  /* Teks tombol gelap */
+            /* Komponen Dark Mode */
+            --d-text: #e2e8f0;      
+            --d-card: #064e41;      
+            --d-btn: #FCD34D;       
+            --d-btn-text: #043F34;  
             --d-accent: #FCD34D;
         }
 
@@ -176,11 +176,11 @@
         .day-hijri { font-size: 9px; opacity: 0.7; position: absolute; bottom: 2px; right: 4px; }
 
         /* Calendar Markers */
-        .m-seninkamis { background: rgba(74, 222, 128, 0.2); border: 1px solid #4ade80; } /* Hijau */
-        .m-ayyamul { background: rgba(96, 165, 250, 0.2); border: 1px solid #60a5fa; } /* Biru */
-        .m-ramadhan { background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; } /* Ungu */
-        .m-special { background: rgba(251, 146, 60, 0.2); border: 1px solid #fb923c; } /* Orange (Arafah/Asyura) */
-        .m-haram { background: rgba(248, 113, 113, 0.2); border: 1px solid #f87171; opacity: 0.6; } /* Merah (Idul Fitri) */
+        .m-seninkamis { background: rgba(74, 222, 128, 0.2); border: 1px solid #4ade80; } 
+        .m-ayyamul { background: rgba(96, 165, 250, 0.2); border: 1px solid #60a5fa; } 
+        .m-ramadhan { background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; } 
+        .m-special { background: rgba(251, 146, 60, 0.2); border: 1px solid #fb923c; } 
+        .m-haram { background: rgba(248, 113, 113, 0.2); border: 1px solid #f87171; opacity: 0.6; } 
 
         .fasting-legend { display: flex; gap: 10px; margin-top: 15px; font-size: 10px; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; gap: 4px; }
@@ -192,8 +192,33 @@
         .fs-num { font-size: 20px; font-weight: 700; color: var(--btn-bg); }
         .fs-label { font-size: 10px; text-transform: uppercase; }
 
-        /* LOCK OVERLAY & DZIKIR */
-        .dzikir-item { background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 12px; }
+        /* DZIKIR PAGE & TASBIH */
+        .top-action-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn-back { border:none; background:none; color:var(--text-main); font-weight:bold; font-size:16px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+        .tasbih-card {
+            background: var(--btn-bg); color: var(--btn-text);
+            border-radius: 16px; padding: 20px; text-align: center;
+            margin-bottom: 20px; position: sticky; top: 0; z-index: 50;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .tasbih-val { font-size: 48px; font-weight: 800; line-height: 1; display: block; margin: 10px 0; }
+        .tasbih-ctrl { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .btn-tasbih { 
+            background: rgba(0,0,0,0.2); color: inherit; border: none; 
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .btn-tasbih-big {
+            width: 100%; height: 60px; border-radius: 12px;
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
+            font-weight: 700; color: inherit; font-size: 16px; cursor: pointer;
+        }
+
+        .dzikir-item { background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 12px; border-left: 4px solid var(--btn-bg); }
         .arab { font-family: 'Amiri', serif; font-size: 24px; text-align: right; direction: rtl; margin: 15px 0; line-height: 1.8; }
         
         /* CHART */
@@ -217,7 +242,7 @@
         
         <div class="date-display">
             <div class="date-masehi" id="date-masehi">-</div>
-            <div class="date-hijri" id="date-hijri">-</div>
+            <div class="date-hijri" id="date-hijri">Loading...</div>
         </div>
 
         <div class="amalan-top-grid">
@@ -388,9 +413,19 @@
             </div>
         </div>
 
+        <div class="card" style="border: 1px solid var(--accent-color);">
+            <h4><i class="ph ph-heart" style="color:var(--accent-color)"></i> Dukungan Dakwah</h4>
+            <p style="font-size:12px; margin-bottom:10px;">Bantu operasional pengembangan Amala App.</p>
+            <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px;">
+                <b style="font-size:14px; display:block;">BANK JAGO</b>
+                <span style="font-size:18px; font-weight:700; letter-spacing:1px;">5012-9872-3886</span>
+            </div>
+        </div>
+
         <div class="card">
-            <h4><i class="ph ph-info"></i> About App</h4>
-            <p style="font-size:11px; line-height:1.6;"><b>Amala Guru v2.2</b><br>Sistem Manajemen Amalan & Tahfidz.</p>
+            <h4><i class="ph ph-info"></i> Info Developer</h4>
+            <p style="font-size:12px; margin-bottom:5px;"><b>Amala Team</b><br>Email: amala.domain@gmail.com</p>
+            <p style="font-size:12px;"><b>CS / Pendampingan:</b><br>0898-6691-457</p>
         </div>
     </div>
     
@@ -673,11 +708,14 @@
 
 <script>
     // --- 1. CONFIG & STATE ---
-    let db = JSON.parse(localStorage.getItem('amala_pro_db_v22')) || {
+    let db = JSON.parse(localStorage.getItem('amala_pro_db_v23')) || {
         murid: [],
         pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasaMonth: 0, puasaYear: 0 },
         settings: { darkMode: false, isLoggedIn: false, pin: "1234" }
     };
+    
+    // State sementara untuk tasbih (tidak perlu save ke DB permanen)
+    let tasbih = { pagi: 0, petang: 0 };
 
     let currentDate = new Date();
     let displayMonth = currentDate.getMonth();
@@ -685,7 +723,7 @@
 
     // --- 2. CORE FUNCTIONS ---
     function save() {
-        localStorage.setItem('amala_pro_db_v22', JSON.stringify(db));
+        localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
         updateUI();
     }
 
@@ -707,7 +745,7 @@
         document.getElementById('daily-percent').innerText = score + "%";
         document.getElementById('daily-donut').style.background = `conic-gradient(var(--btn-bg) ${score}%, rgba(0,0,0,0.1) ${score}% 100%)`;
         
-        // Update Counters
+        // Update Counters Amalan
         ['dhuha', 'tahajjud', 'tilawah'].forEach(k => {
             document.getElementById('val-'+k).innerText = db.pribadi[k];
         });
@@ -721,7 +759,20 @@
         }
     }
 
-    // --- 3. LOGIC AMALAN ---
+    // --- 3. TASBIH LOGIC (NEW) ---
+    function countDzikir(type, val) {
+        tasbih[type] = Math.max(0, tasbih[type] + val);
+        document.getElementById('counter-'+type).innerText = tasbih[type];
+    }
+    
+    function resetDzikir(type) {
+        if(confirm("Reset hitungan tasbih?")) {
+            tasbih[type] = 0;
+            document.getElementById('counter-'+type).innerText = 0;
+        }
+    }
+
+    // --- 4. LOGIC AMALAN ---
     function updatePersonal(key, val) {
         db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val);
         save();
@@ -741,7 +792,7 @@
         }
     }
 
-    // --- 4. NAVIGATION & SECURITY ---
+    // --- 5. NAVIGATION & SECURITY ---
     function openPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
@@ -775,7 +826,7 @@
         }
     }
 
-    // --- 5. THEME ---
+    // --- 6. THEME ---
     function toggleDarkMode() {
         db.settings.darkMode = !db.settings.darkMode;
         applyTheme();
@@ -794,13 +845,30 @@
         }
     }
 
-    // --- 6. ADVANCED CALENDAR LOGIC ---
+    // --- 7. ADVANCED CALENDAR LOGIC (FIXED) ---
     function renderDateHeader() {
         const d = new Date();
+        // Masehi Standard
         document.getElementById('date-masehi').innerText = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        // Hijri via Intl
-        const hijri = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
-        document.getElementById('date-hijri').innerText = hijri;
+        
+        // Hijri Fix: Manual Mapping untuk menghindari bug "Agustus" atau "SM"
+        try {
+            const hijriNames = ["Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulkaidah", "Dzulhijjah"];
+            
+            // Gunakan intl hanya untuk mengambil angka bagian bulan dan tanggal
+            const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(d);
+            
+            const hDay = parts.find(p => p.type === 'day').value;
+            const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1; // 0-based index
+            const hYear = parts.find(p => p.type === 'year').value;
+            
+            // Susun manual
+            const hijriString = `${hDay} ${hijriNames[hMonthIdx]} ${hYear} H`;
+            document.getElementById('date-hijri').innerText = hijriString;
+        } catch (e) {
+            // Fallback jika browser sangat tua
+            document.getElementById('date-hijri').innerText = "Kalender Hijriyah Error";
+        }
     }
 
     function changeMonth(dir) {
@@ -820,10 +888,13 @@
         // Header Masehi
         document.getElementById('cal-month-year').innerText = new Date(displayYear, displayMonth).toLocaleDateString('id-ID', {month:'long', year:'numeric'});
         
-        // Header Hijri (Estimate from 15th of month)
+        // Header Hijri (Estimate)
         const midDate = new Date(displayYear, displayMonth, 15);
-        const hijriMonthName = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', { month: 'long', year: 'numeric' }).format(midDate);
-        document.getElementById('cal-hijri-month').innerText = hijriMonthName;
+        // Kita gunakan mapping manual juga disini untuk konsistensi
+        const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {month:'numeric', year:'numeric'}).formatToParts(midDate);
+        const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1;
+        const hijriNames = ["Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulkaidah", "Dzulhijjah"];
+        document.getElementById('cal-hijri-month').innerText = hijriNames[hMonthIdx] + " " + parts.find(p => p.type === 'year').value + " H";
 
         // Empty slots
         for(let i=0; i<firstDay; i++) container.innerHTML += `<div></div>`;
@@ -831,44 +902,29 @@
         // Days
         for(let i=1; i<=daysInMonth; i++) {
             const date = new Date(displayYear, displayMonth, i);
-            const dayOfWeek = date.getDay(); // 0=Sun, 1=Mon, 4=Thu
+            const dayOfWeek = date.getDay();
             
-            // Convert to Hijri Parts
-            const hijriParts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {day:'numeric', month:'numeric'}).formatToParts(date);
-            const hDay = parseInt(hijriParts.find(p => p.type === 'day').value);
-            const hMonth = parseInt(hijriParts.find(p => p.type === 'month').value);
+            const p = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric'}).formatToParts(date);
+            const hDay = parseInt(p.find(k => k.type === 'day').value);
+            const hMonth = parseInt(p.find(k => k.type === 'month').value);
             
             let classes = "day-cell";
-            let style = "";
+            
+            // Rules
+            if(hMonth === 10 && hDay === 1) classes += " m-haram";
+            else if(hMonth === 9) classes += " m-ramadhan";
+            else if(hMonth === 12 && hDay === 9) classes += " m-special";
+            else if(hMonth === 1 && (hDay === 9 || hDay === 10)) classes += " m-special";
+            else if(hDay >= 13 && hDay <= 15) classes += " m-ayyamul";
+            else if(dayOfWeek === 1 || dayOfWeek === 4) classes += " m-seninkamis";
 
-            // --- PUASA LOGIC ---
-            // 1. Dilarang (1 Syawal)
-            if(hMonth === 10 && hDay === 1) { classes += " m-haram"; }
-            // 2. Ramadhan (Month 9)
-            else if(hMonth === 9) { classes += " m-ramadhan"; }
-            // 3. Arafah (9 Dzulhijjah - Month 12)
-            else if(hMonth === 12 && hDay === 9) { classes += " m-special"; }
-            // 4. Tasua/Asyura (9,10 Muharram - Month 1)
-            else if(hMonth === 1 && (hDay === 9 || hDay === 10)) { classes += " m-special"; }
-            // 5. 6 Hari Syawal (Month 10, approx day 2-7) - Optional approximation
-            else if(hMonth === 10 && hDay >= 2 && hDay <= 7) { classes += " m-seninkamis"; } // Use green for sunnah
-            // 6. Ayyamul Bidh (13,14,15 Any Month)
-            else if(hDay >= 13 && hDay <= 15) { classes += " m-ayyamul"; }
-            // 7. Senin & Kamis
-            else if(dayOfWeek === 1 || dayOfWeek === 4) { classes += " m-seninkamis"; }
-
-            // Today Marker
             if(date.toDateString() === new Date().toDateString()) classes += " today";
 
-            container.innerHTML += `
-                <div class="${classes}">
-                    ${i}
-                    <span class="day-hijri">${hDay}</span>
-                </div>`;
+            container.innerHTML += `<div class="${classes}">${i}<span class="day-hijri">${hDay}</span></div>`;
         }
     }
 
-    // --- 7. MURID & RAPORT (SAME AS BEFORE) ---
+    // --- 8. MURID & RAPORT ---
     function renderMuridPage() {
         const div = document.getElementById('murid-content');
         if(db.murid.length === 0) {
