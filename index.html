@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMALA GURU - Pro System v2.5</title>
+    <title>AMALA GURU - Pro System v2.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        /* --- CONFIG WARNA --- */
+        /* --- CONFIG WARNA (TIDAK BERUBAH) --- */
         :root {
+            /* Palette Dasar */
             --bg-light: #B6E5D2;    
             --bg-dark: #043F34;     
             
+            /* Komponen Light Mode */
             --l-text: #043F34;
             --l-card: #ffffff;      
             --l-btn: #043F34;
             --l-btn-text: #B6E5D2;
             --l-accent: #d97706;
 
+            /* Komponen Dark Mode */
             --d-text: #e2e8f0;      
             --d-card: #064e41;      
             --d-btn: #FCD34D;       
@@ -26,6 +29,7 @@
             --d-accent: #FCD34D;
         }
 
+        /* Default (Light Mode) */
         body {
             --bg-body: var(--bg-light);
             --text-main: var(--l-text);
@@ -35,6 +39,7 @@
             --accent-color: var(--l-accent);
         }
 
+        /* Dark Mode Override */
         body.dark-mode {
             --bg-body: var(--bg-dark);
             --text-main: var(--d-text);
@@ -70,27 +75,39 @@
         h2 { font-size: 20px; margin-bottom: 5px; font-weight: 700; }
         h4 { font-size: 14px; margin-bottom: 8px; opacity: 0.8; }
         
-        .greeting { font-size: 14px; margin-bottom: 20px; opacity: 0.9; font-weight: 500; }
+        .greeting {
+            font-size: 14px; margin-bottom: 20px; opacity: 0.9; font-weight: 500;
+        }
 
         .date-display {
-            background: var(--card-bg); padding: 15px; border-radius: 16px;
-            margin-bottom: 20px; text-align: center;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .date-masehi { font-size: 14px; font-weight: 600; }
         .date-hijri { font-size: 18px; font-weight: 700; color: var(--accent-color); margin-top: 5px; }
 
         .card { 
-            background: var(--card-bg); padding: 20px; border-radius: 18px; 
-            margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 18px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         input, select { 
             width: 100%; padding: 14px; border-radius: 12px; 
             border: 2px solid var(--text-main); opacity: 0.8;
-            background: transparent; color: var(--text-main);
+            background: transparent;
+            color: var(--text-main);
             margin-bottom: 15px; outline: none; font-weight: 600;
         }
+        input::placeholder { color: var(--text-main); opacity: 0.3; font-weight: 400; }
 
         .btn-primary { 
             background: var(--btn-bg); color: var(--btn-text); border: none; 
@@ -98,15 +115,6 @@
             font-weight: 700; cursor: pointer; display: flex; 
             align-items: center; justify-content: center; gap: 10px; font-size: 14px;
         }
-        
-        /* Tombol Kembali Custom */
-        .btn-back-custom {
-            background: transparent; border: 2px solid var(--text-main);
-            color: var(--text-main); padding: 8px 16px; border-radius: 30px;
-            font-size: 12px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .btn-back-custom:active { opacity: 0.6; transform: scale(0.95); }
 
         /* AMALAN LAYOUT */
         .amalan-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
@@ -114,7 +122,8 @@
         .amalan-item {
             background: var(--card-bg); border-radius: 16px; padding: 18px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
         .amalan-row {
@@ -122,69 +131,25 @@
             margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+
         .row-icon { font-size: 32px; margin-right: 15px; width: 40px; text-align: center; color: var(--btn-bg); }
         .row-info { flex: 1; text-align: left; }
         .row-info h3 { font-size: 16px; font-weight: 700; }
-        .row-info .unit-badge { font-size: 10px; background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 10px; font-weight: 600; opacity: 0.7; }
+        .row-info .unit-badge { 
+            font-size: 10px; background: rgba(0,0,0,0.05); padding: 3px 8px; 
+            border-radius: 10px; font-weight: 600; color: var(--text-main); opacity: 0.7;
+        }
 
+        /* COUNTER CONTROLS */
         .counter-wrap { display: flex; align-items: center; gap: 10px; }
         .c-btn { 
             background: var(--btn-bg); color: var(--btn-text); 
             border: none; width: 32px; height: 32px; border-radius: 8px; 
-            font-size: 18px; cursor: pointer;
+            font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
         .c-val { font-size: 18px; font-weight: 700; min-width: 30px; text-align: center; }
 
-        /* STATISTIK & CHART */
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .stat-box { background: rgba(0,0,0,0.03); padding: 10px; border-radius: 12px; text-align: center; }
-        .stat-num { font-size: 20px; font-weight: 700; color: var(--btn-bg); }
-        .stat-lbl { font-size: 10px; text-transform: uppercase; font-weight: 600; opacity: 0.7; }
-
-        .bar-chart-container {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            height: 120px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.1);
-            margin-top: 15px;
-        }
-        .bar-col { display: flex; flex-direction: column; align-items: center; width: 12%; }
-        .bar { 
-            width: 100%; border-radius: 4px 4px 0 0; 
-            background: var(--accent-color); transition: height 1s ease;
-            min-height: 4px; opacity: 0.8;
-        }
-        .bar-day { font-size: 9px; margin-top: 5px; font-weight: 600; opacity: 0.6; }
-
-        /* CALENDAR */
-        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
-        .day-name { font-size: 11px; font-weight: 700; text-align: center; padding: 5px 0; }
-        .day-cell { 
-            height: 45px; display: flex; align-items: center; justify-content: center; flex-direction: column;
-            background: rgba(0,0,0,0.03); border-radius: 8px; font-size: 13px; font-weight: 600; position: relative;
-        }
-        .day-cell.today { border: 2px solid var(--text-main); }
-        .day-hijri { font-size: 9px; opacity: 0.7; position: absolute; bottom: 2px; right: 4px; }
-        
-        .m-seninkamis { background: rgba(74, 222, 128, 0.2); border: 1px solid #4ade80; } 
-        .m-ayyamul { background: rgba(96, 165, 250, 0.2); border: 1px solid #60a5fa; } 
-        .m-ramadhan { background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; } 
-        .m-special { background: rgba(251, 146, 60, 0.2); border: 1px solid #fb923c; } 
-        .m-haram { background: rgba(248, 113, 113, 0.2); border: 1px solid #f87171; opacity: 0.6; } 
-
-        /* DZIKIR PAGE */
-        .nav-dzikir { 
-            display: flex; align-items: center; justify-content: space-between; 
-            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.1); 
-        }
-        .dzikir-item { background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 12px; border-left: 4px solid var(--btn-bg); }
-        .arab { font-family: 'Amiri', serif; font-size: 24px; text-align: right; direction: rtl; margin: 15px 0; line-height: 1.8; }
-        .counter-badge { 
-            float: right; background: var(--btn-bg); color: var(--btn-text);
-            padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;
-            display: flex; align-items: center; gap: 4px;
-        }
-
-        /* BOTTOM NAV */
+        /* NAVIGASI BAWAH */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; max-width: 480px;
             background: var(--card-bg); display: flex; justify-content: space-around;
@@ -198,6 +163,72 @@
         .nav-item i { font-size: 24px; }
         .nav-item span { font-size: 9px; font-weight: 700; text-transform: uppercase; }
         .nav-item.active { opacity: 1; color: var(--btn-bg); }
+        
+        /* CALENDAR */
+        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+        .day-name { font-size: 11px; font-weight: 700; text-align: center; padding: 5px 0; }
+        .day-cell { 
+            height: 45px; display: flex; align-items: center; justify-content: center; flex-direction: column;
+            background: rgba(0,0,0,0.03); border-radius: 8px; font-size: 13px; font-weight: 600; position: relative;
+        }
+        .day-cell.today { border: 2px solid var(--text-main); }
+        .day-hijri { font-size: 9px; opacity: 0.7; position: absolute; bottom: 2px; right: 4px; }
+
+        /* Calendar Markers */
+        .m-seninkamis { background: rgba(74, 222, 128, 0.2); border: 1px solid #4ade80; } 
+        .m-ayyamul { background: rgba(96, 165, 250, 0.2); border: 1px solid #60a5fa; } 
+        .m-ramadhan { background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; } 
+        .m-special { background: rgba(251, 146, 60, 0.2); border: 1px solid #fb923c; } 
+        .m-haram { background: rgba(248, 113, 113, 0.2); border: 1px solid #f87171; opacity: 0.6; } 
+
+        .fasting-legend { display: flex; gap: 10px; margin-top: 15px; font-size: 10px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 4px; }
+        .dot { width: 8px; height: 8px; border-radius: 2px; }
+
+        /* FASTING STATS */
+        .fasting-stats { display: flex; gap: 10px; margin-top: 20px; }
+        .fs-box { flex: 1; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 10px; text-align: center; }
+        .fs-num { font-size: 20px; font-weight: 700; color: var(--btn-bg); }
+        .fs-label { font-size: 10px; text-transform: uppercase; }
+
+        /* DZIKIR PAGE & TASBIH */
+        .top-action-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn-back { border:none; background:none; color:var(--text-main); font-weight:bold; font-size:16px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+        .tasbih-card {
+            background: var(--btn-bg); color: var(--btn-text);
+            border-radius: 16px; padding: 20px; text-align: center;
+            margin-bottom: 20px; position: sticky; top: 0; z-index: 50;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .tasbih-val { font-size: 48px; font-weight: 800; line-height: 1; display: block; margin: 10px 0; }
+        .tasbih-ctrl { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .btn-tasbih { 
+            background: rgba(0,0,0,0.2); color: inherit; border: none; 
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .btn-tasbih-big {
+            width: 100%; height: 60px; border-radius: 12px;
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
+            font-weight: 700; color: inherit; font-size: 16px; cursor: pointer;
+        }
+
+        .dzikir-item { background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 12px; border-left: 4px solid var(--btn-bg); }
+        .arab { font-family: 'Amiri', serif; font-size: 24px; text-align: right; direction: rtl; margin: 15px 0; line-height: 1.8; }
+        
+        /* CHART */
+        .chart-container { display: flex; justify-content: center; margin: 20px 0; }
+        .donut-chart {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: conic-gradient(var(--btn-bg) 0% 0%, rgba(0,0,0,0.1) 0% 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .donut-inner { width: 90px; height: 90px; background: var(--card-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
     </style>
 </head>
 <body class="light-mode">
@@ -205,6 +236,7 @@
 <div class="app-container">
 
     <div id="page-amalan" class="page active">
+        
         <h2 style="color:var(--btn-bg)">Muhasabah</h2>
         <p class="greeting">Assalamualaikum, Ustadz.</p>
         
@@ -285,40 +317,33 @@
     </div>
 
     <div id="page-statistik" class="page">
-        <h2>Statistik Ibadah</h2>
+        <h2>Muhasabah Mingguan</h2>
         
-        <div class="card" style="margin-top:20px">
-            <h4><i class="ph ph-chart-bar"></i> Grafik Mingguan</h4>
-            <div class="bar-chart-container" id="week-chart">
+        <div class="card" style="text-align:center;">
+            <h4>Capaian Hari Ini</h4>
+            <div class="chart-container">
+                <div class="donut-chart" id="daily-donut">
+                    <div class="donut-inner">
+                        <span id="daily-percent" style="font-size:24px; font-weight:700;">0%</span>
+                        <small>Produktif</small>
+                    </div>
                 </div>
-            <small style="display:block; text-align:center; opacity:0.6; margin-top:5px;">Aktivitas 7 Hari Terakhir</small>
+            </div>
         </div>
 
+        <div class="amalan-top-grid">
+            <div class="amalan-item">
+                <span id="stat-dhuha" style="font-size:24px; font-weight:700;">0</span>
+                <small>Dhuha (Rakaat)</small>
+            </div>
+            <div class="amalan-item">
+                <span id="stat-tahajjud" style="font-size:24px; font-weight:700;">0</span>
+                <small>Tahajjud (Rakaat)</small>
+            </div>
+        </div>
         <div class="card">
-            <h4><i class="ph ph-list-checks"></i> Rincian Amalan</h4>
-            <div class="stat-grid">
-                <div class="stat-box">
-                    <div class="stat-num" id="stat-dhuha">0</div>
-                    <div class="stat-lbl">Dhuha (Rakaat)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num" id="stat-tahajjud">0</div>
-                    <div class="stat-lbl">Tahajjud (Rakaat)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num" id="stat-tilawah">0</div>
-                    <div class="stat-lbl">Tilawah (Lembar)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-num" id="stat-puasa">0</div>
-                    <div class="stat-lbl">Puasa (Hari)</div>
-                </div>
-            </div>
-            
-            <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; text-align:center; margin-top:10px;">
-                <span class="stat-lbl">Total Shodaqoh Bulan Ini</span>
-                <div id="stat-shodaqoh" style="font-size:18px; font-weight:700; color:var(--btn-bg)">Rp 0</div>
-            </div>
+            <h4>Total Shodaqoh Bulan Ini</h4>
+            <h2 id="stat-shodaqoh" style="color:var(--btn-bg)">Rp 0</h2>
         </div>
     </div>
 
@@ -350,7 +375,19 @@
             </div>
             
             <hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin:15px 0;">
-            <div style="text-align:center;">
+            
+            <h4>Statistik Puasa Saya</h4>
+            <div class="fasting-stats">
+                <div class="fs-box">
+                    <div class="fs-num" id="stat-puasa-month">0</div>
+                    <div class="fs-label">Hari (Bulan Ini)</div>
+                </div>
+                <div class="fs-box">
+                    <div class="fs-num" id="stat-puasa-year">0</div>
+                    <div class="fs-label">Hari (Tahun Ini)</div>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:10px;">
                 <button class="btn-primary" onclick="catatPuasa()" style="padding:10px; font-size:12px;">
                     <i class="ph ph-check"></i> Catat Puasa Hari Ini
                 </button>
@@ -363,16 +400,10 @@
         
         <div class="card">
             <h4><i class="ph ph-lock-key"></i> Akses Guru (Login)</h4>
-            <input type="password" id="admin-pass" placeholder="PIN saat ini">
+            <p style="font-size:12px; margin-bottom:10px;">Masukkan PIN untuk membuka fitur Murid.</p>
+            <input type="password" id="admin-pass" placeholder="PIN Default: 1234">
             <button class="btn-primary" onclick="verifikasiLogin()">Verifikasi</button>
             <p id="login-status" style="font-size:12px; margin-top:5px; color:var(--accent-color)"></p>
-        </div>
-
-        <div class="card" id="card-ganti-pin" style="display:none; border:1px solid var(--btn-bg);">
-            <h4><i class="ph ph-key"></i> Ubah Password / PIN</h4>
-            <p style="font-size:12px; margin-bottom:10px;">Atur PIN baru untuk keamanan.</p>
-            <input type="number" id="new-pin" placeholder="PIN Baru (angka)">
-            <button class="btn-primary" onclick="gantiPin()">Simpan PIN Baru</button>
         </div>
 
         <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
@@ -381,18 +412,28 @@
                 <div id="dm-toggle" style="width:20px; height:20px; background:var(--bg-body); border-radius:50%; position:absolute; left:3px; top:3px; transition:0.3s;"></div>
             </div>
         </div>
-        
+
+        <div class="card" style="border: 1px solid var(--accent-color);">
+            <h4><i class="ph ph-heart" style="color:var(--accent-color)"></i> Dukungan Dakwah</h4>
+            <p style="font-size:12px; margin-bottom:10px;">Bantu operasional pengembangan Amala App.</p>
+            <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px;">
+                <b style="font-size:14px; display:block;">BANK JAGO</b>
+                <span style="font-size:18px; font-weight:700; letter-spacing:1px;">5012-9872-3886</span>
+            </div>
+        </div>
+
         <div class="card">
             <h4><i class="ph ph-info"></i> Info Developer</h4>
-            <p style="font-size:12px;"><b>Amala Team v2.5</b></p>
+            <p style="font-size:12px; margin-bottom:5px;"><b>Amala Team</b><br>Email: amala.domain@gmail.com</p>
+            <p style="font-size:12px;"><b>CS / Pendampingan:</b><br>0898-6691-457</p>
         </div>
     </div>
     
     <div id="page-pagi" class="page">
-        <div class="nav-dzikir">
-    <i class="ph ph-arrow-left" onclick="switchPage('home')"></i>
-    <h2 style="flex:1">Dzikir Pagi</h2>
-    <i class="ph ph-arrows-clockwise" onclick="resetDzikir()" style="cursor:pointer; font-size: 20px;"></i>
+        <div class="header">
+    <button onclick="goBack()" class="btn-kembali">
+        &#8592; KEMBALI </button>
+    <h1>DZIKIR PAGI</h1>
 </div>
         <div class="dzikir-scroll">
             <div class="dzikir-item" data-max="1" onclick="hitungDzikir(this)">
@@ -519,10 +560,10 @@
     </div>
 
     <div id="page-petang" class="page">
-        <div class="nav-dzikir">
-    <i class="ph ph-arrow-left" onclick="switchPage('home')"></i>
-    <h2 style="flex:1">Dzikir Petang</h2>
-    <i class="ph ph-arrows-clockwise" onclick="resetDzikir()" style="cursor:pointer; font-size: 20px;"></i>
+        <div class="header">
+    <button onclick="goBack()" class="btn-kembali">
+        &#8592; KEMBALI </button>
+    <h1>DZIKIR PETANG</h1>
 </div>
         <div class="dzikir-scroll">
             <div class="dzikir-item" data-max="1" onclick="hitungDzikir(this)">
@@ -653,7 +694,7 @@
             <i class="ph ph-article"></i><span>Raport</span>
         </div>
         <div class="nav-item" onclick="openPage('statistik', this)">
-            <i class="ph ph-chart-bar"></i><span>Statistik</span>
+            <i class="ph ph-chart-pie"></i><span>Statistik</span>
         </div>
         <div class="nav-item" onclick="openPage('kalender', this)">
             <i class="ph ph-calendar-blank"></i><span>Kalender</span>
@@ -667,74 +708,71 @@
 
 <script>
     // --- 1. CONFIG & STATE ---
-    // Init Database with History & Password
-    let db = JSON.parse(localStorage.getItem('amala_pro_v25')) || {
+    let db = JSON.parse(localStorage.getItem('amala_pro_db_v23')) || {
         murid: [],
         pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasaMonth: 0, puasaYear: 0 },
-        // History untuk Grafik (dummy data awal untuk demo visual)
-        history: [20, 45, 30, 60, 80, 50, 40], 
         settings: { darkMode: false, isLoggedIn: false, pin: "1234" }
     };
     
-    let displayMonth = new Date().getMonth();
-    let displayYear = new Date().getFullYear();
+    // State sementara untuk tasbih (tidak perlu save ke DB permanen)
+    let tasbih = { pagi: 0, petang: 0 };
+
+    let currentDate = new Date();
+    let displayMonth = currentDate.getMonth();
+    let displayYear = currentDate.getFullYear();
 
     // --- 2. CORE FUNCTIONS ---
     function save() {
-        localStorage.setItem('amala_pro_v25', JSON.stringify(db));
+        localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
         updateUI();
     }
 
     function updateUI() {
-        // Halaman Amalan
+        // Stats Text
+        document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
+        document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
+        document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString();
+        document.getElementById('stat-puasa-month').innerText = db.pribadi.puasaMonth;
+        document.getElementById('stat-puasa-year').innerText = db.pribadi.puasaYear;
+        
+        // Donut Logic
+        let score = 0;
+        if(db.pribadi.dhuha > 0) score += 25;
+        if(db.pribadi.tahajjud > 0) score += 25;
+        if(db.pribadi.tilawah > 0) score += 25;
+        if(db.pribadi.shodaqoh > 0) score += 25;
+        
+        document.getElementById('daily-percent').innerText = score + "%";
+        document.getElementById('daily-donut').style.background = `conic-gradient(var(--btn-bg) ${score}%, rgba(0,0,0,0.1) ${score}% 100%)`;
+        
+        // Update Counters Amalan
         ['dhuha', 'tahajjud', 'tilawah'].forEach(k => {
             document.getElementById('val-'+k).innerText = db.pribadi[k];
         });
-        document.getElementById('val-shodaqoh').value = db.pribadi.shodaqoh > 0 ? db.pribadi.shodaqoh : "";
-
-        // Halaman Statistik
-        document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
-        document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
-        document.getElementById('stat-tilawah').innerText = db.pribadi.tilawah;
-        document.getElementById('stat-puasa').innerText = db.pribadi.puasaYear;
-        document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString();
-
-        renderChart();
         
-        // Settings Visibility
-        if(db.settings.isLoggedIn) {
-            document.getElementById('card-ganti-pin').style.display = 'block';
+        // Shodaqoh Placeholder Logic
+        const shodInput = document.getElementById('val-shodaqoh');
+        if(db.pribadi.shodaqoh > 0) {
+            shodInput.value = db.pribadi.shodaqoh;
         } else {
-            document.getElementById('card-ganti-pin').style.display = 'none';
+            shodInput.value = "";
         }
     }
 
-    // --- 3. CHART LOGIC (VISUAL) ---
-    function renderChart() {
-        const container = document.getElementById('week-chart');
-        container.innerHTML = "";
-        
-        const days = ['Ahad', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-        const todayIdx = new Date().getDay();
-        
-        // Generate Bars
-        for(let i = 0; i < 7; i++) {
-            // Rotasi hari supaya hari ini paling kanan
-            let dIndex = (todayIdx - 6 + i + 7) % 7;
-            let val = db.history[i] || 10; // Ambil history atau minimal 10% height
-            
-            // Logic warna: Tinggi = Bagus
-            let color = val > 50 ? 'var(--btn-bg)' : 'var(--accent-color)';
-            
-            container.innerHTML += `
-            <div class="bar-col">
-                <div class="bar" style="height:${val}%; background:${color}"></div>
-                <div class="bar-day">${days[dIndex]}</div>
-            </div>`;
+    // --- 3. TASBIH LOGIC (NEW) ---
+    function countDzikir(type, val) {
+        tasbih[type] = Math.max(0, tasbih[type] + val);
+        document.getElementById('counter-'+type).innerText = tasbih[type];
+    }
+    
+    function resetDzikir(type) {
+        if(confirm("Reset hitungan tasbih?")) {
+            tasbih[type] = 0;
+            document.getElementById('counter-'+type).innerText = 0;
         }
     }
 
-    // --- 4. AMALAN LOGIC ---
+    // --- 4. LOGIC AMALAN ---
     function updatePersonal(key, val) {
         db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val);
         save();
@@ -746,45 +784,18 @@
     }
 
     function catatPuasa() {
-        if(confirm("Catat puasa hari ini?")) {
+        if(confirm("Catat puasa hari ini? Data akan masuk statistik.")) {
             db.pribadi.puasaMonth++;
             db.pribadi.puasaYear++;
             save();
-            alert("Alhamdulillah, tercatat!");
+            alert("Puasa tercatat!");
         }
     }
 
-    // --- 5. TASBIH LOGIC ---
-    function hitungDzikir(el) {
-        let max = parseInt(el.getAttribute('data-max'));
-        let badge = el.querySelector('.num');
-        let current = parseInt(badge.innerText);
-        
-        if(current > 0) {
-            badge.innerText = current - 1;
-            if(current - 1 === 0) {
-                el.style.opacity = "0.5";
-                el.style.background = "rgba(0,0,0,0.05)";
-            }
-        }
-    }
-    
-    function resetDzikir(type) {
-        if(confirm("Ulangi hitungan?")) {
-            document.querySelectorAll(`#page-${type} .dzikir-item`).forEach(el => {
-                let max = el.getAttribute('data-max');
-                el.querySelector('.num').innerText = max;
-                el.style.opacity = "1";
-                el.style.background = "var(--card-bg)";
-            });
-        }
-    }
-
-    // --- 6. NAVIGATION & AUTH (FIXED) ---
+    // --- 5. NAVIGATION & SECURITY ---
     function openPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
-        
         if(el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
@@ -800,36 +811,22 @@
         if (db.settings.isLoggedIn) {
             openPage(pageId, el);
         } else {
-            alert("🔒 AKSES TERKUNCI.\nMasukkan PIN di menu Setting untuk membuka fitur Murid.");
+            alert("🔒 AKSES TERKUNCI.\nMasukkan PIN di menu Setting.");
             openPage('setting');
         }
     }
 
     function verifikasiLogin() {
-        const input = document.getElementById('admin-pass').value;
-        if(input === db.settings.pin) {
+        if(document.getElementById('admin-pass').value === db.settings.pin) {
             db.settings.isLoggedIn = true;
-            document.getElementById('login-status').innerText = "Login Sukses! Akses Guru Terbuka.";
-            document.getElementById('admin-pass').value = "";
+            document.getElementById('login-status').innerText = "Login Sukses!";
             save();
         } else {
             document.getElementById('login-status').innerText = "PIN Salah!";
         }
     }
 
-    function gantiPin() {
-        const newPin = document.getElementById('new-pin').value;
-        if(newPin && newPin.length >= 4) {
-            db.settings.pin = newPin;
-            alert("PIN Berhasil Diubah Menjadi: " + newPin);
-            document.getElementById('new-pin').value = "";
-            save();
-        } else {
-            alert("PIN minimal 4 angka.");
-        }
-    }
-
-    // --- 7. THEME & CALENDAR (FIXED) ---
+    // --- 6. THEME ---
     function toggleDarkMode() {
         db.settings.darkMode = !db.settings.darkMode;
         applyTheme();
@@ -848,23 +845,30 @@
         }
     }
 
-    // Calendar Hijri Manual Fix
-    function getHijriManual(date) {
-        const hijriMonths = ["Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulkaidah", "Dzulhijjah"];
-        try {
-            const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(date);
-            const hDay = parts.find(p => p.type === 'day').value;
-            const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1;
-            const hYear = parts.find(p => p.type === 'year').value;
-            return { day: hDay, monthName: hijriMonths[hMonthIdx], monthNum: hMonthIdx + 1, year: hYear };
-        } catch (e) { return { day: "?", monthName: "Error", year: "????" }; }
-    }
-
+    // --- 7. ADVANCED CALENDAR LOGIC (FIXED) ---
     function renderDateHeader() {
         const d = new Date();
+        // Masehi Standard
         document.getElementById('date-masehi').innerText = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        const h = getHijriManual(d);
-        document.getElementById('date-hijri').innerText = `${h.day} ${h.monthName} ${h.year} H`;
+        
+        // Hijri Fix: Manual Mapping untuk menghindari bug "Agustus" atau "SM"
+        try {
+            const hijriNames = ["Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulkaidah", "Dzulhijjah"];
+            
+            // Gunakan intl hanya untuk mengambil angka bagian bulan dan tanggal
+            const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(d);
+            
+            const hDay = parts.find(p => p.type === 'day').value;
+            const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1; // 0-based index
+            const hYear = parts.find(p => p.type === 'year').value;
+            
+            // Susun manual
+            const hijriString = `${hDay} ${hijriNames[hMonthIdx]} ${hYear} H`;
+            document.getElementById('date-hijri').innerText = hijriString;
+        } catch (e) {
+            // Fallback jika browser sangat tua
+            document.getElementById('date-hijri').innerText = "Kalender Hijriyah Error";
+        }
     }
 
     function changeMonth(dir) {
@@ -877,28 +881,43 @@
     function renderCalendar() {
         const container = document.getElementById('calendar-days');
         container.innerHTML = "";
+        
         const firstDay = new Date(displayYear, displayMonth, 1).getDay();
         const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
         
+        // Header Masehi
         document.getElementById('cal-month-year').innerText = new Date(displayYear, displayMonth).toLocaleDateString('id-ID', {month:'long', year:'numeric'});
-        const hMid = getHijriManual(new Date(displayYear, displayMonth, 15));
-        document.getElementById('cal-hijri-month').innerText = `${hMid.monthName} ${hMid.year} H`;
+        
+        // Header Hijri (Estimate)
+        const midDate = new Date(displayYear, displayMonth, 15);
+        // Kita gunakan mapping manual juga disini untuk konsistensi
+        const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {month:'numeric', year:'numeric'}).formatToParts(midDate);
+        const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1;
+        const hijriNames = ["Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulkaidah", "Dzulhijjah"];
+        document.getElementById('cal-hijri-month').innerText = hijriNames[hMonthIdx] + " " + parts.find(p => p.type === 'year').value + " H";
 
+        // Empty slots
         for(let i=0; i<firstDay; i++) container.innerHTML += `<div></div>`;
 
+        // Days
         for(let i=1; i<=daysInMonth; i++) {
             const date = new Date(displayYear, displayMonth, i);
-            const h = getHijriManual(date);
-            const hDay = parseInt(h.day);
-            const hMonth = h.monthNum;
             const dayOfWeek = date.getDay();
             
+            const p = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric'}).formatToParts(date);
+            const hDay = parseInt(p.find(k => k.type === 'day').value);
+            const hMonth = parseInt(p.find(k => k.type === 'month').value);
+            
             let classes = "day-cell";
+            
+            // Rules
             if(hMonth === 10 && hDay === 1) classes += " m-haram";
             else if(hMonth === 9) classes += " m-ramadhan";
-            else if((hMonth === 12 && hDay === 9) || (hMonth === 1 && (hDay === 9 || hDay === 10))) classes += " m-special";
+            else if(hMonth === 12 && hDay === 9) classes += " m-special";
+            else if(hMonth === 1 && (hDay === 9 || hDay === 10)) classes += " m-special";
             else if(hDay >= 13 && hDay <= 15) classes += " m-ayyamul";
             else if(dayOfWeek === 1 || dayOfWeek === 4) classes += " m-seninkamis";
+
             if(date.toDateString() === new Date().toDateString()) classes += " today";
 
             container.innerHTML += `<div class="${classes}">${i}<span class="day-hijri">${hDay}</span></div>`;
@@ -908,33 +927,66 @@
     // --- 8. MURID & RAPORT ---
     function renderMuridPage() {
         const div = document.getElementById('murid-content');
-        if(db.murid.length === 0) { div.innerHTML = `<div class="card" style="text-align:center;">Belum ada murid. <br><button class="btn-primary" onclick="tambahMurid()" style="margin-top:10px;">+ Tambah</button></div>`; return; }
+        if(db.murid.length === 0) {
+            div.innerHTML = `<div class="card" style="text-align:center;">Belum ada murid. <br><button class="btn-primary" onclick="tambahMurid()" style="margin-top:10px;">+ Tambah</button></div>`;
+            return;
+        }
         let html = `<div class="card"><button class="btn-primary" onclick="tambahMurid()">+ Tambah Murid</button></div>`;
         db.murid.forEach((m, i) => {
-            html += `<div class="card" style="display:flex; justify-content:space-between; align-items:center;"><div><b>${m.nama}</b><br><small>${m.wa}</small></div><button onclick="hapusMurid(${i})" style="color:red; background:none; border:none; font-weight:bold;">Hapus</button></div>`;
+            html += `<div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                <div><b>${m.nama}</b><br><small>${m.wa}</small></div>
+                <button onclick="hapusMurid(${i})" style="color:red; background:none; border:none; font-weight:bold;">Hapus</button>
+            </div>`;
         });
         div.innerHTML = html;
     }
+    
     function tambahMurid() {
-        const nama = prompt("Nama:"); const wa = prompt("WA (628...):");
+        const nama = prompt("Nama:");
+        const wa = prompt("WA (628...):");
         if(nama) { db.murid.push({nama, wa}); save(); renderMuridPage(); }
     }
-    function hapusMurid(i) { if(confirm("Hapus?")) { db.murid.splice(i, 1); save(); renderMuridPage(); } }
     
+    function hapusMurid(i) { if(confirm("Hapus?")) { db.murid.splice(i, 1); save(); renderMuridPage(); } }
+
     function renderRaportPage() {
         const div = document.getElementById('raport-content');
         if(db.murid.length === 0) { div.innerHTML = `<div class="card">Tambah murid dulu.</div>`; return; }
-        let opts = ""; db.murid.forEach((m, i) => opts += `<option value="${i}">${m.nama}</option>`);
-        div.innerHTML = `<div class="card"><label>Santri:</label><select id="sel-rap-murid">${opts}</select><label>Ziyadah:</label><input type="text" id="rap-ziyadah" placeholder="Hafalan Baru"><label>Murojaah:</label><input type="text" id="rap-murojaah" placeholder="Mengulang"><button class="btn-primary" onclick="kirimWA()"><i class="ph ph-whatsapp-logo"></i> Kirim</button></div>`;
+        
+        let opts = "";
+        db.murid.forEach((m, i) => opts += `<option value="${i}">${m.nama}</option>`);
+
+        div.innerHTML = `
+        <div class="card">
+            <label>Santri:</label><select id="sel-rap-murid">${opts}</select>
+            <label>Ziyadah:</label><input type="text" id="rap-ziyadah" placeholder="Hafalan Baru">
+            <label>Murojaah:</label><input type="text" id="rap-murojaah" placeholder="Mengulang">
+            <button class="btn-primary" onclick="kirimWA()"><i class="ph ph-whatsapp-logo"></i> Kirim</button>
+        </div>`;
     }
+
     function kirimWA() {
-        const m = db.murid[document.getElementById('sel-rap-murid').value];
-        const text = `*LAPORAN AMALA*%0A%0A👤 ${m.nama}%0A📈 Hafalan: ${document.getElementById('rap-ziyadah').value}%0A🔄 Murojaah: ${document.getElementById('rap-murojaah').value}`;
+        const idx = document.getElementById('sel-rap-murid').value;
+        const m = db.murid[idx];
+        const ziyadah = document.getElementById('rap-ziyadah').value;
+        const murojaah = document.getElementById('rap-murojaah').value;
+        const text = `*LAPORAN AMALA*%0A%0A👤 ${m.nama}%0A📈 Hafalan: ${ziyadah}%0A🔄 Murojaah: ${murojaah}`;
         window.open(`https://wa.me/${m.wa}?text=${text}`);
     }
 
+    function goBack() {
+    switchPage('home'); // Mengarahkan kembali ke dashboard/home
+}
+
     // --- INIT ---
-    window.onload = () => { applyTheme(); renderDateHeader(); updateUI(); renderCalendar(); };
+    window.onload = () => {
+        applyTheme();
+        renderDateHeader();
+        updateUI();
+        renderCalendar();
+    };
+
 </script>
+
 </body>
 </html>
