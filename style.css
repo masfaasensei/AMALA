@@ -224,6 +224,28 @@
             padding: 20px;
             text-align: center;
         }
+<style>
+    /* CSS PERBAIKAN TOMBOL KEMBALI */
+    .btn-kembali {
+        background-color: #333; /* Warna gelap agar kontras */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px; /* Sudut tumpul */
+        cursor: pointer;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-kembali:hover {
+        background-color: #555; /* Efek hover */
+    }
+
+    .btn-kembali:active {
+        transform: scale(0.98); /* Efek tekan */
+    }
 
     </style>
 </head>
@@ -323,5 +345,6 @@
 
 </body>
 </html>
+
 
 
