@@ -521,28 +521,32 @@
     <div id="page-setting" class="page">
         <h2>Pengaturan Aplikasi</h2>
         
-        <div class="card">
-            <h4><i class="ph ph-user-circle"></i> Profil Pengguna</h4>
-            <p style="font-size:12px; margin-bottom:10px;">Nama ini akan muncul di halaman depan.</p>
+        <div id="panel-setup" class="card" style="display:none;">
+            <h4 id="setup-title"><i class="ph ph-user-plus"></i> Buat Profil Baru</h4>
+            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Silakan atur nama dan PIN rahasia Anda.</p>
             
             <label style="font-size:12px; font-weight:bold;">Nama Panggilan:</label>
-            <input type="text" id="set-name" placeholder="Contoh: Mas Fajar" onchange="saveProfile()">
+            <input type="text" id="set-name" placeholder="Nama Anda...">
             
-            <label style="font-size:12px; font-weight:bold;">Ganti PIN Akses:</label>
-            <input type="number" id="set-pin" placeholder="PIN Baru (Angka)" onchange="saveProfile()">
+            <label style="font-size:12px; font-weight:bold;">PIN Akses (Angka):</label>
+            <input type="number" id="set-pin" placeholder="Buat PIN Baru">
             
-            <button class="btn-primary" onclick="saveProfile()" style="margin-top:5px; background:var(--accent-color); color:white;">
-                <i class="ph ph-floppy-disk"></i> Simpan Profil
+            <button class="btn-primary" onclick="saveProfile()" style="background:var(--accent-color); color:white;">
+                <i class="ph ph-floppy-disk"></i> <span id="setup-btn-text">Simpan & Mulai</span>
+            </button>
+
+            <button id="btn-logout" onclick="logout()" style="width:100%; margin-top:10px; background:none; border:1px solid red; color:red; padding:10px; border-radius:10px; font-weight:bold; display:none;">
+                <i class="ph ph-sign-out"></i> Log Out (Kunci Aplikasi)
             </button>
         </div>
 
-        <div class="card" style="border-left: 5px solid var(--btn-bg);">
-            <h4><i class="ph ph-lock-key"></i> Akses Data Santri</h4>
-            <p style="font-size:12px; margin-bottom:10px;">Masukkan PIN Anda untuk membuka menu Murid & Raport.</p>
+        <div id="panel-login" class="card" style="border-left: 5px solid var(--btn-bg); display:none;">
+            <h4><i class="ph ph-lock-key"></i> Login Pemilik</h4>
+            <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN Anda.</p>
             
-            <input type="password" id="admin-pass" placeholder="Masukkan PIN Anda">
+            <input type="password" id="login-pass" placeholder="Masukkan PIN">
             <button class="btn-primary" onclick="verifikasiLogin()">Buka Akses</button>
-            <p id="login-status" style="font-size:12px; margin-top:5px; font-weight:bold;"></p>
+            <p id="login-status" style="font-size:12px; margin-top:5px; font-weight:bold; color:red;"></p>
         </div>
 
         <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
@@ -554,7 +558,7 @@
 
         <div class="card">
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
-            <p style="font-size:12px;"><b>Amala Pro System v2.3</b><br>Developed by Amala Team.</p>
+            <p style="font-size:12px;"><b>Amala Pro System v2.3</b><br>Created by Mas Fajar.</p>
         </div>
     </div>
     
@@ -838,22 +842,34 @@
 </div>
 
 <script>
-    // --- 1. CONFIG & STATE (MESIN WAKTU AKTIF) ---
+    // --- 1. CONFIG & STATE (MESIN WAKTU & PROFIL AKTIF) ---
+    // Kita cek apakah database lama ada isinya
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
 
     if (rawData) {
         db = JSON.parse(rawData);
-        if (!db.settings) db.settings = { darkMode: false, isLoggedIn: false, pin: "1234", userName: "Hamba Allah" };
-        if (!db.settings.userName) db.settings.userName = "Hamba Allah";
-        if (!db.settings.pin) db.settings.pin = "1234"; 
         
+        // MIGRASI: Pastikan setting nama, pin, dan STATUS SETUP ada
+        if (!db.settings) db.settings = { darkMode: false, isLoggedIn: false, pin: "1234", userName: "Hamba Allah" };
+        
+        // Cek apakah user ini sudah pernah setup profil?
+        // Kalau belum ada variable 'setupDone', kita anggap FALSE (harus sign up dulu)
+        if (typeof db.settings.setupDone === 'undefined') {
+            db.settings.setupDone = false; 
+            
+            // TAPI... Kalau ini Mas Fajar (sedang ngetes dan punya data lama), 
+            // kita anggap sudah setup biar gak kaget.
+            if(db.settings.pin !== "1234") db.settings.setupDone = true;
+        }
+
         if (!db.history) {
             db.history = {}; 
             db.lastDate = new Date().toLocaleDateString('en-CA');
             if(!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
         }
     } else {
+        // --- INI BAGIAN "DATABASE BARU" (JIKA PENGGUNA BARU INSTALL) ---
         db = {
             murid: [],
             pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
@@ -862,24 +878,11 @@
             settings: { 
                 darkMode: false, 
                 isLoggedIn: false, 
+                setupDone: false, // <--- PENANDA: User Baru (Belum Sign Up)
                 pin: "1234",           
                 userName: "Hamba Allah" 
             }
         };
-    }
-
-    // --- FUNGSI CEK GANTI HARI (RESET JAM 00:00) ---
-    function checkNewDay() {
-        const todayStr = new Date().toLocaleDateString('en-CA'); 
-        
-        if (db.lastDate !== todayStr) {
-            console.log("Ganti hari terdeteksi!");
-            db.history[db.lastDate] = JSON.parse(JSON.stringify(db.pribadi));
-            db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
-            db.lastDate = todayStr;
-            save();
-            alert("☀️ Assalamu'alaikum! Lembaran amalan hari baru telah dibuka.");
-        }
     }
 
     // --- DATABASE AL-QURAN (NAMA & JUMLAH AYAT) ---
@@ -1000,53 +1003,125 @@
         }
     }
 
-    // --- 5. NAVIGATION & SECURITY (DIPERBAIKI: Digabung jadi satu) ---
+    // --- 5. NAVIGATION (Updated) ---
     function openPage(pageId, el) {
-        // Logika Ganti Halaman
+        // ... (Kode navigasi lama biarkan sama) ...
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
-        
-        // Logika Tab Aktif
         if(el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
         }
         window.scrollTo(0,0);
         
-        // Logika Render Khusus
+        // Render halaman spesifik
         if(pageId === 'kalender') renderCalendar();
-        if(pageId === 'murid' && db.settings.isLoggedIn) renderMuridPage();
-        if(pageId === 'raport' && db.settings.isLoggedIn) renderRaportPage();
+        if(pageId === 'murid') {
+            if(db.settings.isLoggedIn) renderMuridPage(); else openPage('setting');
+        }
+        if(pageId === 'raport') {
+            if(db.settings.isLoggedIn) renderRaportPage(); else openPage('setting');
+        }
         if(pageId === 'statistik') renderHeatmap();
 
-        // Logika Form Setting (Pre-fill Data)
-        if(pageId === 'setting') {
-            const nameInput = document.getElementById('set-name');
-            const pinInput = document.getElementById('set-pin');
-            if(nameInput) nameInput.value = db.settings.userName;
-            if(pinInput) pinInput.value = db.settings.pin;
+        // JIKA BUKA SETTING -> JALANKAN LOGIKA PINTAR
+        if(pageId === 'setting') renderSettings();
+    }
+
+    // --- LOGIKA PINTAR HALAMAN SETTING ---
+    function renderSettings() {
+        const pSetup = document.getElementById('panel-setup');
+        const pLogin = document.getElementById('panel-login');
+        const btnLogout = document.getElementById('btn-logout');
+        
+        // KONDISI 1: PENGGUNA BARU (Belum pernah setup)
+        if (!db.settings.setupDone) {
+            pSetup.style.display = 'block';
+            pLogin.style.display = 'none';
+            
+            // Ubah Teks jadi "Sign Up Mode"
+            document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
+            document.getElementById('setup-desc').innerText = 'Mari siapkan profil Anda sebelum mulai.';
+            document.getElementById('setup-btn-text').innerText = 'Buat Profil & Masuk';
+            btnLogout.style.display = 'none'; // Sembunyikan logout
+            
+            // Kosongkan form
+            document.getElementById('set-name').value = "";
+            document.getElementById('set-pin').value = "";
+        } 
+        
+        // KONDISI 2: SUDAH SETUP, TAPI BELUM LOGIN (Terkunci)
+        else if (db.settings.setupDone && !db.settings.isLoggedIn) {
+            pSetup.style.display = 'none'; // Sembunyikan profil (Keamanan)
+            pLogin.style.display = 'block'; // Munculkan Login
+            document.getElementById('login-pass').value = ""; // Reset input
+            document.getElementById('login-status').innerText = "";
+        }
+        
+        // KONDISI 3: SUDAH LOGIN (Mode Admin/Edit)
+        else {
+            pSetup.style.display = 'block';
+            pLogin.style.display = 'none';
+            
+            // Ubah Teks jadi "Edit Mode"
+            document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
+            document.getElementById('setup-desc').innerText = 'Ubah nama atau PIN akses Anda di sini.';
+            document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
+            btnLogout.style.display = 'block'; // Munculkan logout
+            
+            // Isi form dengan data lama
+            document.getElementById('set-name').value = db.settings.userName;
+            document.getElementById('set-pin').value = db.settings.pin;
         }
     }
 
-    function checkAccess(pageId, el) {
-        if (db.settings.isLoggedIn) {
-            openPage(pageId, el);
-        } else {
-            alert("🔒 AKSES TERKUNCI.\nMasukkan PIN di menu Setting.");
-            openPage('setting');
+    // --- ACTION BUTTONS ---
+
+    function saveProfile() {
+        const newName = document.getElementById('set-name').value;
+        const newPin = document.getElementById('set-pin').value;
+        
+        if(!newName || !newPin) {
+            alert("⚠️ Harap isi Nama dan PIN!");
+            return;
         }
+
+        db.settings.userName = newName;
+        db.settings.pin = newPin;
+        db.settings.setupDone = true;  // Tandai sudah setup
+        db.settings.isLoggedIn = true; // Auto login setelah simpan
+        
+        save();
+        alert("✅ Data tersimpan! Anda sekarang Login.");
+        
+        // Refresh halaman setting (biar pindah ke tampilan 'Logged In')
+        initDashboard(); // Update header nama
+        renderSettings(); 
     }
 
     function verifikasiLogin() {
-        if(document.getElementById('admin-pass').value === db.settings.pin) {
+        const inputPin = document.getElementById('login-pass').value;
+        
+        if(inputPin === db.settings.pin) {
             db.settings.isLoggedIn = true;
-            document.getElementById('login-status').innerText = "Login Sukses!";
             save();
+            // Sukses -> Refresh ke tampilan Edit Profil
+            renderSettings(); 
         } else {
-            document.getElementById('login-status').innerText = "PIN Salah!";
+            document.getElementById('login-status').innerText = "🚫 PIN SALAH!";
+            // Efek getar (opsional)
+            navigator.vibrate(200);
         }
     }
 
+    function logout() {
+        if(confirm("Yakin ingin Log Out? Akses murid akan terkunci.")) {
+            db.settings.isLoggedIn = false;
+            save();
+            // Refresh ke tampilan Login
+            renderSettings();
+        }
+    }
     // --- 6. THEME ---
     function toggleDarkMode() {
         db.settings.darkMode = !db.settings.darkMode;
@@ -1514,6 +1589,7 @@
 
 </body>
 </html>
+
 
 
 
