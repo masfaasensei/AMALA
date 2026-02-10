@@ -1241,7 +1241,7 @@
         window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
     }
 
-    // --- FUNGSI RENDER HEATMAP (GITHUB STYLE) ---
+    // --- FUNGSI RENDER HEATMAP (EDISI FINAL: TANGGAL LENGKAP INDONESIA) ---
     function renderHeatmap() {
         const grid = document.getElementById('heatmap-grid');
         if(!grid) return; 
@@ -1250,6 +1250,8 @@
 
         const today = new Date();
         let dates = [];
+        
+        // Loop 28 Hari ke belakang
         for(let i=27; i>=0; i--) {
             let d = new Date();
             d.setDate(today.getDate() - i);
@@ -1257,11 +1259,23 @@
         }
 
         dates.forEach(d => {
-            const dateStr = d.toLocaleDateString('en-CA'); 
+            const dateStr = d.toLocaleDateString('en-CA'); // Key Database (Tetap YYYY-MM-DD)
+            
+            // --- UPDATE: FORMAT TANGGAL LENGKAP INDONESIA ---
+            // Contoh: "Sabtu, 7 Februari 2026"
+            const dateDisplay = d.toLocaleDateString('id-ID', { 
+                weekday: 'long', 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+
+            // Cek Data
             let data = (dateStr === db.lastDate) ? db.pribadi : (db.history[dateStr] || null);
 
             let level = 0;
-            let detailHTML = `<b>${dateStr}</b><br>Belum ada catatan.`;
+            // Tampilan Jika KOSONG
+            let detailHTML = `<b>${dateDisplay}</b><br><span style="color:#666;">Belum ada catatan.</span>`;
 
             if (data) {
                 let score = 0;
@@ -1275,33 +1289,45 @@
                 else if(score === 3) level = 3;
                 else if(score >= 4) level = 4;
 
-                const hariIndo = d.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'short'});
                 const uang = (parseInt(data.shodaqoh)||0).toLocaleString('id-ID');
                 
+                // Tampilan Jika ADA DATA
                 detailHTML = `
-                <b>📅 ${hariIndo}</b><br>
-                -------------------------<br>
+                <b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br>
+                <div style="margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
                 ☀️ Dhuha: <b>${data.dhuha}</b> Rakaat<br>
                 🌙 Tahajjud: <b>${data.tahajjud}</b> Rakaat<br>
                 📖 Tilawah: <b>${data.tilawah}</b> Lembar<br>
                 💰 Sedekah: <b>Rp ${uang}</b><br>
-                ${data.puasa ? '✅ Puasa Sunnah' : '❌ Tidak Puasa'}`;
+                ${data.puasa ? '✅ <b style="color:green">Puasa</b>' : '❌ <span style="opacity:0.7">Tidak Puasa</span>'}
+                </div>`;
             }
 
+            // Render Kotak
             const box = document.createElement('div');
             box.className = `hm-box hm-lvl-${level}`;
-            if(dateStr === db.lastDate) box.style.border = "1px solid #000"; 
+            if(dateStr === db.lastDate) box.style.border = "2px solid #333"; // Tandai hari ini lebih tebal
 
             box.onclick = function() {
-                document.querySelectorAll('.hm-box').forEach(b => b.classList.remove('selected'));
+                document.querySelectorAll('.hm-box').forEach(b => {
+                    b.classList.remove('selected');
+                    // Reset border hari ini jika tidak dipilih
+                    if(b.dataset.date === db.lastDate) b.style.border = "2px solid #333";
+                    else b.style.border = "none";
+                });
+                
                 this.classList.add('selected');
+                this.style.border = "2px solid var(--accent-color)"; // Warna highlight saat diklik
+                
                 document.getElementById('hm-detail').innerHTML = detailHTML;
             };
+            
+            // Simpan tanggal di dataset untuk referensi
+            box.dataset.date = dateStr; 
 
             grid.appendChild(box);
         });
     }
-
     // --- 9. FITUR DASHBOARD HIDUP (PRAYER TIMES MUHAMMADIYAH) ---
     const PrayTimes = {
         calc: function(date, lat, lng, timezone) {
@@ -1409,6 +1435,7 @@
 
 </body>
 </html>
+
 
 
 
