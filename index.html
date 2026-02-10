@@ -262,76 +262,76 @@
         }
 
         /* --- STYLE HEATMAP KALENDER (AMALA) --- */
-    .heatmap-container {
-        background: white;
-        padding: 15px;
-        border-radius: 16px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
-    }
-    .hm-header { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        margin-bottom: 15px; 
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-    }
-    .hm-period-title { font-weight: 700; font-size: 16px; color: var(--btn-bg); }
-    
-    /* Baris Nama Hari (Min, Sen, Sel...) */
-    .hm-days-header {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        margin-bottom: 5px;
-    }
-    .hm-day-name {
-        font-size: 10px; font-weight: bold; text-align: center; color: #999;
-    }
-
-    /* Grid Kalender */
-    .hm-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr); /* 7 Hari ke samping */
-        gap: 6px;
-    }
-    .hm-box {
-        aspect-ratio: 1/1; /* Kotak Persegi */
-        border-radius: 6px;
-        background: #f1f5f9; /* Abu-abu terang */
-        cursor: pointer;
-        transition: transform 0.1s;
+        .heatmap-container {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .hm-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .hm-period-title { font-weight: 700; font-size: 16px; color: var(--btn-bg); }
         
-        /* Agar Angka di Tengah */
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        font-size: 12px;
-        font-weight: 600;
-        color: #64748b; /* Warna angka default */
-    }
-    .hm-box:active { transform: scale(0.9); }
-    .hm-box.selected { border: 2px solid #333 !important; transform: scale(1.1); z-index: 2; }
-    .hm-box.empty { background: transparent; cursor: default; } /* Kotak kosong padding */
+        /* Baris Nama Hari (Min, Sen, Sel...) */
+        .hm-days-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 5px;
+        }
+        .hm-day-name {
+            font-size: 10px; font-weight: bold; text-align: center; color: #999;
+        }
 
-    /* Level Warna (Makin Hijau Makin Sholeh) */
-    /* Text color kita buat gelap biar kontras, kecuali level tinggi */
-    .hm-lvl-0 { background: #f1f5f9; color: #cbd5e1; } /* 0% */
-    .hm-lvl-1 { background: #bbf7d0; color: #166534; } /* 25% */
-    .hm-lvl-2 { background: #86efac; color: #166534; } /* 50% */
-    .hm-lvl-3 { background: #4ade80; color: #064e3b; } /* 75% */
-    .hm-lvl-4 { background: #16a34a; color: white; } /* 100% */
+        /* Grid Kalender */
+        .hm-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 Hari ke samping */
+            gap: 6px;
+        }
+        .hm-box {
+            aspect-ratio: 1/1; /* Kotak Persegi */
+            border-radius: 6px;
+            background: #f1f5f9; /* Abu-abu terang */
+            cursor: pointer;
+            transition: transform 0.1s;
+            
+            /* Agar Angka di Tengah */
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b; /* Warna angka default */
+        }
+        .hm-box:active { transform: scale(0.9); }
+        .hm-box.selected { border: 2px solid #333 !important; transform: scale(1.1); z-index: 2; }
+        .hm-box.empty { background: transparent; cursor: default; } /* Kotak kosong padding */
 
-    .hm-detail-text {
-        margin-top: 15px;
-        padding: 12px;
-        background: #f8fafc;
-        border-radius: 8px;
-        font-size: 12px;
-        color: #334155;
-        border-left: 4px solid var(--btn-bg);
-        line-height: 1.6;
-    }
+        /* Level Warna (Makin Hijau Makin Sholeh) */
+        /* Text color kita buat gelap biar kontras, kecuali level tinggi */
+        .hm-lvl-0 { background: #f1f5f9; color: #cbd5e1; } /* 0% */
+        .hm-lvl-1 { background: #bbf7d0; color: #166534; } /* 25% */
+        .hm-lvl-2 { background: #86efac; color: #166534; } /* 50% */
+        .hm-lvl-3 { background: #4ade80; color: #064e3b; } /* 75% */
+        .hm-lvl-4 { background: #16a34a; color: white; } /* 100% */
+
+        .hm-detail-text {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #334155;
+            border-left: 4px solid var(--btn-bg);
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body class="light-mode">
@@ -839,29 +839,31 @@
 
 <script>
     // --- 1. CONFIG & STATE (MESIN WAKTU AKTIF) ---
-    // --- 1. CONFIG & STATE ---
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
 
     if (rawData) {
         db = JSON.parse(rawData);
-        // MIGRASI: Pastikan setting nama & pin ada
+        if (!db.settings) db.settings = { darkMode: false, isLoggedIn: false, pin: "1234", userName: "Hamba Allah" };
         if (!db.settings.userName) db.settings.userName = "Hamba Allah";
-        if (!db.settings.pin) db.settings.pin = "1234"; // Default PIN
-        // ... (kode history lama biarkan) ...
+        if (!db.settings.pin) db.settings.pin = "1234"; 
+        
+        if (!db.history) {
+            db.history = {}; 
+            db.lastDate = new Date().toLocaleDateString('en-CA');
+            if(!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
+        }
     } else {
-        // DATABASE BARU (Fresh Install)
         db = {
             murid: [],
             pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
             history: {}, 
             lastDate: new Date().toLocaleDateString('en-CA'), 
-            // SETTING DINAMIS (Bisa Diubah User)
             settings: { 
                 darkMode: false, 
                 isLoggedIn: false, 
-                pin: "1234",           // PIN Default
-                userName: "Hamba Allah" // Nama Default
+                pin: "1234",           
+                userName: "Hamba Allah" 
             }
         };
     }
@@ -948,7 +950,6 @@
         document.getElementById('stat-puasa-month').innerText = countMonth;
         document.getElementById('stat-puasa-year').innerText = countYear;
         
-        // Update Counters Amalan di Halaman Depan
         if(document.getElementById('val-dhuha')) document.getElementById('val-dhuha').innerText = db.pribadi.dhuha;
         if(document.getElementById('val-tahajjud')) document.getElementById('val-tahajjud').innerText = db.pribadi.tahajjud;
         if(document.getElementById('val-tilawah')) document.getElementById('val-tilawah').innerText = db.pribadi.tilawah;
@@ -967,7 +968,6 @@
     
     // --- 3. TASBIH LOGIC ---
     function countDzikir(type, val) {
-        // Logika hitung dzikir visual (hanya efek visual di list, tidak disimpan ke DB history)
         let badge = type.querySelector('.num');
         let max = parseInt(type.getAttribute('data-max'));
         let current = parseInt(badge.innerText);
@@ -975,7 +975,7 @@
         if(current < max) {
             badge.innerText = current + 1;
             if(current + 1 === max) {
-                type.style.backgroundColor = "#d1fae5"; // Hijau kalau selesai
+                type.style.backgroundColor = "#d1fae5"; 
                 type.style.borderColor = "#10b981";
             }
         }
@@ -1000,20 +1000,32 @@
         }
     }
 
-    // --- 5. NAVIGATION & SECURITY ---
+    // --- 5. NAVIGATION & SECURITY (DIPERBAIKI: Digabung jadi satu) ---
     function openPage(pageId, el) {
+        // Logika Ganti Halaman
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
+        
+        // Logika Tab Aktif
         if(el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
         }
         window.scrollTo(0,0);
         
+        // Logika Render Khusus
         if(pageId === 'kalender') renderCalendar();
         if(pageId === 'murid' && db.settings.isLoggedIn) renderMuridPage();
         if(pageId === 'raport' && db.settings.isLoggedIn) renderRaportPage();
         if(pageId === 'statistik') renderHeatmap();
+
+        // Logika Form Setting (Pre-fill Data)
+        if(pageId === 'setting') {
+            const nameInput = document.getElementById('set-name');
+            const pinInput = document.getElementById('set-pin');
+            if(nameInput) nameInput.value = db.settings.userName;
+            if(pinInput) pinInput.value = db.settings.pin;
+        }
     }
 
     function checkAccess(pageId, el) {
@@ -1054,7 +1066,20 @@
         }
     }
 
-    // --- 7. LOGIKA KALENDER & PUASA ---
+    // --- 7. FUNGSI BARU: SAVE PROFIL ---
+    function saveProfile() {
+        const newName = document.getElementById('set-name').value;
+        const newPin = document.getElementById('set-pin').value;
+        
+        if(newName) db.settings.userName = newName;
+        if(newPin) db.settings.pin = newPin;
+        
+        save();
+        alert("✅ Profil & PIN berhasil disimpan!");
+        initDashboard(); 
+    }
+
+    // --- 8. LOGIKA KALENDER & PUASA ---
     function renderDateHeader() {
         const d = new Date();
         document.getElementById('date-masehi').innerText = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -1122,7 +1147,7 @@
         }
     }
 
-    // --- 8. MURID & RAPORT ---
+    // --- 9. MURID & RAPORT ---
     function renderMuridPage() {
         const div = document.getElementById('murid-content');
         if(db.murid.length === 0) {
@@ -1295,7 +1320,7 @@
         window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
     }
 
-    // --- FUNGSI RENDER HEATMAP: MODE KALENDER BULANAN ---
+    // --- 10. HEATMAP KALENDER ---
     function renderHeatmap() {
         const grid = document.getElementById('heatmap-grid');
         const title = document.getElementById('hm-period');
@@ -1303,46 +1328,34 @@
         
         grid.innerHTML = ""; 
 
-        // Kita gunakan Bulan Saat Ini
         const now = new Date();
         const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth(); // 0 = Januari
+        const currentMonth = now.getMonth(); 
 
-        // Update Judul Bulan (Indo)
         title.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
 
-        // 1. Cari Hari Pertama Bulan Ini (0=Minggu, 1=Senin...)
         const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
-        
-        // 2. Cari Jumlah Hari dalam Bulan Ini
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        // 3. Render Kotak Kosong (Padding Awal Bulan)
         for(let i=0; i<firstDayIndex; i++) {
             const emptyBox = document.createElement('div');
             emptyBox.className = 'hm-box empty';
             grid.appendChild(emptyBox);
         }
 
-        // 4. Render Tanggal (1 sampai 28/30/31)
         for(let i=1; i<=daysInMonth; i++) {
-            // Buat Object Date untuk tanggal ini
             const d = new Date(currentYear, currentMonth, i);
-            const dateStr = d.toLocaleDateString('en-CA'); // YYYY-MM-DD (Kunci Database)
+            const dateStr = d.toLocaleDateString('en-CA'); 
             
-            // Format Tanggal Indo untuk Detail (Permintaan Mas Tadi)
             const dateDisplay = d.toLocaleDateString('id-ID', { 
                 weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
             });
 
-            // Ambil Data
             let data = (dateStr === db.lastDate) ? db.pribadi : (db.history[dateStr] || null);
 
-            // Tentukan Warna & Score
             let level = 0;
             let score = 0;
             
-            // Text Default jika diklik (Kosong)
             let detailHTML = `<b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br><span style="color:#999; font-size:11px;">Belum ada catatan ibadah.</span>`;
 
             if (data) {
@@ -1358,7 +1371,6 @@
 
                 const uang = (parseInt(data.shodaqoh)||0).toLocaleString('id-ID');
                 
-                // Text Jika Ada Data
                 detailHTML = `
                 <b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br>
                 <div style="margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
@@ -1370,24 +1382,19 @@
                 </div>`;
             }
 
-            // Bikin Kotak
             const box = document.createElement('div');
             box.className = `hm-box hm-lvl-${level}`;
-            box.innerText = i; // TAMPILKAN ANGKA TANGGAL
+            box.innerText = i; 
             
-            // Tandai Hari Ini (Border Tebal)
             if(dateStr === db.lastDate) {
                 box.style.border = "2px solid var(--accent-color)";
                 box.style.color = "var(--accent-color)";
                 box.style.fontWeight = "800";
             }
 
-            // Event Klik
             box.onclick = function() {
-                // Reset seleksi lama
                 document.querySelectorAll('.hm-box').forEach(b => {
                     b.classList.remove('selected');
-                    // Balikin border hari ini kalau ada
                     if(b.innerText == new Date().getDate()) b.style.border = "2px solid var(--accent-color)";
                     else if(!b.classList.contains('empty')) b.style.border = "none";
                 });
@@ -1399,8 +1406,8 @@
             grid.appendChild(box);
         }
     }
-    
-    // --- 9. FITUR DASHBOARD HIDUP (PRAYER TIMES MUHAMMADIYAH) ---
+
+    // --- 11. DASHBOARD HIDUP ---
     const PrayTimes = {
         calc: function(date, lat, lng, timezone) {
             const D = date.getDate();
@@ -1468,32 +1475,6 @@
         } catch(e) { console.log("Kalender Hijriah error di browser ini"); }
     }
 
-    // --- FUNGSI SAVE PROFIL BARU ---
-    function saveProfile() {
-        const newName = document.getElementById('set-name').value;
-        const newPin = document.getElementById('set-pin').value;
-        
-        if(newName) db.settings.userName = newName;
-        if(newPin) db.settings.pin = newPin;
-        
-        save();
-        alert("✅ Profil & PIN berhasil disimpan!");
-        
-        // Render ulang header biar nama langsung berubah
-        initDashboard(); 
-    }
-
-    // --- UPDATE NAVIGASI (Supaya Form Terisi Saat Buka Setting) ---
-    function openPage(pageId, el) {
-        // ... (kode lama biarkan) ...
-        
-        // TAMBAHAN: Kalau buka setting, isi form dengan data sekarang
-        if(pageId === 'setting') {
-            document.getElementById('set-name').value = db.settings.userName;
-            document.getElementById('set-pin').value = db.settings.pin;
-        }
-    }
-
     function updatePrayerTimes(lat, lng) {
         const times = PrayTimes.calc(new Date(), lat, lng, 7); 
         const now = new Date();
@@ -1512,9 +1493,8 @@
 
         const greeting = document.querySelector('.greeting h2');
         if(greeting) {
-            // GANTI 'Mas Fajar' DENGAN VARIABEL INI:
             greeting.innerHTML = `
-            ${db.settings.userName} <br> 
+            ${db.settings.userName} <br>
             <div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">
                 🕋 ${nextPrayer}: <b>${nextTime}</b> WIB
             </div>`;
@@ -1534,6 +1514,7 @@
 
 </body>
 </html>
+
 
 
 
