@@ -229,6 +229,46 @@
             display: flex; align-items: center; justify-content: center;
         }
         .donut-inner { width: 90px; height: 90px; background: var(--card-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+    /* --- STYLE BARU UNTUK HEADER & TOMBOL KEMBALI --- */
+
+        .header-dzikir {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Jarak antara tombol dan judul */
+            padding: 10px 0 20px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05); /* Garis pemisah tipis */
+        }
+
+        .header-dzikir h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .btn-back-custom {
+            background: var(--card-bg); /* Sesuai warna kartu */
+            color: var(--text-main);
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 10px 16px;
+            border-radius: 12px; /* Radius membulat */
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Bayangan tipis */
+            transition: all 0.2s;
+        }
+
+        .btn-back-custom:active {
+            transform: scale(0.95); /* Efek tekan */
+            background: var(--btn-bg);
+            color: var(--btn-text);
+        }
     </style>
 </head>
 <body class="light-mode">
@@ -430,10 +470,10 @@
     </div>
     
     <div id="page-pagi" class="page">
-        <div class="header">
-    <button onclick="openPage('amalan')" class="tombol-kembali-style-mas">
-   ← KEMBALI
-</button>
+       <div class="header-dzikir">
+    <button onclick="openPage('amalan')" class="btn-back-custom">
+        <i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali
+    </button>
     <h1>DZIKIR PAGI</h1>
 </div>
         <div class="dzikir-scroll">
@@ -561,10 +601,10 @@
     </div>
 
     <div id="page-petang" class="page">
-        <div class="header">
-    <button onclick="openPage('amalan')" class="tombol-kembali-style-mas">
-   ← KEMBALI
-</button>
+        <div class="header-dzikir">
+    <button onclick="openPage('amalan')" class="btn-back-custom">
+        <i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali
+    </button>
     <h1>DZIKIR PETANG</h1>
 </div>
         <div class="dzikir-scroll">
@@ -992,4 +1032,5 @@
     
 </body>
 </html>
+
 
