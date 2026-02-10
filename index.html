@@ -261,47 +261,77 @@
             color: var(--btn-text);
         }
 
-        /* --- STYLE HEATMAP GITHUB (AMALA) --- */
-        .heatmap-container {
-            background: white;
-            padding: 15px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-        .hm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .hm-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 Hari ke samping */
-            gap: 6px;
-        }
-        .hm-box {
-            aspect-ratio: 1/1; /* Kotak Persegi */
-            border-radius: 4px;
-            background: #e2e8f0; /* Abu-abu (Kosong) */
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        .hm-box:active { transform: scale(0.9); }
-        .hm-box.selected { border: 2px solid #333; transform: scale(1.1); }
+        /* --- STYLE HEATMAP KALENDER (AMALA) --- */
+    .heatmap-container {
+        background: white;
+        padding: 15px;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+    .hm-header { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 15px; 
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    .hm-period-title { font-weight: 700; font-size: 16px; color: var(--btn-bg); }
+    
+    /* Baris Nama Hari (Min, Sen, Sel...) */
+    .hm-days-header {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        margin-bottom: 5px;
+    }
+    .hm-day-name {
+        font-size: 10px; font-weight: bold; text-align: center; color: #999;
+    }
 
-        /* Level Warna (Makin Hijau Makin Sholeh) */
-        .hm-lvl-0 { background: #e2e8f0; } /* 0% */
-        .hm-lvl-1 { background: #bbf7d0; } /* 25% */
-        .hm-lvl-2 { background: #86efac; } /* 50% */
-        .hm-lvl-3 { background: #22c55e; } /* 75% */
-        .hm-lvl-4 { background: #15803d; } /* 100% */
+    /* Grid Kalender */
+    .hm-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr); /* 7 Hari ke samping */
+        gap: 6px;
+    }
+    .hm-box {
+        aspect-ratio: 1/1; /* Kotak Persegi */
+        border-radius: 6px;
+        background: #f1f5f9; /* Abu-abu terang */
+        cursor: pointer;
+        transition: transform 0.1s;
+        
+        /* Agar Angka di Tengah */
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b; /* Warna angka default */
+    }
+    .hm-box:active { transform: scale(0.9); }
+    .hm-box.selected { border: 2px solid #333 !important; transform: scale(1.1); z-index: 2; }
+    .hm-box.empty { background: transparent; cursor: default; } /* Kotak kosong padding */
 
-        .hm-detail-text {
-            margin-top: 15px;
-            padding: 12px;
-            background: #f8fafc;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #334155;
-            border-left: 4px solid var(--btn-bg);
-            line-height: 1.6;
-        }
+    /* Level Warna (Makin Hijau Makin Sholeh) */
+    /* Text color kita buat gelap biar kontras, kecuali level tinggi */
+    .hm-lvl-0 { background: #f1f5f9; color: #cbd5e1; } /* 0% */
+    .hm-lvl-1 { background: #bbf7d0; color: #166534; } /* 25% */
+    .hm-lvl-2 { background: #86efac; color: #166534; } /* 50% */
+    .hm-lvl-3 { background: #4ade80; color: #064e3b; } /* 75% */
+    .hm-lvl-4 { background: #16a34a; color: white; } /* 100% */
+
+    .hm-detail-text {
+        margin-top: 15px;
+        padding: 12px;
+        background: #f8fafc;
+        border-radius: 8px;
+        font-size: 12px;
+        color: #334155;
+        border-left: 4px solid var(--btn-bg);
+        line-height: 1.6;
+    }
     </style>
 </head>
 <body class="light-mode">
@@ -395,18 +425,28 @@
         
         <div class="heatmap-container">
             <div class="hm-header">
-                <h4 style="font-size:14px;">📅 Riwayat Keistiqomahan</h4>
-                <div style="display:flex; gap:3px;">
-                    <div class="hm-box hm-lvl-0" style="width:8px; height:8px;"></div>
-                    <div class="hm-box hm-lvl-2" style="width:8px; height:8px;"></div>
-                    <div class="hm-box hm-lvl-4" style="width:8px; height:8px;"></div>
+                <span id="hm-period" class="hm-period-title">Februari 2026</span>
+                <div style="display:flex; gap:2px;">
+                    <div style="width:8px; height:8px; background:#f1f5f9; border-radius:2px;"></div>
+                    <div style="width:8px; height:8px; background:#4ade80; border-radius:2px;"></div>
+                    <div style="width:8px; height:8px; background:#16a34a; border-radius:2px;"></div>
                 </div>
+            </div>
+
+            <div class="hm-days-header">
+                <div class="hm-day-name">Min</div>
+                <div class="hm-day-name">Sen</div>
+                <div class="hm-day-name">Sel</div>
+                <div class="hm-day-name">Rab</div>
+                <div class="hm-day-name">Kam</div>
+                <div class="hm-day-name">Jum</div>
+                <div class="hm-day-name">Sab</div>
             </div>
             
             <div id="heatmap-grid" class="hm-grid"></div>
 
             <div id="hm-detail" class="hm-detail-text">
-                Klik kotak di atas untuk melihat detail amalan.
+                Klik tanggal di atas untuk melihat detail.
             </div>
         </div>
 
@@ -1241,44 +1281,57 @@
         window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
     }
 
-    // --- FUNGSI RENDER HEATMAP (EDISI FINAL: TANGGAL LENGKAP INDONESIA) ---
+    // --- FUNGSI RENDER HEATMAP: MODE KALENDER BULANAN ---
     function renderHeatmap() {
         const grid = document.getElementById('heatmap-grid');
+        const title = document.getElementById('hm-period');
         if(!grid) return; 
         
         grid.innerHTML = ""; 
 
-        const today = new Date();
-        let dates = [];
+        // Kita gunakan Bulan Saat Ini
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth(); // 0 = Januari
+
+        // Update Judul Bulan (Indo)
+        title.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
+
+        // 1. Cari Hari Pertama Bulan Ini (0=Minggu, 1=Senin...)
+        const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
         
-        // Loop 28 Hari ke belakang
-        for(let i=27; i>=0; i--) {
-            let d = new Date();
-            d.setDate(today.getDate() - i);
-            dates.push(d);
+        // 2. Cari Jumlah Hari dalam Bulan Ini
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        // 3. Render Kotak Kosong (Padding Awal Bulan)
+        for(let i=0; i<firstDayIndex; i++) {
+            const emptyBox = document.createElement('div');
+            emptyBox.className = 'hm-box empty';
+            grid.appendChild(emptyBox);
         }
 
-        dates.forEach(d => {
-            const dateStr = d.toLocaleDateString('en-CA'); // Key Database (Tetap YYYY-MM-DD)
+        // 4. Render Tanggal (1 sampai 28/30/31)
+        for(let i=1; i<=daysInMonth; i++) {
+            // Buat Object Date untuk tanggal ini
+            const d = new Date(currentYear, currentMonth, i);
+            const dateStr = d.toLocaleDateString('en-CA'); // YYYY-MM-DD (Kunci Database)
             
-            // --- UPDATE: FORMAT TANGGAL LENGKAP INDONESIA ---
-            // Contoh: "Sabtu, 7 Februari 2026"
+            // Format Tanggal Indo untuk Detail (Permintaan Mas Tadi)
             const dateDisplay = d.toLocaleDateString('id-ID', { 
-                weekday: 'long', 
-                day: 'numeric', 
-                month: 'long', 
-                year: 'numeric' 
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
             });
 
-            // Cek Data
+            // Ambil Data
             let data = (dateStr === db.lastDate) ? db.pribadi : (db.history[dateStr] || null);
 
+            // Tentukan Warna & Score
             let level = 0;
-            // Tampilan Jika KOSONG
-            let detailHTML = `<b>${dateDisplay}</b><br><span style="color:#666;">Belum ada catatan.</span>`;
+            let score = 0;
+            
+            // Text Default jika diklik (Kosong)
+            let detailHTML = `<b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br><span style="color:#999; font-size:11px;">Belum ada catatan ibadah.</span>`;
 
             if (data) {
-                let score = 0;
                 if(data.dhuha > 0) score++;
                 if(data.tahajjud > 0) score++;
                 if(data.tilawah > 0) score++;
@@ -1291,7 +1344,7 @@
 
                 const uang = (parseInt(data.shodaqoh)||0).toLocaleString('id-ID');
                 
-                // Tampilan Jika ADA DATA
+                // Text Jika Ada Data
                 detailHTML = `
                 <b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br>
                 <div style="margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
@@ -1303,31 +1356,36 @@
                 </div>`;
             }
 
-            // Render Kotak
+            // Bikin Kotak
             const box = document.createElement('div');
             box.className = `hm-box hm-lvl-${level}`;
-            if(dateStr === db.lastDate) box.style.border = "2px solid #333"; // Tandai hari ini lebih tebal
+            box.innerText = i; // TAMPILKAN ANGKA TANGGAL
+            
+            // Tandai Hari Ini (Border Tebal)
+            if(dateStr === db.lastDate) {
+                box.style.border = "2px solid var(--accent-color)";
+                box.style.color = "var(--accent-color)";
+                box.style.fontWeight = "800";
+            }
 
+            // Event Klik
             box.onclick = function() {
+                // Reset seleksi lama
                 document.querySelectorAll('.hm-box').forEach(b => {
                     b.classList.remove('selected');
-                    // Reset border hari ini jika tidak dipilih
-                    if(b.dataset.date === db.lastDate) b.style.border = "2px solid #333";
-                    else b.style.border = "none";
+                    // Balikin border hari ini kalau ada
+                    if(b.innerText == new Date().getDate()) b.style.border = "2px solid var(--accent-color)";
+                    else if(!b.classList.contains('empty')) b.style.border = "none";
                 });
                 
                 this.classList.add('selected');
-                this.style.border = "2px solid var(--accent-color)"; // Warna highlight saat diklik
-                
                 document.getElementById('hm-detail').innerHTML = detailHTML;
             };
-            
-            // Simpan tanggal di dataset untuk referensi
-            box.dataset.date = dateStr; 
 
             grid.appendChild(box);
-        });
+        }
     }
+    
     // --- 9. FITUR DASHBOARD HIDUP (PRAYER TIMES MUHAMMADIYAH) ---
     const PrayTimes = {
         calc: function(date, lat, lng, timezone) {
@@ -1435,6 +1493,7 @@
 
 </body>
 </html>
+
 
 
 
