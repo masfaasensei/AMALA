@@ -523,10 +523,14 @@
         
         <div id="panel-setup" class="card" style="display:none;">
             <h4 id="setup-title"><i class="ph ph-user-plus"></i> Buat Profil Baru</h4>
-            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Silakan atur nama dan PIN rahasia Anda.</p>
+            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Silakan atur identitas dan lokasi Anda.</p>
             
             <label style="font-size:12px; font-weight:bold;">Nama Panggilan:</label>
             <input type="text" id="set-name" placeholder="Nama Anda...">
+
+            <label style="font-size:12px; font-weight:bold;">Lokasi (Untuk Jadwal Sholat):</label>
+            <select id="set-lokasi" style="background:#f9f9f9; font-weight:bold;">
+                </select>
             
             <label style="font-size:12px; font-weight:bold;">PIN Akses (Angka):</label>
             <input type="number" id="set-pin" placeholder="Buat PIN Baru">
@@ -539,7 +543,7 @@
                 <i class="ph ph-sign-out"></i> Log Out (Kunci Aplikasi)
             </button>
         </div>
-
+        
         <div id="panel-login" class="card" style="border-left: 5px solid var(--btn-bg); display:none;">
             <h4><i class="ph ph-lock-key"></i> Login Pemilik</h4>
             <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN Anda.</p>
@@ -917,6 +921,43 @@
     let displayMonth = currentDate.getMonth();
     let displayYear = currentDate.getFullYear();
 
+    // --- DATABASE KOTA (LATITUDE, LONGITUDE) ---
+    const daftarKota = [
+        {id:0, nama:"Jakarta", lat:-6.2088, lng:106.8456},
+        {id:1, nama:"Bandung", lat:-7.2575, lng:112.7521},
+        {id:2, nama:"Surabaya", lat:-7.2504, lng:112.7688},
+        {id:3, nama:"Yogyakarta", lat:-7.7955, lng:110.3695},
+        {id:4, nama:"Semarang", lat:-6.9667, lng:110.4167},
+        {id:5, nama:"Surakarta (Solo)", lat:-7.5711, lng:110.8228},
+        {id:6, nama:"Medan", lat:-3.5952, lng:98.6722},
+        {id:7, nama:"Makassar", lat:3.5952, lng:98.6722},
+        {id:8, nama:"Palembang", lat:-2.9761, lng:104.7754},
+        {id:9, nama:"Balikpapan", lat:-1.2379, lng:116.8529},
+        {id:10, nama:"Banjarmasin", lat:-3.3194, lng:114.5908},
+        {id:11, nama:"Denpasar", lat:-8.6705, lng:115.2126},
+        {id:12, nama:"Mataram", lat:-8.6705, lng:116.1167},
+        {id:13, nama:"Aceh", lat:5.5483, lng:95.3238},
+        {id:14, nama:"Padang", lat:-0.9471, lng:100.4172},
+        {id:15, nama:"Lampung", lat:-5.3971, lng:105.2668},
+        {id:16, nama:"Purbalingga", lat:-7.3934, lng:109.3627},
+        {id:17, nama:"Purwokerto", lat:-7.4245, lng:109.2302},
+        {id:18, nama:"Temanggung", lat:-7.3135, lng:110.1706}
+    ];
+
+    // Fungsi Render Dropdown Kota (Panggil saat Init)
+    function initKotaSelector() {
+        const sel = document.getElementById('set-lokasi');
+        sel.innerHTML = "";
+        daftarKota.forEach(k => {
+            sel.innerHTML += `<option value="${k.id}">${k.nama}</option>`;
+        });
+        
+        // Set nilai default dari database jika ada
+        if(db.settings.kotaId !== undefined) {
+            sel.value = db.settings.kotaId;
+        }
+    }
+    
     // --- 2. CORE FUNCTIONS ---
     function save() {
         localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
@@ -1066,21 +1107,31 @@
     function saveProfile() {
         const newName = document.getElementById('set-name').value;
         const newPin = document.getElementById('set-pin').value;
+        const kotaId = document.getElementById('set-lokasi').value; // Ambil ID Kota
         
         if(!newName || !newPin) {
             alert("⚠️ Harap isi Nama dan PIN!"); return;
         }
 
+        // SIMPAN KE DATABASE
         db.settings.userName = newName;
         db.settings.pin = newPin;
-        db.settings.setupDone = true;  // TANDAI SUDAH SIGN UP
-        db.settings.isLoggedIn = true; // Auto login
+        db.settings.kotaId = parseInt(kotaId); // Simpan ID Kota
+        
+        // Ambil Lat/Lng dari database kota berdasarkan ID
+        const kotaPilih = daftarKota.find(k => k.id == kotaId);
+        db.settings.lat = kotaPilih.lat;
+        db.settings.lng = kotaPilih.lng;
+        db.settings.kotaNama = kotaPilih.nama;
+
+        db.settings.setupDone = true;
+        db.settings.isLoggedIn = true;
         
         save();
-        alert("✅ Data tersimpan! Anda sekarang Login.");
+        alert("✅ Profil tersimpan! Lokasi: " + kotaPilih.nama);
         
-        initDashboard(); // Update header nama
-        renderSettings(); // Refresh tampilan setting
+        initDashboard(); 
+        renderSettings();
     }
     
     function logout() {
@@ -1523,26 +1574,16 @@
     };
 
     function initDashboard() {
-        // 1. LANGSUNG TAMPILKAN NAMA & JADWAL (Default Jakarta)
-        // Supaya tidak menunggu loading GPS
-        updatePrayerTimes(-6.2088, 106.8456);
-
-        // 2. BARU CARI LOKASI ASLI (Update ulang diam-diam jika GPS aktif)
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                console.log("Lokasi ditemukan: " + pos.coords.latitude);
-                updatePrayerTimes(pos.coords.latitude, pos.coords.longitude);
-            }, (err) => {
-                console.log("GPS tidak aktif/ditolak, menggunakan default.");
-            });
-        }
+        // --- LOGIKA BARU: AMBIL DARI DATABASE SETTINGS ---
+        // Jika belum ada setting (pengguna baru), default Jakarta
+        let lat = db.settings.lat || -6.2088; 
+        let lng = db.settings.lng || 106.8456;
         
-        // 3. Render Hijriyah (Opsional/Pelengkap)
-        try {
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', options).format(new Date());
-            // Kita tidak mengubah header greeting lagi di sini agar tidak bentrok
-        } catch(e) { console.log("Kalender Hijriah error"); }
+        // Update Jadwal Shalat berdasarkan Koordinat Statis
+        updatePrayerTimes(lat, lng);
+        
+        // Render Dropdown Kota (Supaya pas buka setting pilihannya muncul)
+        initKotaSelector();
     }
 
     function updatePrayerTimes(lat, lng) {
@@ -1576,7 +1617,7 @@
     // --- INIT (KUNCI KONTAK) ---
     window.onload = () => {
         checkNewDay();      
-        initDashboard();    
+        initDashboard(); // Ini akan memanggil updatePrayerTimes + initKotaSelector
         applyTheme();       
         renderDateHeader(); 
         updateUI();         
@@ -1585,6 +1626,7 @@
 </script>
 </body>
 </html>
+
 
 
 
