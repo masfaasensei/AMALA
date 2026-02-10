@@ -841,7 +841,7 @@
 </div>
 
 <script>
-    // --- 1. CONFIG & STATE (FIXED VERSION) ---
+    // --- 1. CONFIG & STATE (VERSI ANTI-CRASH) ---
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
 
@@ -849,28 +849,25 @@
         if (rawData) {
             db = JSON.parse(rawData);
             
-            // 1. Pastikan folder SETTINGS ada
-            if (!db.settings) db.settings = { darkMode: false, isLoggedIn: false, setupDone: false, pin: "1234", userName: "Hamba Allah" };
+            // PERBAIKAN: Cek satu-satu, kalau kosong kita isi default
+            if (!db.settings) db.settings = {};
             if (!db.settings.userName) db.settings.userName = "Hamba Allah";
             if (!db.settings.pin) db.settings.pin = "1234";
-
-            // 2. Pastikan folder HISTORY ada
+            
             if (!db.history) db.history = {};
-
-            // 3. Pastikan folder PRIBADI ada (INI YANG BIKIN CRASH KEMARIN!)
-            // Kita cek, kalau db.pribadi kosong, kita buat baru.
+            
             if (!db.pribadi) {
                 db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
             }
             
-            // 4. Cek Tanggal
             if (!db.lastDate) db.lastDate = new Date().toLocaleDateString('en-CA');
-
+            
         } else {
-            throw new Error("Data baru");
+            throw new Error("Data Kosong"); // Lempar ke catch di bawah
         }
     } catch (e) {
-        // Jika data rusak/baru, reset ke default biar aplikasi jalan terus
+        console.log("Database di-reset ke default karena: " + e.message);
+        // JIKA ERROR/DATA BARU -> PAKAI DEFAULT INI
         db = {
             murid: [],
             pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
@@ -878,6 +875,8 @@
             lastDate: new Date().toLocaleDateString('en-CA'), 
             settings: { darkMode: false, isLoggedIn: false, setupDone: false, pin: "1234", userName: "Hamba Allah" }
         };
+        // Simpan biar tidak error lagi pas refresh
+        localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
     }
 
     // --- DATABASE AL-QURAN (NAMA & JUMLAH AYAT) ---
@@ -1560,17 +1559,15 @@
         else { nextPrayer = "Subuh"; nextTime = times.Subuh; } 
 
         // Perbaikan Selector: Kita cari 'p.greeting' BUKAN '.greeting h2'
-        const greetingElement = document.querySelector('p.greeting'); 
-        
-        if(greetingElement) {
-            // Kita ubah teks "Assalamualaikum, Ustadz" jadi Nama User
-            // Tapi biarkan "Muhasabah" (h2) tetap utuh
-            greetingElement.innerHTML = `
-            <span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br>
-            <div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">
-                🕋 ${nextPrayer}: <b>${nextTime}</b> WIB
-            </div>`;
-        }
+        const greetingElement = document.querySelector('.greeting'); 
+    
+    if(greetingElement) {
+        greetingElement.innerHTML = `
+        <span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br>
+        <div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">
+            🕋 ${nextPrayer}: <b>${nextTime}</b> WIB
+        </div>`;
+    }
     }
 
     // --- INIT (KUNCI KONTAK) ---
@@ -1585,6 +1582,7 @@
 </script>
 </body>
 </html>
+
 
 
 
