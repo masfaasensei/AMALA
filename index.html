@@ -8,20 +8,15 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        /* --- CONFIG WARNA (TIDAK BERUBAH) --- */
+        /* --- CONFIG WARNA --- */
         :root {
-            /* Palette Dasar */
             --bg-light: #B6E5D2;    
             --bg-dark: #043F34;     
-            
-            /* Komponen Light Mode */
             --l-text: #043F34;
             --l-card: #ffffff;      
             --l-btn: #043F34;
             --l-btn-text: #B6E5D2;
             --l-accent: #d97706;
-
-            /* Komponen Dark Mode */
             --d-text: #e2e8f0;      
             --d-card: #064e41;      
             --d-btn: #FCD34D;        
@@ -29,309 +24,75 @@
             --d-accent: #FCD34D;
         }
 
-        /* Default (Light Mode) */
-        body {
-            --bg-body: var(--bg-light);
-            --text-main: var(--l-text);
-            --card-bg: var(--l-card);
-            --btn-bg: var(--l-btn);
-            --btn-text: var(--l-btn-text);
-            --accent-color: var(--l-accent);
-        }
-
-        /* Dark Mode Override */
-        body.dark-mode {
-            --bg-body: var(--bg-dark);
-            --text-main: var(--d-text);
-            --card-bg: var(--d-card);
-            --btn-bg: var(--d-btn);
-            --btn-text: var(--d-btn-text);
-            --accent-color: var(--d-accent);
-        }
+        body { --bg-body: var(--bg-light); --text-main: var(--l-text); --card-bg: var(--l-card); --btn-bg: var(--l-btn); --btn-text: var(--l-btn-text); --accent-color: var(--l-accent); }
+        body.dark-mode { --bg-body: var(--bg-dark); --text-main: var(--d-text); --card-bg: var(--d-card); --btn-bg: var(--d-btn); --btn-text: var(--d-btn-text); --accent-color: var(--d-accent); }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background 0.3s, color 0.3s; }
-
-        body { 
-            background-color: var(--bg-body); 
-            display: flex; 
-            justify-content: center; 
-            color: var(--text-main);
-            min-height: 100vh;
-        }
-
-        .app-container { 
-            width: 100%; 
-            max-width: 480px; 
-            padding-bottom: 110px; 
-            position: relative;
-        }
-
+        body { background-color: var(--bg-body); display: flex; justify-content: center; color: var(--text-main); min-height: 100vh; }
+        .app-container { width: 100%; max-width: 480px; padding-bottom: 110px; position: relative; }
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI COMPONENTS */
         h2 { font-size: 20px; margin-bottom: 5px; font-weight: 700; }
         h4 { font-size: 14px; margin-bottom: 8px; opacity: 0.8; }
-        
-        .greeting {
-            font-size: 14px; margin-bottom: 20px; opacity: 0.9; font-weight: 500;
-        }
-
-        .date-display {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+        .greeting { font-size: 14px; margin-bottom: 20px; opacity: 0.9; font-weight: 500; }
+        .date-display { background: var(--card-bg); padding: 15px; border-radius: 16px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
         .date-masehi { font-size: 14px; font-weight: 600; }
         .date-hijri { font-size: 18px; font-weight: 700; color: var(--accent-color); margin-top: 5px; }
-
-        .card { 
-            background: var(--card-bg); 
-            padding: 20px; 
-            border-radius: 18px; 
-            margin-bottom: 15px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        input, select { 
-            width: 100%; padding: 14px; border-radius: 12px; 
-            border: 2px solid var(--text-main); opacity: 0.8;
-            background: transparent;
-            color: var(--text-main);
-            margin-bottom: 15px; outline: none; font-weight: 600;
-        }
-        input::placeholder { color: var(--text-main); opacity: 0.3; font-weight: 400; }
-
-        .btn-primary { 
-            background: var(--btn-bg); color: var(--btn-text); border: none; 
-            padding: 16px; border-radius: 12px; width: 100%; 
-            font-weight: 700; cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; gap: 10px; font-size: 14px;
-        }
-
-        /* AMALAN LAYOUT */
+        .card { background: var(--card-bg); padding: 20px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--text-main); opacity: 0.8; background: transparent; color: var(--text-main); margin-bottom: 15px; outline: none; font-weight: 600; }
+        .btn-primary { background: var(--btn-bg); color: var(--btn-text); border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
         .amalan-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        
-        .amalan-item {
-            background: var(--card-bg); border-radius: 16px; padding: 18px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        .amalan-row {
-            background: var(--card-bg); border-radius: 16px; padding: 15px 20px;
-            margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
+        .amalan-item { background: var(--card-bg); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .amalan-row { background: var(--card-bg); border-radius: 16px; padding: 15px 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .row-icon { font-size: 32px; margin-right: 15px; width: 40px; text-align: center; color: var(--btn-bg); }
         .row-info { flex: 1; text-align: left; }
         .row-info h3 { font-size: 16px; font-weight: 700; }
-        .row-info .unit-badge { 
-            font-size: 10px; background: rgba(0,0,0,0.05); padding: 3px 8px; 
-            border-radius: 10px; font-weight: 600; color: var(--text-main); opacity: 0.7;
-        }
-
-        /* COUNTER CONTROLS */
+        .row-info .unit-badge { font-size: 10px; background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 10px; font-weight: 600; color: var(--text-main); opacity: 0.7; }
         .counter-wrap { display: flex; align-items: center; gap: 10px; }
-        .c-btn { 
-            background: var(--btn-bg); color: var(--btn-text); 
-            border: none; width: 32px; height: 32px; border-radius: 8px; 
-            font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
+        .c-btn { background: var(--btn-bg); color: var(--btn-text); border: none; width: 32px; height: 32px; border-radius: 8px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .c-val { font-size: 18px; font-weight: 700; min-width: 30px; text-align: center; }
-
-        /* NAVIGASI BAWAH */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; max-width: 480px;
-            background: var(--card-bg); display: flex; justify-content: space-around;
-            padding: 15px 5px; border-top-left-radius: 20px; border-top-right-radius: 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000;
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center;
-            color: var(--text-main); opacity: 0.5; cursor: pointer; gap: 5px; flex: 1;
-        }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px 5px; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-main); opacity: 0.5; cursor: pointer; gap: 5px; flex: 1; }
         .nav-item i { font-size: 24px; }
         .nav-item span { font-size: 9px; font-weight: 700; text-transform: uppercase; }
         .nav-item.active { opacity: 1; color: var(--btn-bg); }
-        
-        /* CALENDAR */
         .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
         .day-name { font-size: 11px; font-weight: 700; text-align: center; padding: 5px 0; }
-        .day-cell { 
-            height: 45px; display: flex; align-items: center; justify-content: center; flex-direction: column;
-            background: rgba(0,0,0,0.03); border-radius: 8px; font-size: 13px; font-weight: 600; position: relative;
-        }
+        .day-cell { height: 45px; display: flex; align-items: center; justify-content: center; flex-direction: column; background: rgba(0,0,0,0.03); border-radius: 8px; font-size: 13px; font-weight: 600; position: relative; }
         .day-cell.today { border: 2px solid var(--text-main); }
         .day-hijri { font-size: 9px; opacity: 0.7; position: absolute; bottom: 2px; right: 4px; }
-
-        /* Calendar Markers */
         .m-seninkamis { background: rgba(74, 222, 128, 0.2); border: 1px solid #4ade80; } 
         .m-ayyamul { background: rgba(96, 165, 250, 0.2); border: 1px solid #60a5fa; } 
         .m-ramadhan { background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; } 
         .m-special { background: rgba(251, 146, 60, 0.2); border: 1px solid #fb923c; } 
         .m-haram { background: rgba(248, 113, 113, 0.2); border: 1px solid #f87171; opacity: 0.6; } 
-
         .fasting-legend { display: flex; gap: 10px; margin-top: 15px; font-size: 10px; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; gap: 4px; }
         .dot { width: 8px; height: 8px; border-radius: 2px; }
-
-        /* FASTING STATS */
-        .fasting-stats { display: flex; gap: 10px; margin-top: 20px; }
-        .fs-box { flex: 1; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 10px; text-align: center; }
-        .fs-num { font-size: 20px; font-weight: 700; color: var(--btn-bg); }
-        .fs-label { font-size: 10px; text-transform: uppercase; }
-
-        /* DZIKIR PAGE & TASBIH */
-        .top-action-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px;
-        }
-        .btn-back { border:none; background:none; color:var(--text-main); font-weight:bold; font-size:16px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-
-        .tasbih-card {
-            background: var(--btn-bg); color: var(--btn-text);
-            border-radius: 16px; padding: 20px; text-align: center;
-            margin-bottom: 20px; position: sticky; top: 0; z-index: 50;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .tasbih-val { font-size: 48px; font-weight: 800; line-height: 1; display: block; margin: 10px 0; }
-        .tasbih-ctrl { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .btn-tasbih { 
-            background: rgba(0,0,0,0.2); color: inherit; border: none; 
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-        }
-        .btn-tasbih-big {
-            width: 100%; height: 60px; border-radius: 12px;
-            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
-            font-weight: 700; color: inherit; font-size: 16px; cursor: pointer;
-        }
-
+        .header-dzikir { display: flex; align-items: center; gap: 15px; padding: 10px 0 20px 0; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .header-dzikir h1 { font-size: 18px; font-weight: 700; margin: 0; color: var(--text-main); }
+        .btn-back-custom { background: var(--card-bg); color: var(--text-main); border: 1px solid rgba(0,0,0,0.1); padding: 10px 16px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .dzikir-item { background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 12px; border-left: 4px solid var(--btn-bg); }
         .arab { font-family: 'Amiri', serif; font-size: 24px; text-align: right; direction: rtl; margin: 15px 0; line-height: 1.8; }
-        
-        /* STYLE BARU UNTUK HEADER & TOMBOL KEMBALI */
-        .header-dzikir {
-            display: flex;
-            align-items: center;
-            gap: 15px; /* Jarak antara tombol dan judul */
-            padding: 10px 0 20px 0;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(0,0,0,0.05); /* Garis pemisah tipis */
-        }
-
-        .header-dzikir h1 {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
-            color: var(--text-main);
-        }
-
-        .btn-back-custom {
-            background: var(--card-bg); /* Sesuai warna kartu */
-            color: var(--text-main);
-            border: 1px solid rgba(0,0,0,0.1);
-            padding: 10px 16px;
-            border-radius: 12px; /* Radius membulat */
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Bayangan tipis */
-            transition: all 0.2s;
-        }
-
-        .btn-back-custom:active {
-            transform: scale(0.95); /* Efek tekan */
-            background: var(--btn-bg);
-            color: var(--btn-text);
-        }
-
-        /* --- STYLE HEATMAP KALENDER (AMALA) --- */
-        .heatmap-container {
-            background: white;
-            padding: 15px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-        .hm-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
+        .heatmap-container { background: white; padding: 15px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .hm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .hm-period-title { font-weight: 700; font-size: 16px; color: var(--btn-bg); }
-        
-        /* Baris Nama Hari (Min, Sen, Sel...) */
-        .hm-days-header {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            margin-bottom: 5px;
-        }
-        .hm-day-name {
-            font-size: 10px; font-weight: bold; text-align: center; color: #999;
-        }
-
-        /* Grid Kalender */
-        .hm-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 Hari ke samping */
-            gap: 6px;
-        }
-        .hm-box {
-            aspect-ratio: 1/1; /* Kotak Persegi */
-            border-radius: 6px;
-            background: #f1f5f9; /* Abu-abu terang */
-            cursor: pointer;
-            transition: transform 0.1s;
-            
-            /* Agar Angka di Tengah */
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748b; /* Warna angka default */
-        }
+        .hm-days-header { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 5px; }
+        .hm-day-name { font-size: 10px; font-weight: bold; text-align: center; color: #999; }
+        .hm-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .hm-box { aspect-ratio: 1/1; border-radius: 6px; background: #f1f5f9; cursor: pointer; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #64748b; }
         .hm-box:active { transform: scale(0.9); }
         .hm-box.selected { border: 2px solid #333 !important; transform: scale(1.1); z-index: 2; }
-        .hm-box.empty { background: transparent; cursor: default; } /* Kotak kosong padding */
-
-        /* Level Warna (Makin Hijau Makin Sholeh) */
-        /* Text color kita buat gelap biar kontras, kecuali level tinggi */
-        .hm-lvl-0 { background: #f1f5f9; color: #cbd5e1; } /* 0% */
-        .hm-lvl-1 { background: #bbf7d0; color: #166534; } /* 25% */
-        .hm-lvl-2 { background: #86efac; color: #166534; } /* 50% */
-        .hm-lvl-3 { background: #4ade80; color: #064e3b; } /* 75% */
-        .hm-lvl-4 { background: #16a34a; color: white; } /* 100% */
-
-        .hm-detail-text {
-            margin-top: 15px;
-            padding: 12px;
-            background: #f8fafc;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #334155;
-            border-left: 4px solid var(--btn-bg);
-            line-height: 1.6;
-        }
+        .hm-box.empty { background: transparent; cursor: default; }
+        .hm-lvl-0 { background: #f1f5f9; color: #cbd5e1; }
+        .hm-lvl-1 { background: #bbf7d0; color: #166534; }
+        .hm-lvl-2 { background: #86efac; color: #166534; }
+        .hm-lvl-3 { background: #4ade80; color: #064e3b; }
+        .hm-lvl-4 { background: #16a34a; color: white; }
+        .hm-detail-text { margin-top: 15px; padding: 12px; background: #f8fafc; border-radius: 8px; font-size: 12px; color: #334155; border-left: 4px solid var(--btn-bg); line-height: 1.6; }
     </style>
 </head>
 <body class="light-mode">
@@ -339,9 +100,8 @@
 <div class="app-container">
 
     <div id="page-amalan" class="page active">
-        
         <h2 style="color:var(--btn-bg)">Muhasabah</h2>
-        <p class="greeting">Assalamualaikum, Ustadz.</p>
+        <p class="greeting">Assalamualaikum.</p>
         
         <div class="date-display">
             <div class="date-masehi" id="date-masehi">-</div>
@@ -523,15 +283,14 @@
         
         <div id="panel-setup" class="card" style="display:none;">
             <h4 id="setup-title"><i class="ph ph-user-plus"></i> Buat Profil Baru</h4>
-            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Silakan atur identitas dan lokasi Anda.</p>
+            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Silakan atur nama dan PIN rahasia Anda.</p>
             
             <label style="font-size:12px; font-weight:bold;">Nama Panggilan:</label>
             <input type="text" id="set-name" placeholder="Nama Anda...">
-
-            <label style="font-size:12px; font-weight:bold;">Lokasi (Untuk Jadwal Sholat):</label>
-            <select id="set-lokasi" style="background:#f9f9f9; font-weight:bold;">
-                </select>
             
+            <label style="font-size:12px; font-weight:bold;">Lokasi (Untuk Jadwal Sholat):</label>
+            <select id="set-lokasi" style="background:#f9f9f9; font-weight:bold;"></select>
+
             <label style="font-size:12px; font-weight:bold;">PIN Akses (Angka):</label>
             <input type="number" id="set-pin" placeholder="Buat PIN Baru">
             
@@ -543,7 +302,7 @@
                 <i class="ph ph-sign-out"></i> Log Out (Kunci Aplikasi)
             </button>
         </div>
-        
+
         <div id="panel-login" class="card" style="border-left: 5px solid var(--btn-bg); display:none;">
             <h4><i class="ph ph-lock-key"></i> Login Pemilik</h4>
             <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN Anda.</p>
@@ -559,9 +318,11 @@
                 <div id="dm-toggle" style="width:20px; height:20px; background:var(--bg-body); border-radius:50%; position:absolute; left:3px; top:3px; transition:0.3s;"></div>
             </div>
         </div>
+
         <div class="card">
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
-            <p style="font-size:12px;"><b>Amala Pro System v2.3</b></p>
+            <p style="font-size:12px;"><b>Amala Pro System v2.3</b><br>Created by Mas Fajar</p>
+            <p style="font-size:12px;"><b>Support Dakwah</b><br>Bank Jago (5012-9872-3886)</p>
         </div>
     </div>
     
@@ -845,45 +606,37 @@
 </div>
 
 <script>
-    // --- 1. CONFIG & STATE (VERSI ANTI-CRASH) ---
+    // --- 1. CONFIG & STATE (ANTI CRASH) ---
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
 
     try {
         if (rawData) {
             db = JSON.parse(rawData);
-            
-            // PERBAIKAN: Cek satu-satu, kalau kosong kita isi default
+            // Patching data jika ada yang hilang
             if (!db.settings) db.settings = {};
             if (!db.settings.userName) db.settings.userName = "Hamba Allah";
             if (!db.settings.pin) db.settings.pin = "1234";
+            if (typeof db.settings.setupDone === 'undefined') db.settings.setupDone = false;
             
             if (!db.history) db.history = {};
-            
-            if (!db.pribadi) {
-                db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
-            }
-            
+            if (!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
             if (!db.lastDate) db.lastDate = new Date().toLocaleDateString('en-CA');
-            
         } else {
-            throw new Error("Data Kosong"); // Lempar ke catch di bawah
+            throw new Error("Data Baru");
         }
     } catch (e) {
-        console.log("Database di-reset ke default karena: " + e.message);
-        // JIKA ERROR/DATA BARU -> PAKAI DEFAULT INI
         db = {
             murid: [],
             pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
             history: {}, 
             lastDate: new Date().toLocaleDateString('en-CA'), 
-            settings: { darkMode: false, isLoggedIn: false, setupDone: false, pin: "1234", userName: "Hamba Allah" }
+            settings: { darkMode: false, isLoggedIn: false, setupDone: false, pin: "1234", userName: "Hamba Allah", lat: -6.2088, lng: 106.8456 }
         };
-        // Simpan biar tidak error lagi pas refresh
         localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
     }
 
-    // --- DATABASE AL-QURAN (NAMA & JUMLAH AYAT) ---
+    // --- DATABASE ---
     const daftarSurat = [
         {n:"Al-Fatihah", a:7}, {n:"Al-Baqarah", a:286}, {n:"Ali 'Imran", a:200}, {n:"An-Nisa'", a:176},
         {n:"Al-Ma'idah", a:120}, {n:"Al-An'am", a:165}, {n:"Al-A'raf", a:206}, {n:"Al-Anfal", a:75},
@@ -915,13 +668,7 @@
         {n:"Al-Kafirun", a:6}, {n:"An-Nasr", a:3}, {n:"Al-Lahab", a:5}, {n:"Al-Ikhlas", a:4},
         {n:"Al-Falaq", a:5}, {n:"An-Nas", a:6}
     ];
-    
-    let tasbih = { pagi: 0, petang: 0 };
-    let currentDate = new Date();
-    let displayMonth = currentDate.getMonth();
-    let displayYear = currentDate.getFullYear();
 
-    // --- DATABASE KOTA (LATITUDE, LONGITUDE) ---
     const daftarKota = [
         {id:0, nama:"Jakarta", lat:-6.2088, lng:106.8456},
         {id:1, nama:"Bandung", lat:-7.2575, lng:112.7521},
@@ -944,24 +691,35 @@
         {id:18, nama:"Temanggung", lat:-7.3135, lng:110.1706}
     ];
 
-    // Fungsi Render Dropdown Kota (Panggil saat Init)
+    let tasbih = { pagi: 0, petang: 0 };
+    let currentDate = new Date();
+    let displayMonth = currentDate.getMonth();
+    let displayYear = currentDate.getFullYear();
+
     function initKotaSelector() {
         const sel = document.getElementById('set-lokasi');
         sel.innerHTML = "";
         daftarKota.forEach(k => {
             sel.innerHTML += `<option value="${k.id}">${k.nama}</option>`;
         });
-        
-        // Set nilai default dari database jika ada
-        if(db.settings.kotaId !== undefined) {
-            sel.value = db.settings.kotaId;
-        }
+        if(db.settings.kotaId !== undefined) sel.value = db.settings.kotaId;
     }
-    
-    // --- 2. CORE FUNCTIONS ---
+
+    // --- CORE FUNCTIONS ---
     function save() {
         localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
         updateUI();
+    }
+
+    function checkNewDay() {
+        const todayStr = new Date().toLocaleDateString('en-CA'); 
+        if (db.lastDate !== todayStr) {
+            db.history[db.lastDate] = JSON.parse(JSON.stringify(db.pribadi));
+            db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
+            db.lastDate = todayStr;
+            save();
+            alert("☀️ Assalamu'alaikum! Lembaran amalan hari baru telah dibuka.");
+        }
     }
 
     function updateUI() {
@@ -969,8 +727,7 @@
         document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
         document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString('id-ID');
         
-        let countMonth = 0;
-        let countYear = 0;
+        let countMonth = 0; let countYear = 0;
         const currentMonthPrefix = new Date().toLocaleDateString('en-CA').substring(0, 7); 
         const currentYearPrefix = new Date().toLocaleDateString('en-CA').substring(0, 4);  
 
@@ -982,7 +739,6 @@
                 }
             });
         }
-
         if(db.pribadi.puasa) { countMonth++; countYear++; }
 
         document.getElementById('stat-puasa-month').innerText = countMonth;
@@ -994,22 +750,16 @@
         
         const shodInput = document.getElementById('val-shodaqoh');
         if(shodInput) {
-            if(db.pribadi.shodaqoh > 0) {
-                shodInput.value = db.pribadi.shodaqoh;
-            } else {
-                shodInput.value = "";
-            }
+            if(db.pribadi.shodaqoh > 0) shodInput.value = db.pribadi.shodaqoh;
+            else shodInput.value = "";
         }
-        
         renderHeatmap(); 
     }
     
-    // --- 3. TASBIH LOGIC ---
     function countDzikir(type, val) {
         let badge = type.querySelector('.num');
         let max = parseInt(type.getAttribute('data-max'));
         let current = parseInt(badge.innerText);
-        
         if(current < max) {
             badge.innerText = current + 1;
             if(current + 1 === max) {
@@ -1019,7 +769,6 @@
         }
     }
 
-    // --- 4. LOGIC AMALAN ---
     function updatePersonal(key, val) {
         db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val);
         save();
@@ -1031,42 +780,31 @@
     }
 
     function catatPuasa() {
-        if(confirm("Catat puasa hari ini? Data akan masuk statistik.")) {
-            db.pribadi.puasa = true; 
-            save(); 
-            alert("Puasa tercatat!");
+        if(confirm("Catat puasa hari ini?")) {
+            db.pribadi.puasa = true; save(); alert("Puasa tercatat!");
         }
     }
 
-    // --- 5. NAVIGATION ---
+    // --- NAVIGATION ---
     function openPage(pageId, el) {
-        // 1. Logika Ganti Halaman (Tampilan)
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
-        
-        // 2. Logika Tab Aktif (Warna Menu Bawah)
         if(el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
         }
         window.scrollTo(0,0);
         
-        // 3. Render Halaman Khusus
         if(pageId === 'kalender') renderCalendar();
         if(pageId === 'statistik') renderHeatmap();
-        
-        // Cek Akses untuk Murid & Raport
-        if(pageId === 'murid') {
-            if(db.settings.isLoggedIn) renderMuridPage(); else openPage('setting');
-        }
-        if(pageId === 'raport') {
-            if(db.settings.isLoggedIn) renderRaportPage(); else openPage('setting');
-        }
+        if(pageId === 'murid') { if(db.settings.isLoggedIn) renderMuridPage(); else openPage('setting'); }
+        if(pageId === 'raport') { if(db.settings.isLoggedIn) renderRaportPage(); else openPage('setting'); }
+        if(pageId === 'setting') renderSettings();
+    }
 
-        // 4. >>> INI POIN B YANG SAYA MAKSUD <<<
-        // (Wajib ada biar halaman Setting tahu harus menampilkan Sign Up atau Login)
-        if(pageId === 'setting') renderSettings(); 
-
+    function checkAccess(pageId, el) {
+        if (db.settings.isLoggedIn) openPage(pageId, el);
+        else { alert("🔒 AKSES TERKUNCI.\nSilakan Login di Setting."); openPage('setting'); }
     }
 
     function renderSettings() {
@@ -1074,134 +812,83 @@
         const pLogin = document.getElementById('panel-login');
         const btnLogout = document.getElementById('btn-logout');
         
-        // KONDISI 1: PENGGUNA BARU (Belum Setup) -> Tampilkan Form Sign Up
         if (!db.settings.setupDone) {
-            pSetup.style.display = 'block';
-            pLogin.style.display = 'none';
+            pSetup.style.display = 'block'; pLogin.style.display = 'none';
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
             document.getElementById('setup-btn-text').innerText = 'Buat Profil & Masuk';
             btnLogout.style.display = 'none';
-            // Kosongkan form
             document.getElementById('set-name').value = "";
             document.getElementById('set-pin').value = "";
-        } 
-        // KONDISI 2: SUDAH SETUP, BELUM LOGIN -> Tampilkan Login Saja
-        else if (db.settings.setupDone && !db.settings.isLoggedIn) {
-            pSetup.style.display = 'none'; 
-            pLogin.style.display = 'block';
-        }
-        // KONDISI 3: SUDAH LOGIN -> Tampilkan Edit Profil
-        else {
-            pSetup.style.display = 'block';
-            pLogin.style.display = 'none';
+        } else if (db.settings.setupDone && !db.settings.isLoggedIn) {
+            pSetup.style.display = 'none'; pLogin.style.display = 'block';
+        } else {
+            pSetup.style.display = 'block'; pLogin.style.display = 'none';
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
             document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
             btnLogout.style.display = 'block';
-            // Isi form dengan data yang ada
             document.getElementById('set-name').value = db.settings.userName;
             document.getElementById('set-pin').value = db.settings.pin;
+            if(db.settings.kotaId) document.getElementById('set-lokasi').value = db.settings.kotaId;
         }
     }
-    // --- ACTION BUTTONS ---
 
     function saveProfile() {
         const newName = document.getElementById('set-name').value;
         const newPin = document.getElementById('set-pin').value;
-        const kotaId = document.getElementById('set-lokasi').value; // Ambil ID Kota
+        const kotaId = document.getElementById('set-lokasi').value;
         
-        if(!newName || !newPin) {
-            alert("⚠️ Harap isi Nama dan PIN!"); return;
-        }
+        if(!newName || !newPin) { alert("⚠️ Harap isi Nama dan PIN!"); return; }
 
-        // SIMPAN KE DATABASE
         db.settings.userName = newName;
         db.settings.pin = newPin;
-        db.settings.kotaId = parseInt(kotaId); // Simpan ID Kota
+        db.settings.kotaId = parseInt(kotaId);
         
-        // Ambil Lat/Lng dari database kota berdasarkan ID
         const kotaPilih = daftarKota.find(k => k.id == kotaId);
-        db.settings.lat = kotaPilih.lat;
-        db.settings.lng = kotaPilih.lng;
-        db.settings.kotaNama = kotaPilih.nama;
+        if(kotaPilih) { db.settings.lat = kotaPilih.lat; db.settings.lng = kotaPilih.lng; }
 
         db.settings.setupDone = true;
         db.settings.isLoggedIn = true;
         
         save();
-        alert("✅ Profil tersimpan! Lokasi: " + kotaPilih.nama);
-        
-        initDashboard(); 
-        renderSettings();
+        alert("✅ Profil tersimpan!");
+        initDashboard(); renderSettings();
     }
-    
-    function logout() {
-        if(confirm("Log Out akan mengunci akses data santri. Lanjutkan?")) {
-            db.settings.isLoggedIn = false;
-            save();
-            renderSettings(); // Akan otomatis pindah ke panel Login
-        }
-    }
-    
+
     function verifikasiLogin() {
         const inputPin = document.getElementById('login-pass').value;
-        
         if(inputPin === db.settings.pin) {
             db.settings.isLoggedIn = true;
-            save();
-            // Sukses -> Refresh ke tampilan Edit Profil
-            renderSettings(); 
+            save(); renderSettings();
         } else {
             document.getElementById('login-status').innerText = "🚫 PIN SALAH!";
-            // Efek getar (opsional)
-            navigator.vibrate(200);
         }
     }
 
     function logout() {
-        if(confirm("Yakin ingin Log Out? Akses murid akan terkunci.")) {
+        if(confirm("Log Out?")) {
             db.settings.isLoggedIn = false;
-            save();
-            // Refresh ke tampilan Login
-            renderSettings();
+            save(); renderSettings();
         }
     }
-    // --- 6. THEME ---
+
     function toggleDarkMode() {
         db.settings.darkMode = !db.settings.darkMode;
-        applyTheme();
-        save();
+        applyTheme(); save();
     }
 
     function applyTheme() {
         const body = document.body;
         const toggle = document.getElementById('dm-toggle');
         if(db.settings.darkMode) {
-            body.classList.add('dark-mode');
-            toggle.style.left = "27px";
+            body.classList.add('dark-mode'); toggle.style.left = "27px";
         } else {
-            body.classList.remove('dark-mode');
-            toggle.style.left = "3px";
+            body.classList.remove('dark-mode'); toggle.style.left = "3px";
         }
     }
 
-    // --- 7. FUNGSI BARU: SAVE PROFIL ---
-    function saveProfile() {
-        const newName = document.getElementById('set-name').value;
-        const newPin = document.getElementById('set-pin').value;
-        
-        if(newName) db.settings.userName = newName;
-        if(newPin) db.settings.pin = newPin;
-        
-        save();
-        alert("✅ Profil & PIN berhasil disimpan!");
-        initDashboard(); 
-    }
-
-    // --- 8. LOGIKA KALENDER & PUASA ---
     function renderDateHeader() {
         const d = new Date();
         document.getElementById('date-masehi').innerText = d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        
         try {
             const hijriNames = ["Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulkaidah", "Dzulhijjah"];
             const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(d);
@@ -1209,30 +896,25 @@
             const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1;
             const hYear = parts.find(p => p.type === 'year').value;
             document.getElementById('date-hijri').innerText = `${hDay} ${hijriNames[hMonthIdx]} ${hYear} H`;
-        } catch (e) {
-            document.getElementById('date-hijri').innerText = "Kalender Hijriyah Error";
-        }
+        } catch (e) { document.getElementById('date-hijri').innerText = "Kalender Hijriyah Error"; }
     }
 
     function changeMonth(dir) {
         displayMonth += dir;
         if(displayMonth > 11) { displayMonth = 0; displayYear++; }
         if(displayMonth < 0) { displayMonth = 11; displayYear--; }
-        renderCalendar(); 
+        renderCalendar();
     }
 
     function renderCalendar() {
         const container = document.getElementById('calendar-days');
-        if(!container) return; 
-        
+        if(!container) return;
         container.innerHTML = "";
         
         const firstDay = new Date(displayYear, displayMonth, 1).getDay();
         const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
-        
         document.getElementById('cal-month-year').innerText = new Date(displayYear, displayMonth).toLocaleDateString('id-ID', {month:'long', year:'numeric'});
         
-        // Hijri Estimate
         const midDate = new Date(displayYear, displayMonth, 15);
         const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {month:'numeric', year:'numeric'}).formatToParts(midDate);
         const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1;
@@ -1240,32 +922,26 @@
         document.getElementById('cal-hijri-month').innerText = hijriNames[hMonthIdx] + " " + parts.find(p => p.type === 'year').value + " H";
 
         for(let i=0; i<firstDay; i++) container.innerHTML += `<div></div>`;
-
         for(let i=1; i<=daysInMonth; i++) {
             const date = new Date(displayYear, displayMonth, i);
-            const dayOfWeek = date.getDay(); 
-            
+            const dayOfWeek = date.getDay();
             const p = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'numeric'}).formatToParts(date);
             const hDay = parseInt(p.find(k => k.type === 'day').value);
             const hMonth = parseInt(p.find(k => k.type === 'month').value);
-            
             let classes = "day-cell";
-            
-            if(hMonth === 10 && hDay === 1) classes += " m-haram"; 
-            else if(hMonth === 12 && hDay >= 10 && hDay <= 13) classes += " m-haram"; 
-            else if(hMonth === 9) classes += " m-ramadhan"; 
-            else if(hMonth === 12 && hDay === 9) classes += " m-special"; 
-            else if(hMonth === 1 && (hDay === 9 || hDay === 10)) classes += " m-special"; 
-            else if(hDay >= 13 && hDay <= 15) classes += " m-ayyamul"; 
-            else if(dayOfWeek === 1 || dayOfWeek === 4) classes += " m-seninkamis"; 
-
+            if(hMonth === 10 && hDay === 1) classes += " m-haram";
+            else if(hMonth === 12 && hDay >= 10 && hDay <= 13) classes += " m-haram";
+            else if(hMonth === 9) classes += " m-ramadhan";
+            else if(hMonth === 12 && hDay === 9) classes += " m-special";
+            else if(hMonth === 1 && (hDay === 9 || hDay === 10)) classes += " m-special";
+            else if(hDay >= 13 && hDay <= 15) classes += " m-ayyamul";
+            else if(dayOfWeek === 1 || dayOfWeek === 4) classes += " m-seninkamis";
             if(date.toDateString() === new Date().toDateString()) classes += " today";
-
             container.innerHTML += `<div class="${classes}">${i}<span class="day-hijri">${hDay}</span></div>`;
         }
     }
 
-    // --- 9. MURID & RAPORT ---
+    // --- MURID & RAPORT ---
     function renderMuridPage() {
         const div = document.getElementById('murid-content');
         if(db.murid.length === 0) {
@@ -1287,31 +963,20 @@
         const wa = prompt("WA (628...):");
         if(nama) { db.murid.push({nama, wa}); save(); renderMuridPage(); }
     }
-    
     function hapusMurid(i) { if(confirm("Hapus?")) { db.murid.splice(i, 1); save(); renderMuridPage(); } }
 
     function renderRaportPage() {
         const div = document.getElementById('raport-content');
-        
-        if(db.murid.length === 0) { 
-            div.innerHTML = `<div class="card">Tambah data murid dulu di menu Murid.</div>`; 
-            return; 
-        }
+        if(db.murid.length === 0) { div.innerHTML = `<div class="card">Tambah data murid dulu di menu Murid.</div>`; return; }
         
         const d = new Date();
         const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
-
-        let optsMurid = "";
-        db.murid.forEach((m, i) => optsMurid += `<option value="${i}">${m.nama}</option>`);
-
+        let optsMurid = ""; db.murid.forEach((m, i) => optsMurid += `<option value="${i}">${m.nama}</option>`);
         let optsSurat = `<option value="">-- Pilih Surat --</option>`;
-        daftarSurat.forEach((s, i) => {
-            optsSurat += `<option value="${i}">${i+1}. ${s.n}</option>`;
-        });
+        daftarSurat.forEach((s, i) => { optsSurat += `<option value="${i}">${i+1}. ${s.n}</option>`; });
 
         div.innerHTML = `
         <input type="hidden" id="rap-current-date" value="${dateStr}">
-        
         <div class="card" style="border-left: 5px solid var(--btn-bg);">
             <div style="text-align:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px dashed #ddd;">
                 <small>Laporan Hari:</small><br><b>${dateStr}</b>
@@ -1319,24 +984,14 @@
             <label style="font-weight:700;">👤 Pilih Santri:</label>
             <select id="sel-rap-murid" style="margin-top:5px; background:#f9f9f9;">${optsMurid}</select>
         </div>
-
         <div class="card">
             <h4 style="color:var(--btn-bg); margin-bottom:10px;">📖 Ziyadah (Hafalan Baru)</h4>
-            
             <label>Surat:</label>
             <select id="z-surat" onchange="updateAyatOptions('z')" style="margin-bottom:10px;">${optsSurat}</select>
-            
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;">
-                    <label>Dari Ayat:</label>
-                    <select id="z-start"><option>-</option></select>
-                </div>
-                <div style="flex:1;">
-                    <label>Sampai:</label>
-                    <select id="z-end"><option>-</option></select>
-                </div>
+                <div style="flex:1;"><label>Dari Ayat:</label><select id="z-start"><option>-</option></select></div>
+                <div style="flex:1;"><label>Sampai:</label><select id="z-end"><option>-</option></select></div>
             </div>
-
             <label style="margin-top:10px; display:block;">Nilai / Status:</label>
             <select id="z-status" style="font-weight:bold; color:var(--accent-color);">
                 <option value="LANCAR - LANJUT">✅ LANCAR - LANJUT</option>
@@ -1344,24 +999,14 @@
                 <option value="LIBUR / TIDAK SETOR">⛔ LIBUR / TIDAK SETOR</option>
             </select>
         </div>
-
         <div class="card">
             <h4 style="color:#d97706; margin-bottom:10px;">🔄 Murojaah (Mengulang)</h4>
-            
             <label>Surat:</label>
             <select id="m-surat" onchange="updateAyatOptions('m')" style="margin-bottom:10px;">${optsSurat}</select>
-            
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;">
-                    <label>Dari Ayat:</label>
-                    <select id="m-start"><option>-</option></select>
-                </div>
-                <div style="flex:1;">
-                    <label>Sampai:</label>
-                    <select id="m-end"><option>-</option></select>
-                </div>
+                <div style="flex:1;"><label>Dari Ayat:</label><select id="m-start"><option>-</option></select></div>
+                <div style="flex:1;"><label>Sampai:</label><select id="m-end"><option>-</option></select></div>
             </div>
-
             <label style="margin-top:10px; display:block;">Nilai / Status:</label>
             <select id="m-status" style="font-weight:bold; color:var(--accent-color);">
                 <option value="LANCAR - LANJUT">✅ LANCAR - LANJUT</option>
@@ -1369,11 +1014,8 @@
                 <option value="LIBUR / TIDAK SETOR">⛔ LIBUR / TIDAK SETOR</option>
             </select>
         </div>
-
         <div class="card" style="background: transparent; box-shadow: none; border:none; padding:0;">
-            <button class="btn-primary" onclick="kirimWA()" style="background:#25D366; color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
-                <i class="ph ph-whatsapp-logo" style="font-size:24px;"></i> KIRIM LAPORAN WA
-            </button>
+            <button class="btn-primary" onclick="kirimWA()" style="background:#25D366; color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);"><i class="ph ph-whatsapp-logo" style="font-size:24px;"></i> KIRIM LAPORAN WA</button>
         </div>`;
     }
 
@@ -1381,220 +1023,109 @@
         const suratIdx = document.getElementById(prefix + '-surat').value;
         const selStart = document.getElementById(prefix + '-start');
         const selEnd = document.getElementById(prefix + '-end');
-
-        selStart.innerHTML = "";
-        selEnd.innerHTML = "";
-
-        if(suratIdx === "") {
-            selStart.innerHTML = "<option>-</option>";
-            selEnd.innerHTML = "<option>-</option>";
-            return;
-        }
-
+        selStart.innerHTML = ""; selEnd.innerHTML = "";
+        if(suratIdx === "") { selStart.innerHTML = "<option>-</option>"; selEnd.innerHTML = "<option>-</option>"; return; }
         const maxAyat = daftarSurat[suratIdx].a;
-        let html = "";
-        for(let i=1; i<=maxAyat; i++) {
-            html += `<option value="${i}">${i}</option>`;
-        }
-
-        selStart.innerHTML = html;
-        selEnd.innerHTML = html;
-        selEnd.value = maxAyat; 
+        let html = ""; for(let i=1; i<=maxAyat; i++) { html += `<option value="${i}">${i}</option>`; }
+        selStart.innerHTML = html; selEnd.innerHTML = html; selEnd.value = maxAyat; 
     }
 
     function kirimWA() {
         const idx = document.getElementById('sel-rap-murid').value;
         const m = db.murid[idx];
         const tanggal = document.getElementById('rap-current-date').value;
-
-        const zIdx = document.getElementById('z-surat').value;
+        
         let zText = "-";
-        if(zIdx !== "") {
-            const zName = daftarSurat[zIdx].n;
-            const zStart = document.getElementById('z-start').value;
-            const zEnd = document.getElementById('z-end').value;
-            const zStat = document.getElementById('z-status').value;
-            zText = `${zName} Ayat ${zStart}-${zEnd} (${zStat})`;
-        }
-
-        const mIdx = document.getElementById('m-surat').value;
+        const zIdx = document.getElementById('z-surat').value;
+        if(zIdx !== "") { zText = `${daftarSurat[zIdx].n} Ayat ${document.getElementById('z-start').value}-${document.getElementById('z-end').value} (${document.getElementById('z-status').value})`; }
+        
         let mText = "-";
-        if(mIdx !== "") {
-            const mName = daftarSurat[mIdx].n;
-            const mStart = document.getElementById('m-start').value;
-            const mEnd = document.getElementById('m-end').value;
-            const mStat = document.getElementById('m-status').value;
-            mText = `${mName} Ayat ${mStart}-${mEnd} (${mStat})`;
-        }
+        const mIdx = document.getElementById('m-surat').value;
+        if(mIdx !== "") { mText = `${daftarSurat[mIdx].n} Ayat ${document.getElementById('m-start').value}-${document.getElementById('m-end').value} (${document.getElementById('m-status').value})`; }
 
-        const text = 
-            `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A` +
-            `📅 ${tanggal}%0A%0A` +
-            `📖 *ZIYADAH (Hafalan Baru):*%0A${zText}%0A%0A` +
-            `🔄 *MUROJAAH (Mengulang):*%0A${mText}%0A%0A` +
-            `_Mohon doanya agar ananda istiqomah._ %0A` +
-            `_Barakallahu Fikum._`;
-
+        const text = `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A📅 ${tanggal}%0A%0A📖 *ZIYADAH (Hafalan Baru):*%0A${zText}%0A%0A🔄 *MUROJAAH (Mengulang):*%0A${mText}%0A%0A_Mohon doanya agar ananda istiqomah._%0A_Barakallahu Fikum._`;
         window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
     }
 
-    // --- 10. HEATMAP KALENDER ---
+    // --- HEATMAP ---
     function renderHeatmap() {
         const grid = document.getElementById('heatmap-grid');
         const title = document.getElementById('hm-period');
         if(!grid) return; 
-        
         grid.innerHTML = ""; 
-
-        const now = new Date();
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth(); 
-
+        const now = new Date(); const currentYear = now.getFullYear(); const currentMonth = now.getMonth(); 
         title.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
-
         const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-        for(let i=0; i<firstDayIndex; i++) {
-            const emptyBox = document.createElement('div');
-            emptyBox.className = 'hm-box empty';
-            grid.appendChild(emptyBox);
-        }
-
+        for(let i=0; i<firstDayIndex; i++) { const emptyBox = document.createElement('div'); emptyBox.className = 'hm-box empty'; grid.appendChild(emptyBox); }
         for(let i=1; i<=daysInMonth; i++) {
             const d = new Date(currentYear, currentMonth, i);
             const dateStr = d.toLocaleDateString('en-CA'); 
-            
-            const dateDisplay = d.toLocaleDateString('id-ID', { 
-                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
-            });
-
+            const dateDisplay = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
             let data = (dateStr === db.lastDate) ? db.pribadi : (db.history[dateStr] || null);
-
-            let level = 0;
-            let score = 0;
-            
+            let level = 0; let score = 0;
             let detailHTML = `<b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br><span style="color:#999; font-size:11px;">Belum ada catatan ibadah.</span>`;
-
             if (data) {
-                if(data.dhuha > 0) score++;
-                if(data.tahajjud > 0) score++;
-                if(data.tilawah > 0) score++;
-                if(data.shodaqoh > 0) score++;
-
-                if(score === 1) level = 1;
-                else if(score === 2) level = 2;
-                else if(score === 3) level = 3;
-                else if(score >= 4) level = 4;
-
+                if(data.dhuha > 0) score++; if(data.tahajjud > 0) score++; if(data.tilawah > 0) score++; if(data.shodaqoh > 0) score++;
+                if(score === 1) level = 1; else if(score === 2) level = 2; else if(score === 3) level = 3; else if(score >= 4) level = 4;
                 const uang = (parseInt(data.shodaqoh)||0).toLocaleString('id-ID');
-                
-                detailHTML = `
-                <b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br>
-                <div style="margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">
-                ☀️ Dhuha: <b>${data.dhuha}</b> Rakaat<br>
-                🌙 Tahajjud: <b>${data.tahajjud}</b> Rakaat<br>
-                📖 Tilawah: <b>${data.tilawah}</b> Lembar<br>
-                💰 Sedekah: <b>Rp ${uang}</b><br>
-                ${data.puasa ? '✅ <b style="color:green">Puasa</b>' : '❌ <span style="opacity:0.7">Tidak Puasa</span>'}
-                </div>`;
+                detailHTML = `<b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br><div style="margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">☀️ Dhuha: <b>${data.dhuha}</b> Rakaat<br>🌙 Tahajjud: <b>${data.tahajjud}</b> Rakaat<br>📖 Tilawah: <b>${data.tilawah}</b> Lembar<br>💰 Sedekah: <b>Rp ${uang}</b><br>${data.puasa ? '✅ <b style="color:green">Puasa</b>' : '❌ <span style="opacity:0.7">Tidak Puasa</span>'}</div>`;
             }
-
-            const box = document.createElement('div');
-            box.className = `hm-box hm-lvl-${level}`;
-            box.innerText = i; 
-            
-            if(dateStr === db.lastDate) {
-                box.style.border = "2px solid var(--accent-color)";
-                box.style.color = "var(--accent-color)";
-                box.style.fontWeight = "800";
-            }
-
+            const box = document.createElement('div'); box.className = `hm-box hm-lvl-${level}`; box.innerText = i; 
+            if(dateStr === db.lastDate) { box.style.border = "2px solid var(--accent-color)"; box.style.color = "var(--accent-color)"; box.style.fontWeight = "800"; }
             box.onclick = function() {
-                document.querySelectorAll('.hm-box').forEach(b => {
-                    b.classList.remove('selected');
-                    if(b.innerText == new Date().getDate()) b.style.border = "2px solid var(--accent-color)";
-                    else if(!b.classList.contains('empty')) b.style.border = "none";
-                });
-                
-                this.classList.add('selected');
-                document.getElementById('hm-detail').innerHTML = detailHTML;
+                document.querySelectorAll('.hm-box').forEach(b => { b.classList.remove('selected'); if(b.innerText == new Date().getDate()) b.style.border = "2px solid var(--accent-color)"; else if(!b.classList.contains('empty')) b.style.border = "none"; });
+                this.classList.add('selected'); document.getElementById('hm-detail').innerHTML = detailHTML;
             };
-
             grid.appendChild(box);
         }
     }
 
-    // --- 11. DASHBOARD HIDUP ---
+    // --- PRAYER TIMES ---
     const PrayTimes = {
         calc: function(date, lat, lng, timezone) {
-            const D = date.getDate();
-            const M = date.getMonth() + 1;
-            const Y = date.getFullYear();
+            const D = date.getDate(); const M = date.getMonth() + 1; const Y = date.getFullYear();
             const JD = 367 * Y - Math.floor(7 * (Y + Math.floor((M + 9) / 12)) / 4) + Math.floor(275 * M / 9) + D + 1721013.5 - timezone / 24;
             const T = 2 * Math.PI * (JD - 2451545) / 36525;
             const L0 = (280.46607 + 36000.7698 * T / (2 * Math.PI)) * (Math.PI / 180);
             const M0 = (357.52911 + 35999.05029 * T / (2 * Math.PI)) * (Math.PI / 180);
-            const C = (1.914602 - 0.004817 * T / (2 * Math.PI)) * Math.sin(M0) + (0.019993 - 0.000101 * T / (2 * Math.PI)) * Math.sin(2 * M0);
-            const trueLong = L0 + C * (Math.PI / 180);
+            const trueLong = L0 + ((1.914602 - 0.004817 * T / (2 * Math.PI)) * Math.sin(M0)) * (Math.PI / 180);
             const Ra = Math.atan2(Math.cos(0.4090928) * Math.sin(trueLong), Math.cos(trueLong));
             const Dec = Math.asin(Math.sin(0.4090928) * Math.sin(trueLong));
-            const EqT = 4 * (L0 * (180 / Math.PI) - Ra * (180 / Math.PI));
-            const timeOffset = 12 - (lng / 15) - (EqT / 60);
-            const getHourAngle = (angle) => {
-                return Math.acos((Math.sin(-angle * (Math.PI / 180)) - Math.sin(lat * (Math.PI / 180)) * Math.sin(Dec)) / (Math.cos(lat * (Math.PI / 180)) * Math.cos(Dec))) * (180 / Math.PI) / 15;
-            };
-
-            const subuhAngle = 18; 
-            const isyaAngle = 18;  
+            const timeOffset = 12 - (lng / 15) - (4 * (L0 * (180 / Math.PI) - Ra * (180 / Math.PI)) / 60);
+            const getHourAngle = (angle) => Math.acos((Math.sin(-angle * (Math.PI / 180)) - Math.sin(lat * (Math.PI / 180)) * Math.sin(Dec)) / (Math.cos(lat * (Math.PI / 180)) * Math.cos(Dec))) * (180 / Math.PI) / 15;
             
+            const subuh = timeOffset - getHourAngle(18);
             const dzuhur = timeOffset;
-            const subuh = dzuhur - getHourAngle(subuhAngle);
-            const terbit = dzuhur - getHourAngle(0.833);
-            const maghrib = dzuhur + getHourAngle(0.833);
-            const isya = dzuhur + getHourAngle(isyaAngle);
             const asharAngle = Math.atan(1 / (1 + Math.tan(Math.abs(lat * (Math.PI / 180) - Dec))));
-            const ashar = dzuhur + (Math.acos((Math.sin(asharAngle) - Math.sin(lat * (Math.PI / 180)) * Math.sin(Dec)) / (Math.cos(lat * (Math.PI / 180)) * Math.cos(Dec))) * (180 / Math.PI) / 15);
+            const ashar = timeOffset + (Math.acos((Math.sin(asharAngle) - Math.sin(lat * (Math.PI / 180)) * Math.sin(Dec)) / (Math.cos(lat * (Math.PI / 180)) * Math.cos(Dec))) * (180 / Math.PI) / 15);
+            const maghrib = timeOffset + getHourAngle(0.833);
+            const isya = timeOffset + getHourAngle(18);
 
-            const toTime = (dec) => {
-                const h = Math.floor(dec);
-                const m = Math.floor((dec - h) * 60);
-                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            };
-
-            return {
-                Subuh: toTime(subuh + timezone),
-                Terbit: toTime(terbit + timezone),
-                Dzuhur: toTime(dzuhur + timezone),
-                Ashar: toTime(ashar + timezone),
-                Maghrib: toTime(maghrib + timezone),
-                Isya: toTime(isya + timezone)
-            };
+            const toTime = (dec) => { const h = Math.floor(dec); const m = Math.floor((dec - h) * 60); return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`; };
+            return { Subuh: toTime(subuh + timezone), Dzuhur: toTime(dzuhur + timezone), Ashar: toTime(ashar + timezone), Maghrib: toTime(maghrib + timezone), Isya: toTime(isya + timezone) };
         }
     };
 
     function initDashboard() {
-        // --- LOGIKA BARU: AMBIL DARI DATABASE SETTINGS ---
-        // Jika belum ada setting (pengguna baru), default Jakarta
-        let lat = db.settings.lat || -6.2088; 
-        let lng = db.settings.lng || 106.8456;
-        
-        // Update Jadwal Shalat berdasarkan Koordinat Statis
+        const lat = db.settings.lat || -6.2088;
+        const lng = db.settings.lng || 106.8456;
         updatePrayerTimes(lat, lng);
-        
-        // Render Dropdown Kota (Supaya pas buka setting pilihannya muncul)
         initKotaSelector();
+        
+        try {
+            const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+            const headerSub = document.querySelector('header .greeting h1'); 
+            if(headerSub) headerSub.innerHTML = `<span style="color:var(--btn-bg); font-weight:bold;">${hijriDate}</span>`;
+        } catch(e) {}
     }
 
     function updatePrayerTimes(lat, lng) {
         const times = PrayTimes.calc(new Date(), lat, lng, 7); 
-        const now = new Date();
-        const curTime = now.getHours() * 60 + now.getMinutes();
+        const now = new Date(); const curTime = now.getHours() * 60 + now.getMinutes();
         const toMins = (t) => parseInt(t.split(':')[0])*60 + parseInt(t.split(':')[1]);
         
-        let nextPrayer = "Subuh";
-        let nextTime = times.Subuh;
-
+        let nextPrayer = "Subuh"; let nextTime = times.Subuh;
         if (curTime < toMins(times.Subuh)) { nextPrayer = "Subuh"; nextTime = times.Subuh; }
         else if (curTime < toMins(times.Dzuhur)) { nextPrayer = "Dzuhur"; nextTime = times.Dzuhur; }
         else if (curTime < toMins(times.Ashar)) { nextPrayer = "Ashar"; nextTime = times.Ashar; }
@@ -1602,46 +1133,17 @@
         else if (curTime < toMins(times.Isya)) { nextPrayer = "Isya"; nextTime = times.Isya; }
         else { nextPrayer = "Subuh"; nextTime = times.Subuh; } 
 
-        // Perbaikan Selector: Kita cari 'p.greeting' BUKAN '.greeting h2'
-        const greetingElement = document.querySelector('.greeting'); 
-    
-    if(greetingElement) {
-        greetingElement.innerHTML = `
-        <span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br>
-        <div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">
-            🕋 ${nextPrayer}: <b>${nextTime}</b> WIB
-        </div>`;
-    }
+        const greetingElement = document.querySelector('p.greeting'); 
+        if(greetingElement) {
+            greetingElement.innerHTML = `<span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br><div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">🕋 ${nextPrayer}: <b>${nextTime}</b> WIB</div>`;
+        }
     }
 
-    // --- INIT (KUNCI KONTAK) ---
+    // --- INIT ---
     window.onload = () => {
-        checkNewDay();      
-        initDashboard(); // Ini akan memanggil updatePrayerTimes + initKotaSelector
-        applyTheme();       
-        renderDateHeader(); 
-        updateUI();         
-        renderCalendar();   
+        checkNewDay(); initDashboard(); applyTheme(); renderDateHeader(); updateUI(); renderCalendar();   
     };
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
