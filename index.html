@@ -522,11 +522,27 @@
         <h2>Pengaturan Aplikasi</h2>
         
         <div class="card">
-            <h4><i class="ph ph-lock-key"></i> Akses Guru (Login)</h4>
-            <p style="font-size:12px; margin-bottom:10px;">Masukkan PIN untuk membuka fitur Murid.</p>
-            <input type="password" id="admin-pass" placeholder="PIN Default: 1234">
-            <button class="btn-primary" onclick="verifikasiLogin()">Verifikasi</button>
-            <p id="login-status" style="font-size:12px; margin-top:5px; color:var(--accent-color)"></p>
+            <h4><i class="ph ph-user-circle"></i> Profil Pengguna</h4>
+            <p style="font-size:12px; margin-bottom:10px;">Nama ini akan muncul di halaman depan.</p>
+            
+            <label style="font-size:12px; font-weight:bold;">Nama Panggilan:</label>
+            <input type="text" id="set-name" placeholder="Contoh: Mas Fajar" onchange="saveProfile()">
+            
+            <label style="font-size:12px; font-weight:bold;">Ganti PIN Akses:</label>
+            <input type="number" id="set-pin" placeholder="PIN Baru (Angka)" onchange="saveProfile()">
+            
+            <button class="btn-primary" onclick="saveProfile()" style="margin-top:5px; background:var(--accent-color); color:white;">
+                <i class="ph ph-floppy-disk"></i> Simpan Profil
+            </button>
+        </div>
+
+        <div class="card" style="border-left: 5px solid var(--btn-bg);">
+            <h4><i class="ph ph-lock-key"></i> Akses Data Santri</h4>
+            <p style="font-size:12px; margin-bottom:10px;">Masukkan PIN Anda untuk membuka menu Murid & Raport.</p>
+            
+            <input type="password" id="admin-pass" placeholder="Masukkan PIN Anda">
+            <button class="btn-primary" onclick="verifikasiLogin()">Buka Akses</button>
+            <p id="login-status" style="font-size:12px; margin-top:5px; font-weight:bold;"></p>
         </div>
 
         <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
@@ -536,21 +552,12 @@
             </div>
         </div>
 
-        <div class="card" style="border: 1px solid var(--accent-color);">
-            <h4><i class="ph ph-heart" style="color:var(--accent-color)"></i> Dukungan Dakwah</h4>
-            <p style="font-size:12px; margin-bottom:10px;">Bantu operasional pengembangan Amala App.</p>
-            <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px;">
-                <b style="font-size:14px; display:block;">BANK JAGO</b>
-                <span style="font-size:18px; font-weight:700; letter-spacing:1px;">5012-9872-3886</span>
-            </div>
-        </div>
-
         <div class="card">
-            <h4><i class="ph ph-info"></i> Info Developer</h4>
-            <p style="font-size:12px; margin-bottom:5px;"><b>Amala Team</b><br>Email: amala.domain@gmail.com</p>
-            <p style="font-size:12px;"><b>CS / Pendampingan:</b><br>0898-6691-457</p>
+            <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
+            <p style="font-size:12px;"><b>Amala Pro System v2.3</b><br>Developed by Amala Team.</p>
         </div>
-    </div>    
+    </div>
+    
     <div id="page-pagi" class="page">
        <div class="header-dzikir">
     <button onclick="openPage('amalan')" class="btn-back-custom">
@@ -832,23 +839,30 @@
 
 <script>
     // --- 1. CONFIG & STATE (MESIN WAKTU AKTIF) ---
+    // --- 1. CONFIG & STATE ---
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
 
     if (rawData) {
         db = JSON.parse(rawData);
-        if (!db.history) {
-            db.history = {}; 
-            db.lastDate = new Date().toLocaleDateString('en-CA');
-            if(!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
-        }
+        // MIGRASI: Pastikan setting nama & pin ada
+        if (!db.settings.userName) db.settings.userName = "Hamba Allah";
+        if (!db.settings.pin) db.settings.pin = "1234"; // Default PIN
+        // ... (kode history lama biarkan) ...
     } else {
+        // DATABASE BARU (Fresh Install)
         db = {
             murid: [],
             pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
             history: {}, 
             lastDate: new Date().toLocaleDateString('en-CA'), 
-            settings: { darkMode: false, isLoggedIn: false, pin: "1234" }
+            // SETTING DINAMIS (Bisa Diubah User)
+            settings: { 
+                darkMode: false, 
+                isLoggedIn: false, 
+                pin: "1234",           // PIN Default
+                userName: "Hamba Allah" // Nama Default
+            }
         };
     }
 
@@ -1454,6 +1468,32 @@
         } catch(e) { console.log("Kalender Hijriah error di browser ini"); }
     }
 
+    // --- FUNGSI SAVE PROFIL BARU ---
+    function saveProfile() {
+        const newName = document.getElementById('set-name').value;
+        const newPin = document.getElementById('set-pin').value;
+        
+        if(newName) db.settings.userName = newName;
+        if(newPin) db.settings.pin = newPin;
+        
+        save();
+        alert("✅ Profil & PIN berhasil disimpan!");
+        
+        // Render ulang header biar nama langsung berubah
+        initDashboard(); 
+    }
+
+    // --- UPDATE NAVIGASI (Supaya Form Terisi Saat Buka Setting) ---
+    function openPage(pageId, el) {
+        // ... (kode lama biarkan) ...
+        
+        // TAMBAHAN: Kalau buka setting, isi form dengan data sekarang
+        if(pageId === 'setting') {
+            document.getElementById('set-name').value = db.settings.userName;
+            document.getElementById('set-pin').value = db.settings.pin;
+        }
+    }
+
     function updatePrayerTimes(lat, lng) {
         const times = PrayTimes.calc(new Date(), lat, lng, 7); 
         const now = new Date();
@@ -1472,8 +1512,9 @@
 
         const greeting = document.querySelector('.greeting h2');
         if(greeting) {
+            // GANTI 'Mas Fajar' DENGAN VARIABEL INI:
             greeting.innerHTML = `
-            Mas Fajar <br>
+            ${db.settings.userName} <br> 
             <div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">
                 🕋 ${nextPrayer}: <b>${nextTime}</b> WIB
             </div>`;
@@ -1493,6 +1534,7 @@
 
 </body>
 </html>
+
 
 
 
