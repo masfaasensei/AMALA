@@ -993,29 +993,74 @@
 
     function renderRaportPage() {
         const div = document.getElementById('raport-content');
-        if(db.murid.length === 0) { div.innerHTML = `<div class="card">Tambah murid dulu.</div>`; return; }
         
+        // Cek jika murid kosong
+        if(db.murid.length === 0) { 
+            div.innerHTML = `<div class="card">Tambah data murid dulu di menu Murid.</div>`; 
+            return; 
+        }
+        
+        // 1. Ambil Tanggal Hari Ini (Sinkron dengan Kalender HP)
+        const d = new Date();
+        const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+        // 2. Siapkan Dropdown Murid
         let opts = "";
         db.murid.forEach((m, i) => opts += `<option value="${i}">${m.nama}</option>`);
 
+        // 3. Render HTML (Ada tambahan Tampilan Tanggal & Input Hidden Tanggal)
         div.innerHTML = `
         <div class="card">
-            <label>Santri:</label><select id="sel-rap-murid">${opts}</select>
-            <label>Ziyadah:</label><input type="text" id="rap-ziyadah" placeholder="Hafalan Baru">
-            <label>Murojaah:</label><input type="text" id="rap-murojaah" placeholder="Mengulang">
-            <button class="btn-primary" onclick="kirimWA()"><i class="ph ph-whatsapp-logo"></i> Kirim</button>
+            
+            <div style="text-align:center; margin-bottom:20px; padding-bottom:15px; border-bottom:1px dashed #ccc;">
+                <small style="color:#666; font-size:12px;">Laporan untuk Hari:</small><br>
+                <b style="font-size:16px; color:var(--btn-bg); text-transform:uppercase;">${dateStr}</b>
+                <input type="hidden" id="rap-current-date" value="${dateStr}">
+            </div>
+
+            <label style="font-size:12px; font-weight:600; margin-left:5px;">Santri:</label>
+            <select id="sel-rap-murid" style="margin-top:5px;">${opts}</select>
+            
+            <label style="font-size:12px; font-weight:600; margin-left:5px;">Ziyadah (Hafalan Baru):</label>
+            <input type="text" id="rap-ziyadah" placeholder="Contoh: An-Naba Ayat 1-5" style="margin-top:5px;">
+            
+            <label style="font-size:12px; font-weight:600; margin-left:5px;">Murojaah (Mengulang):</label>
+            <input type="text" id="rap-murojaah" placeholder="Contoh: Juz 30 Lancar" style="margin-top:5px;">
+            
+            <button class="btn-primary" onclick="kirimWA()">
+                <i class="ph ph-whatsapp-logo" style="font-size:18px;"></i> Kirim Laporan
+            </button>
         </div>`;
     }
 
     function kirimWA() {
+        // 1. Ambil Data Murid & Hafalan
         const idx = document.getElementById('sel-rap-murid').value;
-        const m = db.murid[idx];
-        const ziyadah = document.getElementById('rap-ziyadah').value;
-        const murojaah = document.getElementById('rap-murojaah').value;
-        const text = `*LAPORAN AMALA*%0A%0A👤 ${m.nama}%0A📈 Hafalan: ${ziyadah}%0A🔄 Murojaah: ${murojaah}`;
-        window.open(`https://wa.me/${m.wa}?text=${text}`);
-    }
+        const m = db.murid[idx]; // Ambil data murid (nama & wa)
+        
+        // Ambil isi hafalan (Kalau kosong, otomatis diisi tanda "-")
+        const ziyadah = document.getElementById('rap-ziyadah').value || "-"; 
+        const murojaah = document.getElementById('rap-murojaah').value || "-";
+        
+        // Ambil Tanggal Hari Ini (dari sistem yang tadi kita buat)
+        const tanggal = document.getElementById('rap-current-date').value;
 
+        // 2. Susun Format Pesan WhatsApp (Sesuai Request)
+        // %0A artinya Enter (Ganti Baris)
+        // Tanda bintang (*) artinya Huruf Tebal di WA
+        
+        const text = 
+            `Assalamu'alaikum Bapak/Ibu, berikut laporan untuk ananda *${m.nama}*%0A%0A` +
+            `📅 Hari/Tanggal: ${tanggal}%0A` +
+            `📖 Ziyadah: ${ziyadah}%0A` +
+            `🔄 Murojaah: ${murojaah}%0A%0A` +
+            `_Tetap Semangat Ya..._` +
+            `_Barakallahu Fikum_`;
+
+        // 3. Buka Aplikasi WhatsApp
+        // Pastikan nomor WA murid sudah tersimpan di database (m.wa)
+        window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
+    }
     function goBack() {
     switchPage('home'); // Mengarahkan kembali ke dashboard/home
 }
@@ -1032,5 +1077,6 @@
     
 </body>
 </html>
+
 
 
