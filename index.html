@@ -555,11 +555,9 @@
                 <div id="dm-toggle" style="width:20px; height:20px; background:var(--bg-body); border-radius:50%; position:absolute; left:3px; top:3px; transition:0.3s;"></div>
             </div>
         </div>
-
         <div class="card">
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
-            <p style="font-size:12px;"><b>Amala Pro System v2.3</b><br>Created by Mas Fajar</p>
-            <p style="font-size:12px;"><b>Support Dakwah</b><br>Bank Jago (5012-9872-3886)</p>
+            <p style="font-size:12px;"><b>Amala Pro System v2.3</b></p>
         </div>
     </div>
     
@@ -1004,78 +1002,70 @@
         }
     }
 
-    // --- 5. NAVIGATION (Updated) ---
+    // --- 5. NAVIGATION ---
     function openPage(pageId, el) {
-        // ... (Kode navigasi lama biarkan sama) ...
+        // 1. Logika Ganti Halaman (Tampilan)
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
+        
+        // 2. Logika Tab Aktif (Warna Menu Bawah)
         if(el) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
         }
         window.scrollTo(0,0);
         
-        // Render halaman spesifik
+        // 3. Render Halaman Khusus
         if(pageId === 'kalender') renderCalendar();
+        if(pageId === 'statistik') renderHeatmap();
+        
+        // Cek Akses untuk Murid & Raport
         if(pageId === 'murid') {
             if(db.settings.isLoggedIn) renderMuridPage(); else openPage('setting');
         }
         if(pageId === 'raport') {
             if(db.settings.isLoggedIn) renderRaportPage(); else openPage('setting');
         }
-        if(pageId === 'statistik') renderHeatmap();
 
-        // JIKA BUKA SETTING -> JALANKAN LOGIKA PINTAR
-        if(pageId === 'setting') renderSettings();
+        // 4. >>> INI POIN B YANG SAYA MAKSUD <<<
+        // (Wajib ada biar halaman Setting tahu harus menampilkan Sign Up atau Login)
+        if(pageId === 'setting') renderSettings(); 
+
     }
 
-    // --- LOGIKA PINTAR HALAMAN SETTING ---
     function renderSettings() {
         const pSetup = document.getElementById('panel-setup');
         const pLogin = document.getElementById('panel-login');
         const btnLogout = document.getElementById('btn-logout');
         
-        // KONDISI 1: PENGGUNA BARU (Belum pernah setup)
+        // KONDISI 1: PENGGUNA BARU (Belum Setup) -> Tampilkan Form Sign Up
         if (!db.settings.setupDone) {
             pSetup.style.display = 'block';
             pLogin.style.display = 'none';
-            
-            // Ubah Teks jadi "Sign Up Mode"
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
-            document.getElementById('setup-desc').innerText = 'Mari siapkan profil Anda sebelum mulai.';
             document.getElementById('setup-btn-text').innerText = 'Buat Profil & Masuk';
-            btnLogout.style.display = 'none'; // Sembunyikan logout
-            
+            btnLogout.style.display = 'none';
             // Kosongkan form
             document.getElementById('set-name').value = "";
             document.getElementById('set-pin').value = "";
         } 
-        
-        // KONDISI 2: SUDAH SETUP, TAPI BELUM LOGIN (Terkunci)
+        // KONDISI 2: SUDAH SETUP, BELUM LOGIN -> Tampilkan Login Saja
         else if (db.settings.setupDone && !db.settings.isLoggedIn) {
-            pSetup.style.display = 'none'; // Sembunyikan profil (Keamanan)
-            pLogin.style.display = 'block'; // Munculkan Login
-            document.getElementById('login-pass').value = ""; // Reset input
-            document.getElementById('login-status').innerText = "";
+            pSetup.style.display = 'none'; 
+            pLogin.style.display = 'block';
         }
-        
-        // KONDISI 3: SUDAH LOGIN (Mode Admin/Edit)
+        // KONDISI 3: SUDAH LOGIN -> Tampilkan Edit Profil
         else {
             pSetup.style.display = 'block';
             pLogin.style.display = 'none';
-            
-            // Ubah Teks jadi "Edit Mode"
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
-            document.getElementById('setup-desc').innerText = 'Ubah nama atau PIN akses Anda di sini.';
             document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
-            btnLogout.style.display = 'block'; // Munculkan logout
-            
-            // Isi form dengan data lama
+            btnLogout.style.display = 'block';
+            // Isi form dengan data yang ada
             document.getElementById('set-name').value = db.settings.userName;
             document.getElementById('set-pin').value = db.settings.pin;
         }
     }
-
     // --- ACTION BUTTONS ---
 
     function saveProfile() {
@@ -1083,23 +1073,29 @@
         const newPin = document.getElementById('set-pin').value;
         
         if(!newName || !newPin) {
-            alert("⚠️ Harap isi Nama dan PIN!");
-            return;
+            alert("⚠️ Harap isi Nama dan PIN!"); return;
         }
 
         db.settings.userName = newName;
         db.settings.pin = newPin;
-        db.settings.setupDone = true;  // Tandai sudah setup
-        db.settings.isLoggedIn = true; // Auto login setelah simpan
+        db.settings.setupDone = true;  // TANDAI SUDAH SIGN UP
+        db.settings.isLoggedIn = true; // Auto login
         
         save();
         alert("✅ Data tersimpan! Anda sekarang Login.");
         
-        // Refresh halaman setting (biar pindah ke tampilan 'Logged In')
         initDashboard(); // Update header nama
-        renderSettings(); 
+        renderSettings(); // Refresh tampilan setting
     }
-
+    
+    function logout() {
+        if(confirm("Log Out akan mengunci akses data santri. Lanjutkan?")) {
+            db.settings.isLoggedIn = false;
+            save();
+            renderSettings(); // Akan otomatis pindah ke panel Login
+        }
+    }
+    
     function verifikasiLogin() {
         const inputPin = document.getElementById('login-pass').value;
         
@@ -1590,6 +1586,7 @@
 
 </body>
 </html>
+
 
 
 
