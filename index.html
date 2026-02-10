@@ -841,46 +841,42 @@
 </div>
 
 <script>
-    // --- 1. CONFIG & STATE (MESIN WAKTU & PROFIL AKTIF) ---
-    // Kita cek apakah database lama ada isinya
+    // --- 1. CONFIG & STATE (MESIN WAKTU AKTIF) ---
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
 
     if (rawData) {
         db = JSON.parse(rawData);
         
-        // MIGRASI: Pastikan setting nama, pin, dan STATUS SETUP ada
-        if (!db.settings) db.settings = { darkMode: false, isLoggedIn: false, pin: "1234", userName: "Hamba Allah" };
-        
-        // Cek apakah user ini sudah pernah setup profil?
-        // Kalau belum ada variable 'setupDone', kita anggap FALSE (harus sign up dulu)
-        if (typeof db.settings.setupDone === 'undefined') {
-            db.settings.setupDone = false; 
-            
-            // TAPI... Kalau ini Mas Fajar (sedang ngetes dan punya data lama), 
-            // kita anggap sudah setup biar gak kaget.
-            if(db.settings.pin !== "1234") db.settings.setupDone = true;
+        // --- PERBAIKAN PENTING DI SINI ---
+        // Jika data lama tidak punya 'settings', kita buatkan paksa!
+        if (!db.settings) {
+            db.settings = { 
+                darkMode: false, 
+                isLoggedIn: false, 
+                setupDone: false, 
+                pin: "1234", 
+                userName: "Hamba Allah" 
+            };
         }
-
+        // Jaga-jaga jika settings ada tapi userName hilang
+        if (!db.settings.userName) db.settings.userName = "Hamba Allah";
+        if (!db.settings.pin) db.settings.pin = "1234";
+        
+        // Cek History (Seperti sebelumnya)
         if (!db.history) {
             db.history = {}; 
             db.lastDate = new Date().toLocaleDateString('en-CA');
             if(!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
         }
     } else {
-        // --- INI BAGIAN "DATABASE BARU" (JIKA PENGGUNA BARU INSTALL) ---
+        // ... (Bagian 'else' biarkan sama seperti sebelumnya) ...
         db = {
             murid: [],
             pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
             history: {}, 
             lastDate: new Date().toLocaleDateString('en-CA'), 
-            settings: { 
-                darkMode: false, 
-                isLoggedIn: false, 
-                setupDone: false, // <--- PENANDA: User Baru (Belum Sign Up)
-                pin: "1234",           
-                userName: "Hamba Allah" 
-            }
+            settings: { darkMode: false, isLoggedIn: false, setupDone: false, pin: "1234", userName: "Hamba Allah" }
         };
     }
 
@@ -1583,9 +1579,9 @@
         renderCalendar();   
     };
 </script>
-
 </body>
 </html>
+
 
 
 
