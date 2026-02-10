@@ -749,12 +749,62 @@
 </div>
 
 <script>
-    // --- 1. CONFIG & STATE ---
-    let db = JSON.parse(localStorage.getItem('amala_pro_db_v23')) || {
-        murid: [],
-        pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasaMonth: 0, puasaYear: 0 },
-        settings: { darkMode: false, isLoggedIn: false, pin: "1234" }
-    };
+    // --- 1. CONFIG & STATE (MESIN WAKTU AKTIF) ---
+    // Kita cek apakah database lama ada isinya
+    let rawData = localStorage.getItem('amala_pro_db_v23');
+    let db;
+
+    if (rawData) {
+        db = JSON.parse(rawData);
+        // MIGRASI: Cek apakah DB ini versi lama (belum punya history)
+        if (!db.history) {
+            db.history = {}; // Buat laci history baru
+            db.lastDate = new Date().toLocaleDateString('en-CA'); // Format YYYY-MM-DD
+            // Pastikan struktur pribadi lengkap
+            if(!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
+        }
+    } else {
+        // DATABASE BARU (Fresh Install)
+        db = {
+            murid: [],
+            // Counter Hari Ini
+            pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false },
+            // Arsip Masa Lalu (Format: "2026-02-09": { ...data... })
+            history: {}, 
+            // Penanda Tanggal Terakhir Buka
+            lastDate: new Date().toLocaleDateString('en-CA'), 
+            settings: { darkMode: false, isLoggedIn: false, pin: "1234" }
+        };
+    }
+
+    // --- FUNGSI CEK GANTI HARI (RESET JAM 00:00) ---
+    function checkNewDay() {
+        const todayStr = new Date().toLocaleDateString('en-CA'); // Format YYYY-MM-DD
+        
+        // JIKA HARI SUDAH BERGANTI
+        if (db.lastDate !== todayStr) {
+            console.log("Ganti hari terdeteksi! Mengarsipkan data kemarin...");
+
+            // 1. Simpan data kemarin ke History
+            db.history[db.lastDate] = JSON.parse(JSON.stringify(db.pribadi));
+
+            // 2. Reset Counter Hari Ini jadi 0
+            db.pribadi = { 
+                dhuha: 0, 
+                tahajjud: 0, 
+                tilawah: 0, 
+                shodaqoh: 0, 
+                puasa: false 
+            };
+
+            // 3. Update Tanggal Terakhir ke Hari Ini
+            db.lastDate = todayStr;
+            
+            // 4. Simpan Perubahan
+            save();
+            alert("☀️ Assalamu'alaikum! Lembaran amalan hari baru telah dibuka.");
+        }
+    }
 
     // --- DATABASE AL-QURAN (NAMA & JUMLAH AYAT) ---
     const daftarSurat = [
@@ -806,34 +856,62 @@
         // Stats Text
         document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
         document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
-        document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString();
-        document.getElementById('stat-puasa-month').innerText = db.pribadi.puasaMonth;
-        document.getElementById('stat-puasa-year').innerText = db.pribadi.puasaYear;
+        // Format Rupiah
+        document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString('id-ID');
         
-        // Donut Logic
+        // --- LOGIKA BARU: HITUNG TOTAL PUASA DARI HISTORY ---
+        let countMonth = 0;
+        let countYear = 0;
+        const currentMonthPrefix = new Date().toLocaleDateString('en-CA').substring(0, 7); // "2026-02"
+        const currentYearPrefix = new Date().toLocaleDateString('en-CA').substring(0, 4);  // "2026"
+
+        // 1. Hitung dari Arsip History
+        if (db.history) {
+            Object.keys(db.history).forEach(dateKey => {
+                // Cek apakah di tanggal tersebut puasa = true
+                if(db.history[dateKey].puasa) {
+                    if(dateKey.startsWith(currentMonthPrefix)) countMonth++;
+                    if(dateKey.startsWith(currentYearPrefix)) countYear++;
+                }
+            });
+        }
+
+        // 2. Tambah hari ini jika sedang puasa
+        if(db.pribadi.puasa) {
+            countMonth++;
+            countYear++;
+        }
+
+        // Tampilkan Hasil
+        document.getElementById('stat-puasa-month').innerText = countMonth;
+        document.getElementById('stat-puasa-year').innerText = countYear;
+        
+        // Donut Logic (Produktifitas Harian)
         let score = 0;
-        if(db.pribadi.dhuha > 0) score += 25;
-        if(db.pribadi.tahajjud > 0) score += 25;
-        if(db.pribadi.tilawah > 0) score += 25;
+        if(db.pribadi.dhuha >= 2) score += 25; 
+        if(db.pribadi.tahajjud >= 2) score += 25;
+        if(db.pribadi.tilawah >= 1) score += 25;
         if(db.pribadi.shodaqoh > 0) score += 25;
         
         document.getElementById('daily-percent').innerText = score + "%";
         document.getElementById('daily-donut').style.background = `conic-gradient(var(--btn-bg) ${score}%, rgba(0,0,0,0.1) ${score}% 100%)`;
         
-        // Update Counters Amalan
-        ['dhuha', 'tahajjud', 'tilawah'].forEach(k => {
-            document.getElementById('val-'+k).innerText = db.pribadi[k];
-        });
+        // Update Counters Amalan di Halaman Depan
+        if(document.getElementById('val-dhuha')) document.getElementById('val-dhuha').innerText = db.pribadi.dhuha;
+        if(document.getElementById('val-tahajjud')) document.getElementById('val-tahajjud').innerText = db.pribadi.tahajjud;
+        if(document.getElementById('val-tilawah')) document.getElementById('val-tilawah').innerText = db.pribadi.tilawah;
         
         // Shodaqoh Placeholder Logic
         const shodInput = document.getElementById('val-shodaqoh');
-        if(db.pribadi.shodaqoh > 0) {
-            shodInput.value = db.pribadi.shodaqoh;
-        } else {
-            shodInput.value = "";
+        if(shodInput) {
+            if(db.pribadi.shodaqoh > 0) {
+                shodInput.value = db.pribadi.shodaqoh;
+            } else {
+                shodInput.value = "";
+            }
         }
     }
-
+    
     // --- 3. TASBIH LOGIC (NEW) ---
     function countDzikir(type, val) {
         tasbih[type] = Math.max(0, tasbih[type] + val);
@@ -1163,12 +1241,15 @@
 
     // --- INIT ---
     window.onload = () => {
+        // 1. Panggil Mesin Waktu DULUAN (Supaya dicek tanggalnya sebelum tampil)
+        checkNewDay(); 
+        
+        // 2. Baru jalankan fungsi tampilan lainnya
         applyTheme();
         renderDateHeader();
         updateUI();
         renderCalendar();
     };
-
     // Fungsi Update Dropdown Ayat (Otomatis)
     function updateAyatOptions(prefix) {
         // Ambil index surat yang dipilih
@@ -1202,10 +1283,124 @@
         selEnd.value = maxAyat; 
     }
 
+    // --- 9. FITUR DASHBOARD HIDUP (PRAYER TIMES MUHAMMADIYAH) ---
+    
+    // Rumus Astronomis Sederhana
+    const PrayTimes = {
+        calc: function(date, lat, lng, timezone) {
+            const D = date.getDate();
+            const M = date.getMonth() + 1;
+            const Y = date.getFullYear();
+            const JD = 367 * Y - Math.floor(7 * (Y + Math.floor((M + 9) / 12)) / 4) + Math.floor(275 * M / 9) + D + 1721013.5 - timezone / 24;
+            const T = 2 * Math.PI * (JD - 2451545) / 36525;
+            const L0 = (280.46607 + 36000.7698 * T / (2 * Math.PI)) * (Math.PI / 180);
+            const M0 = (357.52911 + 35999.05029 * T / (2 * Math.PI)) * (Math.PI / 180);
+            const C = (1.914602 - 0.004817 * T / (2 * Math.PI)) * Math.sin(M0) + (0.019993 - 0.000101 * T / (2 * Math.PI)) * Math.sin(2 * M0);
+            const trueLong = L0 + C * (Math.PI / 180);
+            const Ra = Math.atan2(Math.cos(0.4090928) * Math.sin(trueLong), Math.cos(trueLong));
+            const Dec = Math.asin(Math.sin(0.4090928) * Math.sin(trueLong));
+            const EqT = 4 * (L0 * (180 / Math.PI) - Ra * (180 / Math.PI));
+            const timeOffset = 12 - (lng / 15) - (EqT / 60);
+            const getHourAngle = (angle) => {
+                return Math.acos((Math.sin(-angle * (Math.PI / 180)) - Math.sin(lat * (Math.PI / 180)) * Math.sin(Dec)) / (Math.cos(lat * (Math.PI / 180)) * Math.cos(Dec))) * (180 / Math.PI) / 15;
+            };
+
+            // PARAMETER MUHAMMADIYAH (-18 Derajat)
+            const subuhAngle = 18; 
+            const isyaAngle = 18;  
+            
+            const dzuhur = timeOffset;
+            const subuh = dzuhur - getHourAngle(subuhAngle);
+            const terbit = dzuhur - getHourAngle(0.833);
+            const maghrib = dzuhur + getHourAngle(0.833);
+            const isya = dzuhur + getHourAngle(isyaAngle);
+            const asharAngle = Math.atan(1 / (1 + Math.tan(Math.abs(lat * (Math.PI / 180) - Dec))));
+            const ashar = dzuhur + (Math.acos((Math.sin(asharAngle) - Math.sin(lat * (Math.PI / 180)) * Math.sin(Dec)) / (Math.cos(lat * (Math.PI / 180)) * Math.cos(Dec))) * (180 / Math.PI) / 15);
+
+            const toTime = (dec) => {
+                const h = Math.floor(dec);
+                const m = Math.floor((dec - h) * 60);
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            };
+
+            return {
+                Subuh: toTime(subuh + timezone),
+                Terbit: toTime(terbit + timezone),
+                Dzuhur: toTime(dzuhur + timezone),
+                Ashar: toTime(ashar + timezone),
+                Maghrib: toTime(maghrib + timezone),
+                Isya: toTime(isya + timezone)
+            };
+        }
+    };
+
+    // FUNGSI UTAMA DASHBOARD
+    function initDashboard() {
+        // Ambil Lokasi GPS
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                updatePrayerTimes(pos.coords.latitude, pos.coords.longitude);
+            }, (err) => {
+                console.log("GPS Error. Default Jakarta.");
+                updatePrayerTimes(-6.2088, 106.8456);
+            });
+        } else {
+            updatePrayerTimes(-6.2088, 106.8456);
+        }
+
+        // Tanggal Hijriah di Header
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        try {
+            const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', options).format(new Date());
+            const headerSub = document.querySelector('header .greeting h1'); 
+            if(headerSub) headerSub.innerHTML = `<span style="color:var(--btn-bg); font-weight:bold;">${hijriDate}</span>`;
+        } catch(e) { console.log("Kalender Hijriah error di browser ini"); }
+    }
+
+    function updatePrayerTimes(lat, lng) {
+        const times = PrayTimes.calc(new Date(), lat, lng, 7); // 7 = WIB
+        
+        // Tentukan Shalat Berikutnya
+        const now = new Date();
+        const curTime = now.getHours() * 60 + now.getMinutes();
+        const toMins = (t) => parseInt(t.split(':')[0])*60 + parseInt(t.split(':')[1]);
+        
+        let nextPrayer = "Subuh";
+        let nextTime = times.Subuh;
+
+        if (curTime < toMins(times.Subuh)) { nextPrayer = "Subuh"; nextTime = times.Subuh; }
+        else if (curTime < toMins(times.Dzuhur)) { nextPrayer = "Dzuhur"; nextTime = times.Dzuhur; }
+        else if (curTime < toMins(times.Ashar)) { nextPrayer = "Ashar"; nextTime = times.Ashar; }
+        else if (curTime < toMins(times.Maghrib)) { nextPrayer = "Maghrib"; nextTime = times.Maghrib; }
+        else if (curTime < toMins(times.Isya)) { nextPrayer = "Isya"; nextTime = times.Isya; }
+        else { nextPrayer = "Subuh"; nextTime = times.Subuh; } // Besok
+
+        // Tampilkan di Header
+        const greeting = document.querySelector('.greeting h2');
+        if(greeting) {
+            greeting.innerHTML = `
+            Mas Fajar <br>
+            <div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">
+                🕋 ${nextPrayer}: <b>${nextTime}</b> WIB
+            </div>`;
+        }
+    }
+
+    // --- INIT (KUNCI KONTAK) ---
+    window.onload = () => {
+        checkNewDay();      // 1. Cek Ganti Hari
+        initDashboard();    // 2. GPS & Jadwal Shalat
+        applyTheme();       // 3. Tema
+        renderDateHeader(); // 4. Tanggal
+        updateUI();         // 5. Update UI
+        renderCalendar();   // 6. Kalender
+    };
+    
 </script>
     
 </body>
 </html>
+
 
 
 
