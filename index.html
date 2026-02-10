@@ -755,6 +755,39 @@
         pribadi: { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasaMonth: 0, puasaYear: 0 },
         settings: { darkMode: false, isLoggedIn: false, pin: "1234" }
     };
+
+    // --- DATABASE AL-QURAN (NAMA & JUMLAH AYAT) ---
+    const daftarSurat = [
+        {n:"Al-Fatihah", a:7}, {n:"Al-Baqarah", a:286}, {n:"Ali 'Imran", a:200}, {n:"An-Nisa'", a:176},
+        {n:"Al-Ma'idah", a:120}, {n:"Al-An'am", a:165}, {n:"Al-A'raf", a:206}, {n:"Al-Anfal", a:75},
+        {n:"At-Taubah", a:129}, {n:"Yunus", a:109}, {n:"Hud", a:123}, {n:"Yusuf", a:111},
+        {n:"Ar-Ra'd", a:43}, {n:"Ibrahim", a:52}, {n:"Al-Hijr", a:99}, {n:"An-Nahl", a:128},
+        {n:"Al-Isra'", a:111}, {n:"Al-Kahf", a:110}, {n:"Maryam", a:98}, {n:"Ta Ha", a:135},
+        {n:"Al-Anbiya'", a:112}, {n:"Al-Hajj", a:78}, {n:"Al-Mu'minun", a:118}, {n:"An-Nur", a:64},
+        {n:"Al-Furqan", a:77}, {n:"Asy-Syu'ara'", a:227}, {n:"An-Naml", a:93}, {n:"Al-Qasas", a:88},
+        {n:"Al-Ankabut", a:69}, {n:"Ar-Rum", a:60}, {n:"Luqman", a:34}, {n:"As-Sajdah", a:30},
+        {n:"Al-Ahzab", a:73}, {n:"Saba'", a:54}, {n:"Fatir", a:45}, {n:"Ya Sin", a:83},
+        {n:"As-Saffat", a:182}, {n:"Sad", a:88}, {n:"Az-Zumar", a:75}, {n:"Ghafir", a:85},
+        {n:"Fussilat", a:54}, {n:"Asy-Syura", a:53}, {n:"Az-Zukhruf", a:89}, {n:"Ad-Dukhan", a:59},
+        {n:"Al-Jasiyah", a:37}, {n:"Al-Ahqaf", a:35}, {n:"Muhammad", a:38}, {n:"Al-Fath", a:29},
+        {n:"Al-Hujurat", a:18}, {n:"Qaf", a:45}, {n:"Az-Zariyat", a:60}, {n:"At-Tur", a:49},
+        {n:"An-Najm", a:62}, {n:"Al-Qamar", a:55}, {n:"Ar-Rahman", a:78}, {n:"Al-Waqi'ah", a:96},
+        {n:"Al-Hadid", a:29}, {n:"Al-Mujadilah", a:22}, {n:"Al-Hasyr", a:24}, {n:"Al-Mumtahanah", a:13},
+        {n:"As-Saff", a:14}, {n:"Al-Jumu'ah", a:11}, {n:"Al-Munafiqun", a:11}, {n:"At-Tagabun", a:18},
+        {n:"At-Talaq", a:12}, {n:"At-Tahrim", a:12}, {n:"Al-Mulk", a:30}, {n:"Al-Qalam", a:52},
+        {n:"Al-Haqqah", a:52}, {n:"Al-Ma'arij", a:44}, {n:"Nuh", a:28}, {n:"Al-Jinn", a:28},
+        {n:"Al-Muzzammil", a:20}, {n:"Al-Muddassir", a:56}, {n:"Al-Qiyamah", a:40}, {n:"Al-Insan", a:31},
+        {n:"Al-Mursalat", a:50}, {n:"An-Naba'", a:40}, {n:"An-Nazi'at", a:46}, {n:"'Abasa", a:42},
+        {n:"At-Takwir", a:29}, {n:"Al-Infitar", a:19}, {n:"Al-Mutaffifin", a:36}, {n:"Al-Insyiqaq", a:25},
+        {n:"Al-Buruj", a:22}, {n:"At-Tariq", a:17}, {n:"Al-A'la", a:19}, {n:"Al-Ghasyiyah", a:26},
+        {n:"Al-Fajr", a:30}, {n:"Al-Balad", a:20}, {n:"Asy-Syams", a:15}, {n:"Al-Lail", a:21},
+        {n:"Ad-Duha", a:11}, {n:"Al-Insyirah", a:8}, {n:"At-Tin", a:8}, {n:"Al-'Alaq", a:19},
+        {n:"Al-Qadr", a:5}, {n:"Al-Bayyinah", a:8}, {n:"Al-Zalzalah", a:8}, {n:"Al-'Adiyat", a:11},
+        {n:"Al-Qari'ah", a:11}, {n:"At-Takasur", a:8}, {n:"Al-'Asr", a:3}, {n:"Al-Humazah", a:9},
+        {n:"Al-Fil", a:5}, {n:"Quraisy", a:4}, {n:"Al-Ma'un", a:7}, {n:"Al-Kausar", a:3},
+        {n:"Al-Kafirun", a:6}, {n:"An-Nasr", a:3}, {n:"Al-Lahab", a:5}, {n:"Al-Ikhlas", a:4},
+        {n:"Al-Falaq", a:5}, {n:"An-Nas", a:6}
+    ];
     
     // State sementara untuk tasbih (tidak perlu save ke DB permanen)
     let tasbih = { pagi: 0, petang: 0 };
@@ -994,76 +1027,139 @@
     function renderRaportPage() {
         const div = document.getElementById('raport-content');
         
-        // Cek jika murid kosong
         if(db.murid.length === 0) { 
             div.innerHTML = `<div class="card">Tambah data murid dulu di menu Murid.</div>`; 
             return; 
         }
         
-        // 1. Ambil Tanggal Hari Ini (Sinkron dengan Kalender HP)
+        // 1. Tanggal Hari Ini
         const d = new Date();
-        const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
 
         // 2. Siapkan Dropdown Murid
-        let opts = "";
-        db.murid.forEach((m, i) => opts += `<option value="${i}">${m.nama}</option>`);
+        let optsMurid = "";
+        db.murid.forEach((m, i) => optsMurid += `<option value="${i}">${m.nama}</option>`);
 
-        // 3. Render HTML (Ada tambahan Tampilan Tanggal & Input Hidden Tanggal)
+        // 3. Siapkan Dropdown Surat (HTML String)
+        let optsSurat = `<option value="">-- Pilih Surat --</option>`;
+        daftarSurat.forEach((s, i) => {
+            // Kita simpan index-nya sebagai value biar gampang ambil jumlah ayat nanti
+            optsSurat += `<option value="${i}">${i+1}. ${s.n}</option>`;
+        });
+
+        // 4. RENDER HTML (4 KOTAK TERPISAH)
         div.innerHTML = `
+        <input type="hidden" id="rap-current-date" value="${dateStr}">
+        
+        <div class="card" style="border-left: 5px solid var(--btn-bg);">
+            <div style="text-align:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px dashed #ddd;">
+                <small>Laporan Hari:</small><br><b>${dateStr}</b>
+            </div>
+            <label style="font-weight:700;">👤 Pilih Santri:</label>
+            <select id="sel-rap-murid" style="margin-top:5px; background:#f9f9f9;">${optsMurid}</select>
+        </div>
+
         <div class="card">
+            <h4 style="color:var(--btn-bg); margin-bottom:10px;">📖 Ziyadah (Hafalan Baru)</h4>
             
-            <div style="text-align:center; margin-bottom:20px; padding-bottom:15px; border-bottom:1px dashed #ccc;">
-                <small style="color:#666; font-size:12px;">Laporan untuk Hari:</small><br>
-                <b style="font-size:16px; color:var(--btn-bg); text-transform:uppercase;">${dateStr}</b>
-                <input type="hidden" id="rap-current-date" value="${dateStr}">
+            <label>Surat:</label>
+            <select id="z-surat" onchange="updateAyatOptions('z')" style="margin-bottom:10px;">${optsSurat}</select>
+            
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>Dari Ayat:</label>
+                    <select id="z-start"><option>-</option></select>
+                </div>
+                <div style="flex:1;">
+                    <label>Sampai:</label>
+                    <select id="z-end"><option>-</option></select>
+                </div>
             </div>
 
-            <label style="font-size:12px; font-weight:600; margin-left:5px;">Santri:</label>
-            <select id="sel-rap-murid" style="margin-top:5px;">${opts}</select>
+            <label style="margin-top:10px; display:block;">Nilai / Status:</label>
+            <select id="z-status" style="font-weight:bold; color:var(--accent-color);">
+                <option value="LANCAR - LANJUT">✅ LANCAR - LANJUT</option>
+                <option value="BELUM LANCAR - ULANG">⚠️ BELUM LANCAR - ULANG</option>
+                <option value="LIBUR / TIDAK SETOR">⛔ LIBUR / TIDAK SETOR</option>
+            </select>
+        </div>
+
+        <div class="card">
+            <h4 style="color:#d97706; margin-bottom:10px;">🔄 Murojaah (Mengulang)</h4>
             
-            <label style="font-size:12px; font-weight:600; margin-left:5px;">Ziyadah (Hafalan Baru):</label>
-            <input type="text" id="rap-ziyadah" placeholder="Contoh: An-Naba Ayat 1-5" style="margin-top:5px;">
+            <label>Surat:</label>
+            <select id="m-surat" onchange="updateAyatOptions('m')" style="margin-bottom:10px;">${optsSurat}</select>
             
-            <label style="font-size:12px; font-weight:600; margin-left:5px;">Murojaah (Mengulang):</label>
-            <input type="text" id="rap-murojaah" placeholder="Contoh: Juz 30 Lancar" style="margin-top:5px;">
-            
-            <button class="btn-primary" onclick="kirimWA()">
-                <i class="ph ph-whatsapp-logo" style="font-size:18px;"></i> Kirim Laporan
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>Dari Ayat:</label>
+                    <select id="m-start"><option>-</option></select>
+                </div>
+                <div style="flex:1;">
+                    <label>Sampai:</label>
+                    <select id="m-end"><option>-</option></select>
+                </div>
+            </div>
+
+            <label style="margin-top:10px; display:block;">Nilai / Status:</label>
+            <select id="m-status" style="font-weight:bold; color:var(--accent-color);">
+                <option value="LANCAR - LANJUT">✅ LANCAR - LANJUT</option>
+                <option value="BELUM LANCAR - ULANG">⚠️ BELUM LANCAR - ULANG</option>
+                <option value="LIBUR / TIDAK SETOR">⛔ LIBUR / TIDAK SETOR</option>
+            </select>
+        </div>
+
+        <div class="card" style="background: transparent; box-shadow: none; border:none; padding:0;">
+            <button class="btn-primary" onclick="kirimWA()" style="background:#25D366; color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
+                <i class="ph ph-whatsapp-logo" style="font-size:24px;"></i> KIRIM LAPORAN WA
             </button>
         </div>`;
     }
 
-    function kirimWA() {
-        // 1. Ambil Data Murid & Hafalan
+   function kirimWA() {
+        // 1. Data Santri & Tanggal
         const idx = document.getElementById('sel-rap-murid').value;
-        const m = db.murid[idx]; // Ambil data murid (nama & wa)
-        
-        // Ambil isi hafalan (Kalau kosong, otomatis diisi tanda "-")
-        const ziyadah = document.getElementById('rap-ziyadah').value || "-"; 
-        const murojaah = document.getElementById('rap-murojaah').value || "-";
-        
-        // Ambil Tanggal Hari Ini (dari sistem yang tadi kita buat)
+        const m = db.murid[idx];
         const tanggal = document.getElementById('rap-current-date').value;
 
-        // 2. Susun Format Pesan WhatsApp (Sesuai Request)
-        // %0A artinya Enter (Ganti Baris)
-        // Tanda bintang (*) artinya Huruf Tebal di WA
-        
-        const text = 
-            `Assalamu'alaikum Bapak/Ibu, berikut laporan untuk ananda *${m.nama}*%0A%0A` +
-            `📅 Hari/Tanggal: ${tanggal}%0A` +
-            `📖 Ziyadah: ${ziyadah}%0A` +
-            `🔄 Murojaah: ${murojaah}%0A%0A` +
-            `_Tetap Semangat Ya..._` +
-            `_Barakallahu Fikum_`;
+        // 2. Data Ziyadah
+        const zIdx = document.getElementById('z-surat').value;
+        let zText = "-";
+        if(zIdx !== "") {
+            const zName = daftarSurat[zIdx].n;
+            const zStart = document.getElementById('z-start').value;
+            const zEnd = document.getElementById('z-end').value;
+            const zStat = document.getElementById('z-status').value;
+            // Format: An-Naba Ayat 1-10 (LANCAR)
+            zText = `${zName} Ayat ${zStart}-${zEnd} (${zStat})`;
+        }
 
-        // 3. Buka Aplikasi WhatsApp
-        // Pastikan nomor WA murid sudah tersimpan di database (m.wa)
+        // 3. Data Murojaah
+        const mIdx = document.getElementById('m-surat').value;
+        let mText = "-";
+        if(mIdx !== "") {
+            const mName = daftarSurat[mIdx].n;
+            const mStart = document.getElementById('m-start').value;
+            const mEnd = document.getElementById('m-end').value;
+            const mStat = document.getElementById('m-status').value;
+            mText = `${mName} Ayat ${mStart}-${mEnd} (${mStat})`;
+        }
+
+        // 4. Susun Pesan
+        const text = 
+            `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A` +
+            `📅 ${tanggal}%0A%0A` +
+            `📖 *ZIYADAH (Hafalan Baru):*%0A${zText}%0A%0A` +
+            `🔄 *MUROJAAH (Mengulang):*%0A${mText}%0A%0A` +
+            `_Mohon doanya agar ananda istiqomah._ %0A` +
+            `_Barakallahu Fikum._`;
+
         window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
     }
+    
     function goBack() {
     switchPage('home'); // Mengarahkan kembali ke dashboard/home
-}
+    }
 
     // --- INIT ---
     window.onload = () => {
@@ -1073,10 +1169,44 @@
         renderCalendar();
     };
 
+    // Fungsi Update Dropdown Ayat (Otomatis)
+    function updateAyatOptions(prefix) {
+        // Ambil index surat yang dipilih
+        const suratIdx = document.getElementById(prefix + '-surat').value;
+        const selStart = document.getElementById(prefix + '-start');
+        const selEnd = document.getElementById(prefix + '-end');
+
+        // Reset Options
+        selStart.innerHTML = "";
+        selEnd.innerHTML = "";
+
+        if(suratIdx === "") {
+            selStart.innerHTML = "<option>-</option>";
+            selEnd.innerHTML = "<option>-</option>";
+            return;
+        }
+
+        // Ambil jumlah ayat dari database
+        const maxAyat = daftarSurat[suratIdx].a;
+
+        // Isi Dropdown dari 1 sampai Max Ayat
+        let html = "";
+        for(let i=1; i<=maxAyat; i++) {
+            html += `<option value="${i}">${i}</option>`;
+        }
+
+        selStart.innerHTML = html;
+        selEnd.innerHTML = html;
+        
+        // Default: End ayat diset ke ayat terakhir biar cepat
+        selEnd.value = maxAyat; 
+    }
+
 </script>
     
 </body>
 </html>
+
 
 
 
