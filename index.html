@@ -1523,23 +1523,26 @@
     };
 
     function initDashboard() {
+        // 1. LANGSUNG TAMPILKAN NAMA & JADWAL (Default Jakarta)
+        // Supaya tidak menunggu loading GPS
+        updatePrayerTimes(-6.2088, 106.8456);
+
+        // 2. BARU CARI LOKASI ASLI (Update ulang diam-diam jika GPS aktif)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
+                console.log("Lokasi ditemukan: " + pos.coords.latitude);
                 updatePrayerTimes(pos.coords.latitude, pos.coords.longitude);
             }, (err) => {
-                console.log("GPS Error. Default Jakarta.");
-                updatePrayerTimes(-6.2088, 106.8456);
+                console.log("GPS tidak aktif/ditolak, menggunakan default.");
             });
-        } else {
-            updatePrayerTimes(-6.2088, 106.8456);
         }
-
-        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        
+        // 3. Render Hijriyah (Opsional/Pelengkap)
         try {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', options).format(new Date());
-            const headerSub = document.querySelector('header .greeting h1'); 
-            if(headerSub) headerSub.innerHTML = `<span style="color:var(--btn-bg); font-weight:bold;">${hijriDate}</span>`;
-        } catch(e) { console.log("Kalender Hijriah error di browser ini"); }
+            // Kita tidak mengubah header greeting lagi di sini agar tidak bentrok
+        } catch(e) { console.log("Kalender Hijriah error"); }
     }
 
     function updatePrayerTimes(lat, lng) {
@@ -1582,6 +1585,7 @@
 </script>
 </body>
 </html>
+
 
 
 
