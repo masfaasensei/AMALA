@@ -102,73 +102,71 @@
     <div id="page-amalan" class="page active">
         <h2 style="color:var(--btn-bg)">Muhasabah</h2>
         <p class="greeting">Assalamualaikum.</p>
-        
         <div class="date-display">
             <div class="date-masehi" id="date-masehi">-</div>
             <div class="date-hijri" id="date-hijri">Loading...</div>
         </div>
 
-        <div class="amalan-top-grid">
-            <div class="amalan-item" onclick="openPage('pagi')">
-                <i class="ph ph-sun-horizon row-icon" style="margin:0 0 10px 0; font-size:28px;"></i>
-                <span style="font-weight:600; font-size:14px;">Dzikir Pagi</span>
-            </div>
-            <div class="amalan-item" onclick="openPage('petang')">
-                <i class="ph ph-moon-stars row-icon" style="margin:0 0 10px 0; font-size:28px;"></i>
-                <span style="font-weight:600; font-size:14px;">Dzikir Petang</span>
-            </div>
+        <div id="amalan-locked" style="text-align:center; padding:40px 20px; background:white; border-radius:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+            <i class="ph ph-lock-key" style="font-size:48px; color:var(--btn-bg); opacity:0.5;"></i>
+            <h3 style="margin-top:10px; color:#555;">Mode Privasi Aktif</h3>
+            <p style="font-size:12px; color:#888; margin-bottom:20px;">Data ibadah disembunyikan untuk menjaga privasi.</p>
+            <button class="btn-primary" onclick="openPage('setting')" style="background:var(--accent-color);">
+                <i class="ph ph-key"></i> Buka Kunci (Login)
+            </button>
         </div>
 
-        <div class="amalan-row">
-            <i class="ph ph-sun row-icon"></i>
-            <div class="row-info">
-                <h3>Sholat Dhuha</h3>
-                <span class="unit-badge">RAKAAT</span>
+        <div id="amalan-content" style="display:none;">
+            <div class="amalan-top-grid">
+                <div class="amalan-item" onclick="openPage('pagi')">
+                    <i class="ph ph-sun-horizon row-icon" style="margin:0 0 10px 0; font-size:28px;"></i>
+                    <span style="font-weight:600; font-size:14px;">Dzikir Pagi</span>
+                </div>
+                <div class="amalan-item" onclick="openPage('petang')">
+                    <i class="ph ph-moon-stars row-icon" style="margin:0 0 10px 0; font-size:28px;"></i>
+                    <span style="font-weight:600; font-size:14px;">Dzikir Petang</span>
+                </div>
             </div>
-            <div class="counter-wrap">
-                <button class="c-btn" onclick="updatePersonal('dhuha', -1)">-</button>
-                <span class="c-val" id="val-dhuha">0</span>
-                <button class="c-btn" onclick="updatePersonal('dhuha', 1)">+</button>
-            </div>
-        </div>
 
-        <div class="amalan-row">
-            <i class="ph ph-cloud-moon row-icon"></i>
-            <div class="row-info">
-                <h3>Sholat Tahajjud</h3>
-                <span class="unit-badge">RAKAAT</span>
+            <div class="amalan-row">
+                <i class="ph ph-sun row-icon"></i>
+                <div class="row-info"><h3>Sholat Dhuha</h3><span class="unit-badge">RAKAAT</span></div>
+                <div class="counter-wrap">
+                    <button class="c-btn" onclick="updatePersonal('dhuha', -1)">-</button>
+                    <span class="c-val" id="val-dhuha">0</span>
+                    <button class="c-btn" onclick="updatePersonal('dhuha', 1)">+</button>
+                </div>
             </div>
-            <div class="counter-wrap">
-                <button class="c-btn" onclick="updatePersonal('tahajjud', -1)">-</button>
-                <span class="c-val" id="val-tahajjud">0</span>
-                <button class="c-btn" onclick="updatePersonal('tahajjud', 1)">+</button>
-            </div>
-        </div>
 
-        <div class="amalan-row">
-            <i class="ph ph-book-open row-icon"></i>
-            <div class="row-info">
-                <h3>Tilawah Al-Quran</h3>
-                <span class="unit-badge">LEMBAR</span>
+            <div class="amalan-row">
+                <i class="ph ph-cloud-moon row-icon"></i>
+                <div class="row-info"><h3>Sholat Tahajjud</h3><span class="unit-badge">RAKAAT</span></div>
+                <div class="counter-wrap">
+                    <button class="c-btn" onclick="updatePersonal('tahajjud', -1)">-</button>
+                    <span class="c-val" id="val-tahajjud">0</span>
+                    <button class="c-btn" onclick="updatePersonal('tahajjud', 1)">+</button>
+                </div>
             </div>
-            <div class="counter-wrap">
-                <button class="c-btn" onclick="updatePersonal('tilawah', -1)">-</button>
-                <span class="c-val" id="val-tilawah">0</span>
-                <button class="c-btn" onclick="updatePersonal('tilawah', 1)">+</button>
-            </div>
-        </div>
 
-        <div class="amalan-row">
-            <i class="ph ph-hand-heart row-icon"></i>
-            <div class="row-info">
-                <h3>Infaq / Shodaqoh</h3>
-                <span class="unit-badge">RUPIAH</span>
+            <div class="amalan-row">
+                <i class="ph ph-book-open row-icon"></i>
+                <div class="row-info"><h3>Tilawah Al-Quran</h3><span class="unit-badge">LEMBAR</span></div>
+                <div class="counter-wrap">
+                    <button class="c-btn" onclick="updatePersonal('tilawah', -1)">-</button>
+                    <span class="c-val" id="val-tilawah">0</span>
+                    <button class="c-btn" onclick="updatePersonal('tilawah', 1)">+</button>
+                </div>
             </div>
-            <input type="number" id="val-shodaqoh" onchange="saveShodaqoh()" placeholder="Rp 0" 
-            style="margin:0; padding:5px 0; width:100px; font-size:16px; text-align:right; border:none; border-bottom:1px solid var(--text-main); border-radius:0;">
+
+            <div class="amalan-row">
+                <i class="ph ph-hand-heart row-icon"></i>
+                <div class="row-info"><h3>Infaq / Shodaqoh</h3><span class="unit-badge">RUPIAH</span></div>
+                <input type="number" id="val-shodaqoh" onchange="saveShodaqoh()" placeholder="Rp 0" 
+                style="margin:0; padding:5px 0; width:100px; font-size:16px; text-align:right; border:none; border-bottom:1px solid var(--text-main); border-radius:0;">
+            </div>
         </div>
     </div>
-
+    
     <div id="page-murid" class="page">
         <h2>Database Murid</h2>
         <div id="murid-content"></div>
@@ -723,6 +721,17 @@
     }
 
     function updateUI() {
+        // LOGIKA PRIVASI DASHBOARD
+        const lockedDiv = document.getElementById('amalan-locked');
+        const contentDiv = document.getElementById('amalan-content');
+        
+        if (db.settings.isLoggedIn) {
+            lockedDiv.style.display = 'none';
+            contentDiv.style.display = 'block';
+        } else {
+            lockedDiv.style.display = 'block';
+            contentDiv.style.display = 'none';
+        }
         document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
         document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
         document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString('id-ID');
@@ -812,35 +821,63 @@
         const pLogin = document.getElementById('panel-login');
         const btnLogout = document.getElementById('btn-logout');
         
+        // 1. PENGGUNA BARU (Belum Setup)
         if (!db.settings.setupDone) {
             pSetup.style.display = 'block'; pLogin.style.display = 'none';
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
+            document.getElementById('setup-desc').innerText = 'Mari siapkan profil Anda sebelum mulai.';
             document.getElementById('setup-btn-text').innerText = 'Buat Profil & Masuk';
             btnLogout.style.display = 'none';
+            
             document.getElementById('set-name').value = "";
             document.getElementById('set-pin').value = "";
-        } else if (db.settings.setupDone && !db.settings.isLoggedIn) {
-            pSetup.style.display = 'none'; pLogin.style.display = 'block';
-        } else {
+            document.getElementById('set-pin').placeholder = "Buat PIN Baru";
+        } 
+        // 2. SUDAH SETUP, BELUM LOGIN (TERKUNCI)
+        else if (db.settings.setupDone && !db.settings.isLoggedIn) {
+            pSetup.style.display = 'none'; 
+            pLogin.style.display = 'block';
+            
+            // Tambahkan tombol LUPA PIN di bawah form login
+            const statusText = document.getElementById('login-status');
+            statusText.innerHTML = `<br><a href="#" onclick="lupaPin()" style="color:#999; font-weight:normal; font-size:11px;">Lupa PIN? Reset Aplikasi</a>`;
+        } 
+        // 3. SUDAH LOGIN (EDIT PROFIL)
+        else {
             pSetup.style.display = 'block'; pLogin.style.display = 'none';
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
+            document.getElementById('setup-desc').innerText = 'Kosongkan PIN jika tidak ingin mengubahnya.';
             document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
             btnLogout.style.display = 'block';
+            
+            // ISI NAMA, TAPI KOSONGKAN PIN (DEMI KEAMANAN)
             document.getElementById('set-name').value = db.settings.userName;
-            document.getElementById('set-pin').value = db.settings.pin;
+            document.getElementById('set-pin').value = ""; 
+            document.getElementById('set-pin').placeholder = "Isi HANYA jika ganti PIN";
+            
             if(db.settings.kotaId) document.getElementById('set-lokasi').value = db.settings.kotaId;
         }
     }
 
     function saveProfile() {
         const newName = document.getElementById('set-name').value;
-        const newPin = document.getElementById('set-pin').value;
+        const newPin = document.getElementById('set-pin').value; // Ambil input
         const kotaId = document.getElementById('set-lokasi').value;
         
-        if(!newName || !newPin) { alert("⚠️ Harap isi Nama dan PIN!"); return; }
+        // Validasi Nama Wajib
+        if(!newName) { alert("⚠️ Nama tidak boleh kosong!"); return; }
+
+        // LOGIKA PIN CERDAS:
+        // Jika Pengguna Baru -> Wajib isi PIN
+        if(!db.settings.setupDone && !newPin) {
+             alert("⚠️ Harap buat PIN akses!"); return; 
+        }
+        // Jika Pengguna Lama -> Kalau input kosong, PAKAI PIN LAMA. Kalau isi, PAKAI BARU.
+        if(newPin) {
+            db.settings.pin = newPin;
+        }
 
         db.settings.userName = newName;
-        db.settings.pin = newPin;
         db.settings.kotaId = parseInt(kotaId);
         
         const kotaPilih = daftarKota.find(k => k.id == kotaId);
@@ -854,6 +891,13 @@
         initDashboard(); renderSettings();
     }
 
+    // FUNGSI DARURAT (LUPA PASSWORD)
+    function lupaPin() {
+        if(confirm("⚠️ PERHATIAN!\n\nAnda akan melakukan RESET TOTAL karena lupa PIN.\nSemua data ibadah & santri akan DIHAPUS agar Anda bisa membuat PIN baru.\n\nLanjutkan?")) {
+            localStorage.removeItem('amala_pro_db_v23'); // Hapus Database
+            location.reload(); // Refresh halaman jadi baru
+        }
+    }
     function verifikasiLogin() {
         const inputPin = document.getElementById('login-pass').value;
         if(inputPin === db.settings.pin) {
@@ -1150,10 +1194,14 @@
 
     // --- INIT ---
     window.onload = () => {
+        // PAKSA LOGOUT SAAT REFRESH/BUKA APLIKASI (PRIVASI)
+        if(db && db.settings) db.settings.isLoggedIn = false; 
+        
         checkNewDay(); initDashboard(); applyTheme(); renderDateHeader(); updateUI(); renderCalendar();   
     };
 </script>
     
 </body>
 </html>
+
 
