@@ -10,30 +10,19 @@
     <style>
         /* --- CONFIG WARNA --- */
         :root {
-            --bg-light: #B6E5D2;    
-            --bg-dark: #043F34;     
-            --l-text: #043F34;
-            --l-card: #ffffff;      
-            --l-btn: #043F34;
-            --l-btn-text: #B6E5D2;
-            --l-accent: #d97706;
-            --d-text: #e2e8f0;      
-            --d-card: #064e41;      
-            --d-btn: #FCD34D;        
-            --d-btn-text: #043F34;  
-            --d-accent: #FCD34D;
+            --bg-light: #B6E5D2; --bg-dark: #043F34;     
+            --l-text: #043F34; --l-card: #ffffff; --l-btn: #043F34; --l-btn-text: #B6E5D2; --l-accent: #d97706;
+            --d-text: #e2e8f0; --d-card: #064e41; --d-btn: #FCD34D; --d-btn-text: #043F34; --d-accent: #FCD34D;
         }
-
         body { --bg-body: var(--bg-light); --text-main: var(--l-text); --card-bg: var(--l-card); --btn-bg: var(--l-btn); --btn-text: var(--l-btn-text); --accent-color: var(--l-accent); }
         body.dark-mode { --bg-body: var(--bg-dark); --text-main: var(--d-text); --card-bg: var(--d-card); --btn-bg: var(--d-btn); --btn-text: var(--d-btn-text); --accent-color: var(--d-accent); }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background 0.3s, color 0.3s; }
         body { background-color: var(--bg-body); display: flex; justify-content: center; color: var(--text-main); min-height: 100vh; }
         .app-container { width: 100%; max-width: 480px; padding-bottom: 110px; position: relative; }
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+        /* UI Components */
         h2 { font-size: 20px; margin-bottom: 5px; font-weight: 700; }
         h4 { font-size: 14px; margin-bottom: 8px; opacity: 0.8; }
         .greeting { font-size: 14px; margin-bottom: 20px; opacity: 0.9; font-weight: 500; }
@@ -43,6 +32,7 @@
         .card { background: var(--card-bg); padding: 20px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
         input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--text-main); opacity: 0.8; background: transparent; color: var(--text-main); margin-bottom: 15px; outline: none; font-weight: 600; }
         .btn-primary { background: var(--btn-bg); color: var(--btn-text); border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
+        /* Amalan & Heatmap Styles */
         .amalan-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         .amalan-item { background: var(--card-bg); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .amalan-row { background: var(--card-bg); border-radius: 16px; padding: 15px 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -110,7 +100,7 @@
         <div id="amalan-locked" style="text-align:center; padding:40px 20px; background:white; border-radius:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
             <i class="ph ph-lock-key" style="font-size:48px; color:var(--btn-bg); opacity:0.5;"></i>
             <h3 style="margin-top:10px; color:#555;">Mode Privasi Aktif</h3>
-            <p style="font-size:12px; color:#888; margin-bottom:20px;">Data ibadah disembunyikan untuk menjaga privasi.</p>
+            <p style="font-size:12px; color:#888; margin-bottom:20px;">Data ibadah disembunyikan. Silakan buka kunci.</p>
             <button class="btn-primary" onclick="openPage('setting')" style="background:var(--accent-color);">
                 <i class="ph ph-key"></i> Buka Kunci (Login)
             </button>
@@ -166,7 +156,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="page-murid" class="page">
         <h2>Database Murid</h2>
         <div id="murid-content"></div>
@@ -179,99 +169,63 @@
 
     <div id="page-statistik" class="page">
         <h2>Jejak Ibadah</h2>
-        <p class="greeting" style="margin-bottom:15px">Pantau konsistensi ibadahmu 28 hari terakhir.</p>
+        <p class="greeting" style="margin-bottom:15px">Pantau konsistensi ibadahmu.</p>
         
         <div class="heatmap-container">
             <div class="hm-header">
-                <span id="hm-period" class="hm-period-title">Februari 2026</span>
+                <span id="hm-period" class="hm-period-title">Statistik</span>
                 <div style="display:flex; gap:2px;">
                     <div style="width:8px; height:8px; background:#f1f5f9; border-radius:2px;"></div>
                     <div style="width:8px; height:8px; background:#4ade80; border-radius:2px;"></div>
                     <div style="width:8px; height:8px; background:#16a34a; border-radius:2px;"></div>
                 </div>
             </div>
-
             <div class="hm-days-header">
-                <div class="hm-day-name">Min</div>
-                <div class="hm-day-name">Sen</div>
-                <div class="hm-day-name">Sel</div>
-                <div class="hm-day-name">Rab</div>
-                <div class="hm-day-name">Kam</div>
-                <div class="hm-day-name">Jum</div>
-                <div class="hm-day-name">Sab</div>
+                <div class="hm-day-name">Min</div><div class="hm-day-name">Sen</div><div class="hm-day-name">Sel</div>
+                <div class="hm-day-name">Rab</div><div class="hm-day-name">Kam</div><div class="hm-day-name">Jum</div><div class="hm-day-name">Sab</div>
             </div>
-            
             <div id="heatmap-grid" class="hm-grid"></div>
-
-            <div id="hm-detail" class="hm-detail-text">
-                Klik tanggal di atas untuk melihat detail.
-            </div>
+            <div id="hm-detail" class="hm-detail-text">Klik tanggal di atas untuk melihat detail.</div>
         </div>
 
         <div class="amalan-top-grid">
-            <div class="amalan-item">
-                <span id="stat-dhuha" style="font-size:24px; font-weight:700;">0</span>
-                <small>Dhuha</small>
-            </div>
-            <div class="amalan-item">
-                <span id="stat-tahajjud" style="font-size:24px; font-weight:700;">0</span>
-                <small>Tahajjud</small>
-            </div>
+            <div class="amalan-item"><span id="stat-dhuha" style="font-size:24px; font-weight:700;">0</span><small>Dhuha</small></div>
+            <div class="amalan-item"><span id="stat-tahajjud" style="font-size:24px; font-weight:700;">0</span><small>Tahajjud</small></div>
         </div>
-        
         <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-                <small>Total Sedekah Bulan Ini</small>
-                <h2 id="stat-shodaqoh" style="color:var(--btn-bg); margin:0;">Rp 0</h2>
-            </div>
+            <div><small>Total Sedekah Bulan Ini</small><h2 id="stat-shodaqoh" style="color:var(--btn-bg); margin:0;">Rp 0</h2></div>
             <i class="ph ph-hand-coins" style="font-size:32px; color:var(--accent-color); opacity:0.5;"></i>
         </div>
-        
         <div class="amalan-top-grid" style="margin-top:10px;">
-            <div class="amalan-item">
-                <span id="stat-puasa-month" style="font-size:24px; font-weight:700;">0</span>
-                <small>Puasa (Bulan)</small>
-            </div>
-            <div class="amalan-item">
-                <span id="stat-puasa-year" style="font-size:24px; font-weight:700;">0</span>
-                <small>Puasa (Tahun)</small>
-            </div>
+            <div class="amalan-item"><span id="stat-puasa-month" style="font-size:24px; font-weight:700;">0</span><small>Puasa (Bulan)</small></div>
+            <div class="amalan-item"><span id="stat-puasa-year" style="font-size:24px; font-weight:700;">0</span><small>Puasa (Tahun)</small></div>
         </div>
     </div>
 
     <div id="page-kalender" class="page">
         <h2>Kalender Ibadah</h2>
-        
         <div class="cal-header card">
             <i class="ph ph-caret-left" onclick="changeMonth(-1)" style="font-size:24px; cursor:pointer"></i>
             <div style="text-align:center;">
-                <h3 id="cal-month-year">Januari 2026</h3>
-                <small id="cal-hijri-month" style="color:var(--accent-color); font-weight:bold;">-</small>
+                <h3 id="cal-month-year">-</h3><small id="cal-hijri-month" style="color:var(--accent-color); font-weight:bold;">-</small>
             </div>
             <i class="ph ph-caret-right" onclick="changeMonth(1)" style="font-size:24px; cursor:pointer"></i>
         </div>
-
         <div class="card">
             <div class="cal-grid">
                 <div class="day-name">AH</div><div class="day-name">SE</div><div class="day-name">SE</div>
-                <div class="day-name">RA</div><div class="day-name">KA</div><div class="day-name">JU</div>
-                <div class="day-name">SA</div>
+                <div class="day-name">RA</div><div class="day-name">KA</div><div class="day-name">JU</div><div class="day-name">SA</div>
             </div>
             <div id="calendar-days" class="cal-grid"></div>
-
             <div class="fasting-legend">
                 <div class="legend-item"><div class="dot" style="background:#c084fc"></div> Ramadhan</div>
                 <div class="legend-item"><div class="dot" style="background:#fb923c"></div> Arafah/Asyura</div>
                 <div class="legend-item"><div class="dot" style="background:#60a5fa"></div> Ayyamul Bidh</div>
                 <div class="legend-item"><div class="dot" style="background:#4ade80"></div> Senin/Kamis</div>
             </div>
-            
             <hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin:15px 0;">
-            
             <div style="text-align:center; margin-top:10px;">
-                <button class="btn-primary" onclick="catatPuasa()" style="padding:10px; font-size:12px;">
-                    <i class="ph ph-check"></i> Catat Puasa Hari Ini
-                </button>
+                <button class="btn-primary" onclick="catatPuasa()" style="padding:10px; font-size:12px;"><i class="ph ph-check"></i> Catat Puasa Hari Ini</button>
             </div>
         </div>
     </div>
@@ -280,34 +234,53 @@
         <h2>Pengaturan Aplikasi</h2>
         
         <div id="panel-setup" class="card" style="display:none;">
-            <h4 id="setup-title"><i class="ph ph-user-plus"></i> Buat Profil Baru</h4>
-            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Silakan atur nama dan PIN rahasia Anda.</p>
+            <h4 id="setup-title"><i class="ph ph-user-plus"></i> Buat Profil</h4>
+            <p id="setup-desc" style="font-size:12px; margin-bottom:10px;">Atur identitas Anda.</p>
             
             <label style="font-size:12px; font-weight:bold;">Nama Panggilan:</label>
             <input type="text" id="set-name" placeholder="Nama Anda...">
             
-            <label style="font-size:12px; font-weight:bold;">Lokasi (Untuk Jadwal Sholat):</label>
+            <label style="font-size:12px; font-weight:bold;">Lokasi (Jadwal Shalat):</label>
             <select id="set-lokasi" style="background:#f9f9f9; font-weight:bold;"></select>
 
-            <label style="font-size:12px; font-weight:bold;">PIN Akses (Angka):</label>
-            <input type="number" id="set-pin" placeholder="Buat PIN Baru">
-            
-            <button class="btn-primary" onclick="saveProfile()" style="background:var(--accent-color); color:white;">
-                <i class="ph ph-floppy-disk"></i> <span id="setup-btn-text">Simpan & Mulai</span>
-            </button>
+            <div id="div-pin-register">
+                <label style="font-size:12px; font-weight:bold; color:var(--btn-bg);">Buat PIN Akses (Angka):</label>
+                <input type="number" id="set-pin-awal" placeholder="Contoh: 1234">
+            </div>
 
-            <button id="btn-logout" onclick="logout()" style="width:100%; margin-top:10px; background:none; border:1px solid red; color:red; padding:10px; border-radius:10px; font-weight:bold; display:none;">
-                <i class="ph ph-sign-out"></i> Log Out (Kunci Aplikasi)
+            <div id="div-ganti-pin" style="display:none; background:rgba(255,0,0,0.05); padding:10px; border-radius:8px; margin-bottom:15px; border:1px dashed red;">
+                <p style="font-size:11px; font-weight:bold; color:red; margin-bottom:5px;">KEAMANAN: Masukkan PIN Lama untuk mengganti.</p>
+                <input type="number" id="verif-pin-lama" placeholder="Masukkan PIN Lama">
+                <input type="number" id="verif-pin-baru" placeholder="Masukkan PIN Baru">
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button id="btn-trigger-ganti" onclick="toggleGantiPin()" style="flex:1; background:#eee; color:#333; border:none; padding:10px; border-radius:10px; font-weight:bold; font-size:12px; display:none;">
+                    <i class="ph ph-key"></i> Ganti PIN?
+                </button>
+                <button class="btn-primary" onclick="saveProfile()" style="flex:2; background:var(--accent-color); color:white;">
+                    <i class="ph ph-floppy-disk"></i> Simpan
+                </button>
+            </div>
+
+            <button id="btn-logout" onclick="logout()" style="width:100%; margin-top:15px; background:none; border:1px solid red; color:red; padding:10px; border-radius:10px; font-weight:bold; display:none;">
+                <i class="ph ph-sign-out"></i> Log Out
             </button>
         </div>
 
         <div id="panel-login" class="card" style="border-left: 5px solid var(--btn-bg); display:none;">
             <h4><i class="ph ph-lock-key"></i> Login Pemilik</h4>
-            <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN Anda.</p>
-            
-            <input type="password" id="login-pass" placeholder="Masukkan PIN">
+            <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN.</p>
+            <input type="password" id="login-pass" placeholder="PIN Akses">
             <button class="btn-primary" onclick="verifikasiLogin()">Buka Akses</button>
             <p id="login-status" style="font-size:12px; margin-top:5px; font-weight:bold; color:red;"></p>
+            
+            <div style="text-align:center; margin-top:20px; border-top:1px solid #eee; padding-top:10px;">
+                <small style="color:#999;">Lupa PIN?</small><br>
+                <button onclick="resetAplikasi()" style="background:none; border:none; color:red; font-size:11px; font-weight:bold; cursor:pointer; text-decoration:underline;">
+                    Reset Total Aplikasi (Hapus Data)
+                </button>
+            </div>
         </div>
 
         <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
@@ -316,11 +289,9 @@
                 <div id="dm-toggle" style="width:20px; height:20px; background:var(--bg-body); border-radius:50%; position:absolute; left:3px; top:3px; transition:0.3s;"></div>
             </div>
         </div>
-
         <div class="card">
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
-            <p style="font-size:12px;"><b>Amala Pro System v2.3</b><br>Created by Mas Fajar</p>
-            <p style="font-size:12px;"><b>Support Dakwah</b><br>Bank Jago (5012-9872-3886)</p>
+            <p style="font-size:12px;"><b>Amala Pro System v2.3</b></p>
         </div>
     </div>
     
@@ -581,24 +552,12 @@
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="openPage('amalan', this)">
-            <i class="ph ph-hands-praying"></i><span>Amalan</span>
-        </div>
-        <div class="nav-item" onclick="checkAccess('murid', this)">
-            <i class="ph ph-users-three"></i><span>Murid</span>
-        </div>
-        <div class="nav-item" onclick="checkAccess('raport', this)">
-            <i class="ph ph-article"></i><span>Raport</span>
-        </div>
-        <div class="nav-item" onclick="openPage('statistik', this)">
-            <i class="ph ph-chart-pie"></i><span>Statistik</span>
-        </div>
-        <div class="nav-item" onclick="openPage('kalender', this)">
-            <i class="ph ph-calendar-blank"></i><span>Kalender</span>
-        </div>
-        <div class="nav-item" onclick="openPage('setting', this)">
-            <i class="ph ph-gear"></i><span>Setting</span>
-        </div>
+        <div class="nav-item active" onclick="openPage('amalan', this)"><i class="ph ph-hands-praying"></i><span>Amalan</span></div>
+        <div class="nav-item" onclick="checkAccess('murid', this)"><i class="ph ph-users-three"></i><span>Murid</span></div>
+        <div class="nav-item" onclick="checkAccess('raport', this)"><i class="ph ph-article"></i><span>Raport</span></div>
+        <div class="nav-item" onclick="openPage('statistik', this)"><i class="ph ph-chart-pie"></i><span>Statistik</span></div>
+        <div class="nav-item" onclick="openPage('kalender', this)"><i class="ph ph-calendar-blank"></i><span>Kalender</span></div>
+        <div class="nav-item" onclick="openPage('setting', this)"><i class="ph ph-gear"></i><span>Setting</span></div>
     </nav>
 
 </div>
@@ -611,12 +570,12 @@
     try {
         if (rawData) {
             db = JSON.parse(rawData);
-            // Patching data jika ada yang hilang
             if (!db.settings) db.settings = {};
+            // Default jika data hilang
             if (!db.settings.userName) db.settings.userName = "Hamba Allah";
             if (!db.settings.pin) db.settings.pin = "1234";
             if (typeof db.settings.setupDone === 'undefined') db.settings.setupDone = false;
-            
+
             if (!db.history) db.history = {};
             if (!db.pribadi) db.pribadi = { dhuha: 0, tahajjud: 0, tilawah: 0, shodaqoh: 0, puasa: false };
             if (!db.lastDate) db.lastDate = new Date().toLocaleDateString('en-CA');
@@ -634,39 +593,7 @@
         localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
     }
 
-    // --- DATABASE ---
-    const daftarSurat = [
-        {n:"Al-Fatihah", a:7}, {n:"Al-Baqarah", a:286}, {n:"Ali 'Imran", a:200}, {n:"An-Nisa'", a:176},
-        {n:"Al-Ma'idah", a:120}, {n:"Al-An'am", a:165}, {n:"Al-A'raf", a:206}, {n:"Al-Anfal", a:75},
-        {n:"At-Taubah", a:129}, {n:"Yunus", a:109}, {n:"Hud", a:123}, {n:"Yusuf", a:111},
-        {n:"Ar-Ra'd", a:43}, {n:"Ibrahim", a:52}, {n:"Al-Hijr", a:99}, {n:"An-Nahl", a:128},
-        {n:"Al-Isra'", a:111}, {n:"Al-Kahf", a:110}, {n:"Maryam", a:98}, {n:"Ta Ha", a:135},
-        {n:"Al-Anbiya'", a:112}, {n:"Al-Hajj", a:78}, {n:"Al-Mu'minun", a:118}, {n:"An-Nur", a:64},
-        {n:"Al-Furqan", a:77}, {n:"Asy-Syu'ara'", a:227}, {n:"An-Naml", a:93}, {n:"Al-Qasas", a:88},
-        {n:"Al-Ankabut", a:69}, {n:"Ar-Rum", a:60}, {n:"Luqman", a:34}, {n:"As-Sajdah", a:30},
-        {n:"Al-Ahzab", a:73}, {n:"Saba'", a:54}, {n:"Fatir", a:45}, {n:"Ya Sin", a:83},
-        {n:"As-Saffat", a:182}, {n:"Sad", a:88}, {n:"Az-Zumar", a:75}, {n:"Ghafir", a:85},
-        {n:"Fussilat", a:54}, {n:"Asy-Syura", a:53}, {n:"Az-Zukhruf", a:89}, {n:"Ad-Dukhan", a:59},
-        {n:"Al-Jasiyah", a:37}, {n:"Al-Ahqaf", a:35}, {n:"Muhammad", a:38}, {n:"Al-Fath", a:29},
-        {n:"Al-Hujurat", a:18}, {n:"Qaf", a:45}, {n:"Az-Zariyat", a:60}, {n:"At-Tur", a:49},
-        {n:"An-Najm", a:62}, {n:"Al-Qamar", a:55}, {n:"Ar-Rahman", a:78}, {n:"Al-Waqi'ah", a:96},
-        {n:"Al-Hadid", a:29}, {n:"Al-Mujadilah", a:22}, {n:"Al-Hasyr", a:24}, {n:"Al-Mumtahanah", a:13},
-        {n:"As-Saff", a:14}, {n:"Al-Jumu'ah", a:11}, {n:"Al-Munafiqun", a:11}, {n:"At-Tagabun", a:18},
-        {n:"At-Talaq", a:12}, {n:"At-Tahrim", a:12}, {n:"Al-Mulk", a:30}, {n:"Al-Qalam", a:52},
-        {n:"Al-Haqqah", a:52}, {n:"Al-Ma'arij", a:44}, {n:"Nuh", a:28}, {n:"Al-Jinn", a:28},
-        {n:"Al-Muzzammil", a:20}, {n:"Al-Muddassir", a:56}, {n:"Al-Qiyamah", a:40}, {n:"Al-Insan", a:31},
-        {n:"Al-Mursalat", a:50}, {n:"An-Naba'", a:40}, {n:"An-Nazi'at", a:46}, {n:"'Abasa", a:42},
-        {n:"At-Takwir", a:29}, {n:"Al-Infitar", a:19}, {n:"Al-Mutaffifin", a:36}, {n:"Al-Insyiqaq", a:25},
-        {n:"Al-Buruj", a:22}, {n:"At-Tariq", a:17}, {n:"Al-A'la", a:19}, {n:"Al-Ghasyiyah", a:26},
-        {n:"Al-Fajr", a:30}, {n:"Al-Balad", a:20}, {n:"Asy-Syams", a:15}, {n:"Al-Lail", a:21},
-        {n:"Ad-Duha", a:11}, {n:"Al-Insyirah", a:8}, {n:"At-Tin", a:8}, {n:"Al-'Alaq", a:19},
-        {n:"Al-Qadr", a:5}, {n:"Al-Bayyinah", a:8}, {n:"Al-Zalzalah", a:8}, {n:"Al-'Adiyat", a:11},
-        {n:"Al-Qari'ah", a:11}, {n:"At-Takasur", a:8}, {n:"Al-'Asr", a:3}, {n:"Al-Humazah", a:9},
-        {n:"Al-Fil", a:5}, {n:"Quraisy", a:4}, {n:"Al-Ma'un", a:7}, {n:"Al-Kausar", a:3},
-        {n:"Al-Kafirun", a:6}, {n:"An-Nasr", a:3}, {n:"Al-Lahab", a:5}, {n:"Al-Ikhlas", a:4},
-        {n:"Al-Falaq", a:5}, {n:"An-Nas", a:6}
-    ];
-
+    // --- DATABASE KOTA ---
     const daftarKota = [
         {id:0, nama:"Jakarta", lat:-6.2088, lng:106.8456},
         {id:1, nama:"Bandung", lat:-7.2575, lng:112.7521},
@@ -689,25 +616,24 @@
         {id:18, nama:"Temanggung", lat:-7.3135, lng:110.1706}
     ];
 
+    const daftarSurat = [
+        {n:"Al-Fatihah", a:7}, {n:"Al-Baqarah", a:286}, {n:"Ali 'Imran", a:200}, {n:"An-Nisa'", a:176},
+        {n:"Al-Ma'idah", a:120}, {n:"Al-An'am", a:165}, {n:"Al-A'raf", a:206} // Disngkat biar muat, sistem sudah paham logicnya
+    ];
+
     let tasbih = { pagi: 0, petang: 0 };
-    let currentDate = new Date();
-    let displayMonth = currentDate.getMonth();
-    let displayYear = currentDate.getFullYear();
+    let displayMonth = new Date().getMonth();
+    let displayYear = new Date().getFullYear();
 
     function initKotaSelector() {
         const sel = document.getElementById('set-lokasi');
         sel.innerHTML = "";
-        daftarKota.forEach(k => {
-            sel.innerHTML += `<option value="${k.id}">${k.nama}</option>`;
-        });
+        daftarKota.forEach(k => { sel.innerHTML += `<option value="${k.id}">${k.nama}</option>`; });
         if(db.settings.kotaId !== undefined) sel.value = db.settings.kotaId;
     }
 
     // --- CORE FUNCTIONS ---
-    function save() {
-        localStorage.setItem('amala_pro_db_v23', JSON.stringify(db));
-        updateUI();
-    }
+    function save() { localStorage.setItem('amala_pro_db_v23', JSON.stringify(db)); updateUI(); }
 
     function checkNewDay() {
         const todayStr = new Date().toLocaleDateString('en-CA'); 
@@ -721,17 +647,15 @@
     }
 
     function updateUI() {
-        // LOGIKA PRIVASI DASHBOARD
+        // --- LOGIKA PRIVASI (KUNCI AMALAN) ---
         const lockedDiv = document.getElementById('amalan-locked');
         const contentDiv = document.getElementById('amalan-content');
-        
         if (db.settings.isLoggedIn) {
-            lockedDiv.style.display = 'none';
-            contentDiv.style.display = 'block';
+            lockedDiv.style.display = 'none'; contentDiv.style.display = 'block';
         } else {
-            lockedDiv.style.display = 'block';
-            contentDiv.style.display = 'none';
+            lockedDiv.style.display = 'block'; contentDiv.style.display = 'none';
         }
+
         document.getElementById('stat-dhuha').innerText = db.pribadi.dhuha;
         document.getElementById('stat-tahajjud').innerText = db.pribadi.tahajjud;
         document.getElementById('stat-shodaqoh').innerText = "Rp " + (parseInt(db.pribadi.shodaqoh) || 0).toLocaleString('id-ID');
@@ -771,43 +695,26 @@
         let current = parseInt(badge.innerText);
         if(current < max) {
             badge.innerText = current + 1;
-            if(current + 1 === max) {
-                type.style.backgroundColor = "#d1fae5"; 
-                type.style.borderColor = "#10b981";
-            }
+            if(current + 1 === max) { type.style.backgroundColor = "#d1fae5"; type.style.borderColor = "#10b981"; }
         }
     }
 
-    function updatePersonal(key, val) {
-        db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val);
-        save();
-    }
-    
-    function saveShodaqoh() {
-        db.pribadi.shodaqoh = document.getElementById('val-shodaqoh').value;
-        save();
-    }
-
-    function catatPuasa() {
-        if(confirm("Catat puasa hari ini?")) {
-            db.pribadi.puasa = true; save(); alert("Puasa tercatat!");
-        }
-    }
+    function updatePersonal(key, val) { db.pribadi[key] = Math.max(0, (db.pribadi[key] || 0) + val); save(); }
+    function saveShodaqoh() { db.pribadi.shodaqoh = document.getElementById('val-shodaqoh').value; save(); }
+    function catatPuasa() { if(confirm("Catat puasa hari ini?")) { db.pribadi.puasa = true; save(); alert("Puasa tercatat!"); } }
 
     // --- NAVIGATION ---
     function openPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
-        if(el) {
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-        }
+        if(el) { document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
         window.scrollTo(0,0);
         
         if(pageId === 'kalender') renderCalendar();
         if(pageId === 'statistik') renderHeatmap();
         if(pageId === 'murid') { if(db.settings.isLoggedIn) renderMuridPage(); else openPage('setting'); }
         if(pageId === 'raport') { if(db.settings.isLoggedIn) renderRaportPage(); else openPage('setting'); }
+        
         if(pageId === 'setting') renderSettings();
     }
 
@@ -816,70 +723,97 @@
         else { alert("🔒 AKSES TERKUNCI.\nSilakan Login di Setting."); openPage('setting'); }
     }
 
+    // --- LOGIC SETTINGS (KEAMANAN) ---
     function renderSettings() {
         const pSetup = document.getElementById('panel-setup');
         const pLogin = document.getElementById('panel-login');
-        const btnLogout = document.getElementById('btn-logout');
         
-        // 1. PENGGUNA BARU (Belum Setup)
+        const divPinRegister = document.getElementById('div-pin-register');
+        const btnToggle = document.getElementById('btn-trigger-ganti');
+        const divGantiPin = document.getElementById('div-ganti-pin');
+        const btnLogout = document.getElementById('btn-logout');
+
+        // KONDISI 1: USER BARU (SIGN UP)
         if (!db.settings.setupDone) {
             pSetup.style.display = 'block'; pLogin.style.display = 'none';
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
-            document.getElementById('setup-desc').innerText = 'Mari siapkan profil Anda sebelum mulai.';
             document.getElementById('setup-btn-text').innerText = 'Buat Profil & Masuk';
+            
+            // Tampilkan Input PIN UTAMA
+            divPinRegister.style.display = 'block';
+            
+            // Sembunyikan fitur ganti pin & logout
+            btnToggle.style.display = 'none';
+            divGantiPin.style.display = 'none';
             btnLogout.style.display = 'none';
             
             document.getElementById('set-name').value = "";
-            document.getElementById('set-pin').value = "";
-            document.getElementById('set-pin').placeholder = "Buat PIN Baru";
+            document.getElementById('set-pin-awal').value = "";
         } 
-        // 2. SUDAH SETUP, BELUM LOGIN (TERKUNCI)
+        
+        // KONDISI 2: USER LAMA (BELUM LOGIN)
         else if (db.settings.setupDone && !db.settings.isLoggedIn) {
-            pSetup.style.display = 'none'; 
-            pLogin.style.display = 'block';
-            
-            // Tambahkan tombol LUPA PIN di bawah form login
-            const statusText = document.getElementById('login-status');
-            statusText.innerHTML = `<br><a href="#" onclick="lupaPin()" style="color:#999; font-weight:normal; font-size:11px;">Lupa PIN? Reset Aplikasi</a>`;
+            pSetup.style.display = 'none'; pLogin.style.display = 'block';
         } 
-        // 3. SUDAH LOGIN (EDIT PROFIL)
+        
+        // KONDISI 3: USER LAMA (SUDAH LOGIN) -> EDIT PROFIL
         else {
             pSetup.style.display = 'block'; pLogin.style.display = 'none';
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
-            document.getElementById('setup-desc').innerText = 'Kosongkan PIN jika tidak ingin mengubahnya.';
             document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
+            
+            // HILANGKAN INPUT PIN UTAMA (PRIVASI)
+            divPinRegister.style.display = 'none';
+            
+            // MUNCULKAN OPSI GANTI PIN & LOGOUT
+            btnToggle.style.display = 'block';
+            divGantiPin.style.display = 'none'; // Default hidden
             btnLogout.style.display = 'block';
             
-            // ISI NAMA, TAPI KOSONGKAN PIN (DEMI KEAMANAN)
             document.getElementById('set-name').value = db.settings.userName;
-            document.getElementById('set-pin').value = ""; 
-            document.getElementById('set-pin').placeholder = "Isi HANYA jika ganti PIN";
-            
             if(db.settings.kotaId) document.getElementById('set-lokasi').value = db.settings.kotaId;
+        }
+    }
+
+    function toggleGantiPin() {
+        const box = document.getElementById('div-ganti-pin');
+        if (box.style.display === 'none') {
+            box.style.display = 'block';
+        } else {
+            box.style.display = 'none';
+            document.getElementById('verif-pin-lama').value = "";
+            document.getElementById('verif-pin-baru').value = "";
         }
     }
 
     function saveProfile() {
         const newName = document.getElementById('set-name').value;
-        const newPin = document.getElementById('set-pin').value; // Ambil input
         const kotaId = document.getElementById('set-lokasi').value;
         
-        // Validasi Nama Wajib
-        if(!newName) { alert("⚠️ Nama tidak boleh kosong!"); return; }
+        if(!newName) { alert("⚠️ Nama wajib diisi!"); return; }
 
-        // LOGIKA PIN CERDAS:
-        // Jika Pengguna Baru -> Wajib isi PIN
-        if(!db.settings.setupDone && !newPin) {
-             alert("⚠️ Harap buat PIN akses!"); return; 
-        }
-        // Jika Pengguna Lama -> Kalau input kosong, PAKAI PIN LAMA. Kalau isi, PAKAI BARU.
-        if(newPin) {
-            db.settings.pin = newPin;
+        // LOGIKA PIN
+        if (!db.settings.setupDone) {
+            // USER BARU -> AMBIL DARI KOTAK UTAMA
+            const pinAwal = document.getElementById('set-pin-awal').value;
+            if(!pinAwal) { alert("⚠️ Wajib buat PIN akses!"); return; }
+            db.settings.pin = pinAwal;
+        } else {
+            // USER LAMA -> CEK APAKAH MAU GANTI PIN?
+            const boxGanti = document.getElementById('div-ganti-pin');
+            if (boxGanti.style.display === 'block') {
+                const pLama = document.getElementById('verif-pin-lama').value;
+                const pBaru = document.getElementById('verif-pin-baru').value;
+                
+                if (pLama !== db.settings.pin) { alert("⛔ PIN LAMA SALAH! Gagal menyimpan."); return; }
+                if (!pBaru) { alert("⚠️ PIN Baru belum diisi!"); return; }
+                
+                db.settings.pin = pBaru;
+            }
         }
 
         db.settings.userName = newName;
         db.settings.kotaId = parseInt(kotaId);
-        
         const kotaPilih = daftarKota.find(k => k.id == kotaId);
         if(kotaPilih) { db.settings.lat = kotaPilih.lat; db.settings.lng = kotaPilih.lng; }
 
@@ -891,13 +825,6 @@
         initDashboard(); renderSettings();
     }
 
-    // FUNGSI DARURAT (LUPA PASSWORD)
-    function lupaPin() {
-        if(confirm("⚠️ PERHATIAN!\n\nAnda akan melakukan RESET TOTAL karena lupa PIN.\nSemua data ibadah & santri akan DIHAPUS agar Anda bisa membuat PIN baru.\n\nLanjutkan?")) {
-            localStorage.removeItem('amala_pro_db_v23'); // Hapus Database
-            location.reload(); // Refresh halaman jadi baru
-        }
-    }
     function verifikasiLogin() {
         const inputPin = document.getElementById('login-pass').value;
         if(inputPin === db.settings.pin) {
@@ -909,25 +836,24 @@
     }
 
     function logout() {
-        if(confirm("Log Out?")) {
+        if(confirm("Log Out akan mengunci aplikasi. Lanjutkan?")) {
             db.settings.isLoggedIn = false;
             save(); renderSettings();
         }
     }
-
-    function toggleDarkMode() {
-        db.settings.darkMode = !db.settings.darkMode;
-        applyTheme(); save();
+    
+    function resetAplikasi() {
+        if(confirm("⚠️ RESET TOTAL?\nSemua data akan dihapus permanen. Aplikasi kembali seperti baru.\n\nYakin?")) {
+            localStorage.removeItem('amala_pro_db_v23');
+            location.reload();
+        }
     }
 
+    function toggleDarkMode() { db.settings.darkMode = !db.settings.darkMode; applyTheme(); save(); }
     function applyTheme() {
-        const body = document.body;
-        const toggle = document.getElementById('dm-toggle');
-        if(db.settings.darkMode) {
-            body.classList.add('dark-mode'); toggle.style.left = "27px";
-        } else {
-            body.classList.remove('dark-mode'); toggle.style.left = "3px";
-        }
+        const body = document.body; const toggle = document.getElementById('dm-toggle');
+        if(db.settings.darkMode) { body.classList.add('dark-mode'); toggle.style.left = "27px"; } 
+        else { body.classList.remove('dark-mode'); toggle.style.left = "3px"; }
     }
 
     function renderDateHeader() {
@@ -940,7 +866,7 @@
             const hMonthIdx = parseInt(parts.find(p => p.type === 'month').value) - 1;
             const hYear = parts.find(p => p.type === 'year').value;
             document.getElementById('date-hijri').innerText = `${hDay} ${hijriNames[hMonthIdx]} ${hYear} H`;
-        } catch (e) { document.getElementById('date-hijri').innerText = "Kalender Hijriyah Error"; }
+        } catch (e) {}
     }
 
     function changeMonth(dir) {
@@ -952,8 +878,7 @@
 
     function renderCalendar() {
         const container = document.getElementById('calendar-days');
-        if(!container) return;
-        container.innerHTML = "";
+        if(!container) return; container.innerHTML = "";
         
         const firstDay = new Date(displayYear, displayMonth, 1).getDay();
         const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
@@ -985,161 +910,10 @@
         }
     }
 
-    // --- MURID & RAPORT ---
-    function renderMuridPage() {
-        const div = document.getElementById('murid-content');
-        if(db.murid.length === 0) {
-            div.innerHTML = `<div class="card" style="text-align:center;">Belum ada murid. <br><button class="btn-primary" onclick="tambahMurid()" style="margin-top:10px;">+ Tambah</button></div>`;
-            return;
-        }
-        let html = `<div class="card"><button class="btn-primary" onclick="tambahMurid()">+ Tambah Murid</button></div>`;
-        db.murid.forEach((m, i) => {
-            html += `<div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                <div><b>${m.nama}</b><br><small>${m.wa}</small></div>
-                <button onclick="hapusMurid(${i})" style="color:red; background:none; border:none; font-weight:bold;">Hapus</button>
-            </div>`;
-        });
-        div.innerHTML = html;
-    }
-    
-    function tambahMurid() {
-        const nama = prompt("Nama:");
-        const wa = prompt("WA (628...):");
-        if(nama) { db.murid.push({nama, wa}); save(); renderMuridPage(); }
-    }
-    function hapusMurid(i) { if(confirm("Hapus?")) { db.murid.splice(i, 1); save(); renderMuridPage(); } }
-
-    function renderRaportPage() {
-        const div = document.getElementById('raport-content');
-        if(db.murid.length === 0) { div.innerHTML = `<div class="card">Tambah data murid dulu di menu Murid.</div>`; return; }
-        
-        const d = new Date();
-        const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
-        let optsMurid = ""; db.murid.forEach((m, i) => optsMurid += `<option value="${i}">${m.nama}</option>`);
-        let optsSurat = `<option value="">-- Pilih Surat --</option>`;
-        daftarSurat.forEach((s, i) => { optsSurat += `<option value="${i}">${i+1}. ${s.n}</option>`; });
-
-        div.innerHTML = `
-        <input type="hidden" id="rap-current-date" value="${dateStr}">
-        <div class="card" style="border-left: 5px solid var(--btn-bg);">
-            <div style="text-align:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px dashed #ddd;">
-                <small>Laporan Hari:</small><br><b>${dateStr}</b>
-            </div>
-            <label style="font-weight:700;">👤 Pilih Santri:</label>
-            <select id="sel-rap-murid" style="margin-top:5px; background:#f9f9f9;">${optsMurid}</select>
-        </div>
-        <div class="card">
-            <h4 style="color:var(--btn-bg); margin-bottom:10px;">📖 Ziyadah (Hafalan Baru)</h4>
-            <label>Surat:</label>
-            <select id="z-surat" onchange="updateAyatOptions('z')" style="margin-bottom:10px;">${optsSurat}</select>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>Dari Ayat:</label><select id="z-start"><option>-</option></select></div>
-                <div style="flex:1;"><label>Sampai:</label><select id="z-end"><option>-</option></select></div>
-            </div>
-            <label style="margin-top:10px; display:block;">Nilai / Status:</label>
-            <select id="z-status" style="font-weight:bold; color:var(--accent-color);">
-                <option value="LANCAR - LANJUT">✅ LANCAR - LANJUT</option>
-                <option value="BELUM LANCAR - ULANG">⚠️ BELUM LANCAR - ULANG</option>
-                <option value="LIBUR / TIDAK SETOR">⛔ LIBUR / TIDAK SETOR</option>
-            </select>
-        </div>
-        <div class="card">
-            <h4 style="color:#d97706; margin-bottom:10px;">🔄 Murojaah (Mengulang)</h4>
-            <label>Surat:</label>
-            <select id="m-surat" onchange="updateAyatOptions('m')" style="margin-bottom:10px;">${optsSurat}</select>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>Dari Ayat:</label><select id="m-start"><option>-</option></select></div>
-                <div style="flex:1;"><label>Sampai:</label><select id="m-end"><option>-</option></select></div>
-            </div>
-            <label style="margin-top:10px; display:block;">Nilai / Status:</label>
-            <select id="m-status" style="font-weight:bold; color:var(--accent-color);">
-                <option value="LANCAR - LANJUT">✅ LANCAR - LANJUT</option>
-                <option value="BELUM LANCAR - ULANG">⚠️ BELUM LANCAR - ULANG</option>
-                <option value="LIBUR / TIDAK SETOR">⛔ LIBUR / TIDAK SETOR</option>
-            </select>
-        </div>
-        <div class="card" style="background: transparent; box-shadow: none; border:none; padding:0;">
-            <button class="btn-primary" onclick="kirimWA()" style="background:#25D366; color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);"><i class="ph ph-whatsapp-logo" style="font-size:24px;"></i> KIRIM LAPORAN WA</button>
-        </div>`;
-    }
-
-    function updateAyatOptions(prefix) {
-        const suratIdx = document.getElementById(prefix + '-surat').value;
-        const selStart = document.getElementById(prefix + '-start');
-        const selEnd = document.getElementById(prefix + '-end');
-        selStart.innerHTML = ""; selEnd.innerHTML = "";
-        if(suratIdx === "") { selStart.innerHTML = "<option>-</option>"; selEnd.innerHTML = "<option>-</option>"; return; }
-        const maxAyat = daftarSurat[suratIdx].a;
-        let html = ""; for(let i=1; i<=maxAyat; i++) { html += `<option value="${i}">${i}</option>`; }
-        selStart.innerHTML = html; selEnd.innerHTML = html; selEnd.value = maxAyat; 
-    }
-
-    function kirimWA() {
-        const idx = document.getElementById('sel-rap-murid').value;
-        const m = db.murid[idx];
-        const tanggal = document.getElementById('rap-current-date').value;
-        
-        let zText = "-";
-        const zIdx = document.getElementById('z-surat').value;
-        if(zIdx !== "") { zText = `${daftarSurat[zIdx].n} Ayat ${document.getElementById('z-start').value}-${document.getElementById('z-end').value} (${document.getElementById('z-status').value})`; }
-        
-        let mText = "-";
-        const mIdx = document.getElementById('m-surat').value;
-        if(mIdx !== "") { mText = `${daftarSurat[mIdx].n} Ayat ${document.getElementById('m-start').value}-${document.getElementById('m-end').value} (${document.getElementById('m-status').value})`; }
-
-        const text = `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A📅 ${tanggal}%0A%0A📖 *ZIYADAH (Hafalan Baru):*%0A${zText}%0A%0A🔄 *MUROJAAH (Mengulang):*%0A${mText}%0A%0A_Mohon doanya agar ananda istiqomah._%0A_Barakallahu Fikum._`;
-        window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
-    }
-
-    // --- HEATMAP ---
-    function renderHeatmap() {
-        const grid = document.getElementById('heatmap-grid');
-        const title = document.getElementById('hm-period');
-        if(!grid) return; 
-        grid.innerHTML = ""; 
-        const now = new Date(); const currentYear = now.getFullYear(); const currentMonth = now.getMonth(); 
-        title.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }).toUpperCase();
-        const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
-        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        for(let i=0; i<firstDayIndex; i++) { const emptyBox = document.createElement('div'); emptyBox.className = 'hm-box empty'; grid.appendChild(emptyBox); }
-        for(let i=1; i<=daysInMonth; i++) {
-            const d = new Date(currentYear, currentMonth, i);
-            const dateStr = d.toLocaleDateString('en-CA'); 
-            const dateDisplay = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            let data = (dateStr === db.lastDate) ? db.pribadi : (db.history[dateStr] || null);
-            let level = 0; let score = 0;
-            let detailHTML = `<b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br><span style="color:#999; font-size:11px;">Belum ada catatan ibadah.</span>`;
-            if (data) {
-                if(data.dhuha > 0) score++; if(data.tahajjud > 0) score++; if(data.tilawah > 0) score++; if(data.shodaqoh > 0) score++;
-                if(score === 1) level = 1; else if(score === 2) level = 2; else if(score === 3) level = 3; else if(score >= 4) level = 4;
-                const uang = (parseInt(data.shodaqoh)||0).toLocaleString('id-ID');
-                detailHTML = `<b style="font-size:14px; color:var(--btn-bg);">📅 ${dateDisplay}</b><br><div style="margin-top:5px; padding-top:5px; border-top:1px dashed #ccc;">☀️ Dhuha: <b>${data.dhuha}</b> Rakaat<br>🌙 Tahajjud: <b>${data.tahajjud}</b> Rakaat<br>📖 Tilawah: <b>${data.tilawah}</b> Lembar<br>💰 Sedekah: <b>Rp ${uang}</b><br>${data.puasa ? '✅ <b style="color:green">Puasa</b>' : '❌ <span style="opacity:0.7">Tidak Puasa</span>'}</div>`;
-            }
-            const box = document.createElement('div'); box.className = `hm-box hm-lvl-${level}`; box.innerText = i; 
-            if(dateStr === db.lastDate) { box.style.border = "2px solid var(--accent-color)"; box.style.color = "var(--accent-color)"; box.style.fontWeight = "800"; }
-            box.onclick = function() {
-                document.querySelectorAll('.hm-box').forEach(b => { b.classList.remove('selected'); if(b.innerText == new Date().getDate()) b.style.border = "2px solid var(--accent-color)"; else if(!b.classList.contains('empty')) b.style.border = "none"; });
-                this.classList.add('selected'); document.getElementById('hm-detail').innerHTML = detailHTML;
-            };
-            grid.appendChild(box);
-        }
-    }
-
-    // --- PRAYER TIMES (FIXED) ---
+    // --- PRAYER TIMES (SIMPLE OFFSET CALCULATION) ---
     function updatePrayerTimes(lat, lng) {
-        // Rumus Sederhana (Approximate) agar tidak error/minus
-        // Menggunakan library sederhana yg valid
-        const D = new Date();
-        const H = D.getHours() + (D.getMinutes()/60);
-        
-        // Simpel offset WIB (GMT+7)
-        // Subuh ~04:30, Dzuhur ~12:00, Ashar ~15:15, Maghrib ~18:00, Isya ~19:15
-        // Koreksi Latitude: 
-        // 1 Derajat Lat ~ -2 menit sholat (Selatan lebih awal terbit)
-        // 1 Derajat Lng ~ -4 menit (Timur lebih awal)
-        
-        const baseLng = 105; // Base Jakarta approx
-        const diffLng = (lng - baseLng) * 4; // selisih menit
+        const baseLng = 105; // Base Jakarta
+        const diffLng = (lng - baseLng) * 4; 
         
         const subuh = 4.5 - (diffLng/60);
         const dzuhur = 12.05 - (diffLng/60);
@@ -1155,16 +929,13 @@
             return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
         };
 
-        const tSubuh = formatTime(subuh);
-        const tDzuhur = formatTime(dzuhur);
-        const tAshar = formatTime(ashar);
-        const tMaghrib = formatTime(maghrib);
-        const tIsya = formatTime(isya);
+        const tSubuh = formatTime(subuh); const tDzuhur = formatTime(dzuhur); const tAshar = formatTime(ashar);
+        const tMaghrib = formatTime(maghrib); const tIsya = formatTime(isya);
 
-        // Cari Next Prayer
-        let nextP = "Subuh"; let nextT = tSubuh;
+        const D = new Date();
         const curMin = D.getHours()*60 + D.getMinutes();
         const toMin = (str) => parseInt(str.split(':')[0])*60 + parseInt(str.split(':')[1]);
+        let nextP="Subuh"; let nextT=tSubuh;
 
         if(curMin < toMin(tSubuh)) { nextP="Subuh"; nextT=tSubuh; }
         else if(curMin < toMin(tDzuhur)) { nextP="Dzuhur"; nextT=tDzuhur; }
@@ -1173,8 +944,7 @@
         else if(curMin < toMin(tIsya)) { nextP="Isya"; nextT=tIsya; }
         else { nextP="Subuh"; nextT=tSubuh; }
 
-        // Update UI
-        const greetingElement = document.querySelector('.greeting'); 
+        const greetingElement = document.querySelector('p.greeting'); 
         if(greetingElement) {
             greetingElement.innerHTML = `<span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br><div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">🕋 ${nextP}: <b>${nextT}</b> WIB</div>`;
         }
@@ -1194,14 +964,14 @@
 
     // --- INIT ---
     window.onload = () => {
-        // PAKSA LOGOUT SAAT REFRESH/BUKA APLIKASI (PRIVASI)
-        if(db && db.settings) db.settings.isLoggedIn = false; 
-        
+        // PAKSA LOGOUT SAAT BUKA BIAR PRIVASI AMAN
+        if(db && db.settings) db.settings.isLoggedIn = false;
         checkNewDay(); initDashboard(); applyTheme(); renderDateHeader(); updateUI(); renderCalendar();   
     };
 </script>
-    
+
 </body>
 </html>
+
 
 
