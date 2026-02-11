@@ -1105,22 +1105,79 @@
         renderCalendar();
     }
 
+    // --- PERBAIKAN TOTAL FITUR MURID (TOMBOL SELALU MUNCUL) ---
+
     function renderMuridPage() {
         const div = document.getElementById('murid-content');
-        // Always show the "Add" button, even if the list is empty or not
-        let html = `<div class="card"><button class="btn-primary" onclick="tambahMurid()">+ Tambah Murid</button></div>`;
         
-        if(db.murid.length === 0) {
-            html += `<div class="card" style="text-align:center; padding: 20px; color: #666;">Belum ada murid. Silakan tambah data.</div>`;
+        // Safety Check: Jika database murid belum ada, kita buat array kosong biar tidak error
+        if (!db.murid) db.murid = [];
+
+        // 1. JUDUL & TOMBOL TAMBAH (Taru di atas biar selalu muncul)
+        let html = `
+            <div class="card" style="text-align:center; margin-bottom:10px;">
+                <button class="btn-primary" onclick="tambahMurid()" style="background:var(--btn-bg); color:var(--btn-text);">
+                    <i class="ph ph-plus-circle" style="font-size:20px;"></i> Tambah Murid Baru
+                </button>
+            </div>
+        `;
+
+        // 2. DAFTAR LIST MURID
+        if (db.murid.length === 0) {
+            // Jika kosong, tampilkan pesan
+            html += `
+            <div style="text-align:center; padding:20px; color:#999; border:2px dashed #ccc; border-radius:10px;">
+                <i class="ph ph-users" style="font-size:32px; margin-bottom:5px;"></i><br>
+                Belum ada data santri.<br>
+                Klik tombol di atas untuk menambah.
+            </div>`;
         } else {
+            // Jika ada isinya, tampilkan loop
             db.murid.forEach((m, i) => {
-                html += `<div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><b>${m.nama}</b><br><small>${m.wa}</small></div>
-                    <button onclick="hapusMurid(${i})" style="color:red; background:none; border:none; font-weight:bold;">Hapus</button>
+                html += `
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div style="text-align:left;">
+                        <b style="font-size:14px; color:var(--text-main);">${m.nama}</b><br>
+                        <small style="color:var(--accent-color); font-weight:bold;">${m.wa}</small>
+                    </div>
+                    <button onclick="hapusMurid(${i})" style="color:red; background:none; border:1px solid red; border-radius:8px; padding:5px 10px; font-size:11px; font-weight:bold; cursor:pointer;">
+                        <i class="ph ph-trash"></i> Hapus
+                    </button>
                 </div>`;
             });
         }
+        
         div.innerHTML = html;
+    }
+    
+    function tambahMurid() {
+        // 1. Munculkan Popup Input
+        const nama = prompt("Masukkan Nama Santri:");
+        // Kalau user klik Cancel atau kosong, berhenti
+        if (!nama) return; 
+
+        const wa = prompt("Masukkan No WA (Format: 628...):");
+        // Kalau user klik Cancel, berhenti
+        if (!wa) return;
+
+        // 2. Masukkan ke Database
+        if (!db.murid) db.murid = []; // Jaga-jaga
+        db.murid.push({ nama: nama, wa: wa });
+        
+        // 3. Simpan & Refresh
+        save(); 
+        renderMuridPage(); 
+        
+        // Feedback
+        alert("✅ Berhasil! Santri " + nama + " ditambahkan.");
+    }
+
+    function hapusMurid(i) { 
+        if(confirm("Yakin ingin menghapus data santri ini?")) { 
+            db.murid.splice(i, 1); // Hapus dari array
+            save(); // Simpan
+            renderMuridPage(); // Refresh tampilan
+        } 
     }
     
     function renderCalendar() {
@@ -1219,6 +1276,7 @@
 
 </body>
 </html>
+
 
 
 
