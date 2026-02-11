@@ -918,50 +918,62 @@
         const pSetup = document.getElementById('panel-setup');
         const pLogin = document.getElementById('panel-login');
         
+        // Elemen-elemen Form
         const divPinRegister = document.getElementById('div-pin-register');
         const btnToggle = document.getElementById('btn-trigger-ganti');
         const divGantiPin = document.getElementById('div-ganti-pin');
         const btnLogout = document.getElementById('btn-logout');
+        const inputName = document.getElementById('set-name');
+        const inputLokasi = document.getElementById('set-lokasi');
 
-        // KONDISI 1: USER BARU (SIGN UP)
+        // KONDISI 1: USER BARU / HABIS RESET (SIGN UP)
         if (!db.settings.setupDone) {
-            pSetup.style.display = 'block'; pLogin.style.display = 'none';
+            pSetup.style.display = 'block'; 
+            pLogin.style.display = 'none';
+            
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
-            document.getElementById('setup-btn-text').innerText = 'Buat Profil & Masuk';
+            document.getElementById('setup-desc').innerText = 'Silakan buat profil baru.';
+            document.getElementById('setup-btn-text').innerText = 'Simpan & Mulai';
             
-            // Tampilkan Input PIN UTAMA
-            divPinRegister.style.display = 'block';
+            // WAJIB: Tampilkan Kotak Buat PIN
+            divPinRegister.style.display = 'block'; 
             
-            // Sembunyikan fitur ganti pin & logout
-            btnToggle.style.display = 'none';
+            // Sembunyikan fitur user lama
+            btnToggle.style.display = 'none'; 
             divGantiPin.style.display = 'none';
             btnLogout.style.display = 'none';
             
-            document.getElementById('set-name').value = "";
+            // Reset Form
+            inputName.value = "";
             document.getElementById('set-pin-awal').value = "";
         } 
         
-        // KONDISI 2: USER LAMA (BELUM LOGIN)
+        // KONDISI 2: USER LAMA BELUM LOGIN (TERKUNCI)
         else if (db.settings.setupDone && !db.settings.isLoggedIn) {
-            pSetup.style.display = 'none'; pLogin.style.display = 'block';
+            pSetup.style.display = 'none'; 
+            pLogin.style.display = 'block';
         } 
         
-        // KONDISI 3: USER LAMA (SUDAH LOGIN) -> EDIT PROFIL
+        // KONDISI 3: USER LAMA SUDAH LOGIN (EDIT PROFIL)
         else {
-            pSetup.style.display = 'block'; pLogin.style.display = 'none';
+            pSetup.style.display = 'block'; 
+            pLogin.style.display = 'none';
+            
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
+            document.getElementById('setup-desc').innerText = 'Ubah data diri Anda.';
             document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
             
-            // HILANGKAN INPUT PIN UTAMA (PRIVASI)
+            // WAJIB: Sembunyikan Kotak PIN Awal (Privasi)
             divPinRegister.style.display = 'none';
             
-            // MUNCULKAN OPSI GANTI PIN & LOGOUT
+            // Tampilkan fitur user lama
             btnToggle.style.display = 'block';
-            divGantiPin.style.display = 'none'; // Default hidden
+            divGantiPin.style.display = 'none'; // Default tertutup
             btnLogout.style.display = 'block';
             
-            document.getElementById('set-name').value = db.settings.userName;
-            if(db.settings.kotaId) document.getElementById('set-lokasi').value = db.settings.kotaId;
+            // Isi Data Lama
+            inputName.value = db.settings.userName;
+            if(db.settings.kotaId !== undefined) inputLokasi.value = db.settings.kotaId;
         }
     }
 
@@ -977,21 +989,33 @@
     }
 
     function saveProfile() {
-        const newName = document.getElementById('set-name').value;
-        const kotaId = document.getElementById('set-lokasi').value;
+        // Ambil elemen input
+        const nameInput = document.getElementById('set-name');
+        const lokasiInput = document.getElementById('set-lokasi');
+        const pinAwalInput = document.getElementById('set-pin-awal'); // Input User Baru
         
+        // Ambil Nilainya
+        const newName = nameInput.value;
+        const kotaId = lokasiInput.value;
+        
+        // 1. CEK NAMA
         if(!newName) { alert("⚠️ Nama wajib diisi!"); return; }
 
-        // PIN Logic
+        // 2. CEK PIN (LOGIKA KRUSIAL UNTUK DAFTAR ULANG)
+        // Jika Setup Belum Selesai (User Baru/Habis Reset)
         if (!db.settings.setupDone) {
-            // New User
-            const pinAwal = document.getElementById('set-pin-awal').value;
-            if(!pinAwal) { alert("⚠️ Wajib buat PIN akses!"); return; }
-            db.settings.pin = pinAwal;
-        } else {
-            // Existing User - Check if they want to change PIN
+            const pinBaru = pinAwalInput.value;
+            if(!pinBaru) { 
+                alert("⚠️ Wajib buat PIN akses baru!"); 
+                pinAwalInput.focus(); // Arahkan kursor ke kotak PIN
+                return; 
+            }
+            db.settings.pin = pinBaru; // Simpan PIN
+        } 
+        // Jika User Lama (Ganti PIN)
+        else {
             const boxGanti = document.getElementById('div-ganti-pin');
-            // Only validate if the change box is visible
+            // Hanya cek validasi jika kotak ganti PIN sedang dibuka
             if (boxGanti.style.display === 'block') {
                 const pLama = document.getElementById('verif-pin-lama').value;
                 const pBaru = document.getElementById('verif-pin-baru').value;
@@ -1003,41 +1027,33 @@
             }
         }
 
-        // Save Profile Data
-        db.settings.userName = newName;
-        db.settings.kotaId = parseInt(kotaId);
-        
-        // Find city coordinates
-        const kotaPilih = daftarKota.find(k => k.id == kotaId);
-        if(kotaPilih) { 
-            db.settings.lat = kotaPilih.lat; 
-            db.settings.lng = kotaPilih.lng; 
+        // 3. CEK LOKASI (MENCEGAH CRASH)
+        if (kotaId === "" || kotaId === null) {
+            alert("⚠️ Harap pilih lokasi kota!"); return;
         }
 
-        db.settings.setupDone = true;
-        db.settings.isLoggedIn = true;
-        
-        save();
-        alert("✅ Profil tersimpan!");
-        
-        // Refresh UI
-        initDashboard(); 
-        renderSettings();
-    }
+        const kotaPilih = daftarKota.find(k => k.id == kotaId);
+        if (!kotaPilih) {
+            alert("⚠️ Data kota tidak valid. Silakan pilih ulang."); return;
+        }
 
+        // 4. SIMPAN KE DATABASE
         db.settings.userName = newName;
         db.settings.kotaId = parseInt(kotaId);
-        const kotaPilih = daftarKota.find(k => k.id == kotaId);
-        if(kotaPilih) { db.settings.lat = kotaPilih.lat; db.settings.lng = kotaPilih.lng; }
+        db.settings.lat = kotaPilih.lat;
+        db.settings.lng = kotaPilih.lng;
 
+        // Kunci Data
         db.settings.setupDone = true;
         db.settings.isLoggedIn = true;
         
-        save();
-        alert("✅ Profil tersimpan!");
-        initDashboard(); renderSettings();
+        save(); // Simpan ke memori HP
+        alert("✅ Alhamdulillah! Profil Berhasil Disimpan.");
+        
+        initDashboard(); 
+        renderSettings(); // Refresh tampilan agar kotak PIN hilang
     }
-
+    
     function verifikasiLogin() {
         const inputPin = document.getElementById('login-pass').value;
         if(inputPin === db.settings.pin) {
@@ -1203,6 +1219,7 @@
 
 </body>
 </html>
+
 
 
 
