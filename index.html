@@ -342,7 +342,6 @@
         </div>
         <div class="card">
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
-            
             <div style="font-size:13px; line-height:1.6; color:var(--text-main); margin-top:10px;">
                 <b>AMALA v.1.0</b><br>
                 Aplikasi Muhasabah dan Raport Digital<br>
@@ -361,16 +360,10 @@
             <div style="margin-top:10px; font-size:10px; color:#999; text-align:center;">
                 &copy; 2026 Kalam Kencana. All Rights Reserved.
             </div>
-        </div>
-    
-    <div id="page-pagi" class="page">
-       <div class="header-dzikir">
-    <button onclick="openPage('amalan')" class="btn-back-custom">
-        <i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali
-    </button>
-    <h1>DZIKIR PAGI</h1>
-</div>
-        <div class="dzikir-scroll">
+            
+        </div> <div id="page-pagi" class="page">
+            <div class="header-dzikir"><button onclick="openPage('amalan')" class="btn-back-custom"><i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali</button><h1>DZIKIR PAGI</h1></div>
+            <div class="dzikir-scroll">
             <div class="dzikir-item" data-max="1" onclick="hitungDzikir(this)">
                 <span class="dzikir-title">Taawudz</span>
                 <div class="counter-badge"><i class="ph ph-hash"></i> <span class="num">1</span></div>
@@ -495,13 +488,8 @@
     </div>
 
     <div id="page-petang" class="page">
-        <div class="header-dzikir">
-    <button onclick="openPage('amalan')" class="btn-back-custom">
-        <i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali
-    </button>
-    <h1>DZIKIR PETANG</h1>
-</div>
-        <div class="dzikir-scroll">
+    <div class="header-dzikir"><button onclick="openPage('amalan')" class="btn-back-custom"><i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali</button><h1>DZIKIR PETANG</h1></div>
+    <div class="dzikir-scroll">
             <div class="dzikir-item" data-max="1" onclick="hitungDzikir(this)">
                 <span class="dzikir-title">Taawudz</span>
                 <div class="counter-badge"><i class="ph ph-hash"></i> <span class="num">1</span></div>
@@ -617,17 +605,16 @@
                 <p class="terjemah">“Aku memohon ampun kepada Allah dan bertobat kepada-Nya.” (Dibaca 100 x dalam sehari)</p>
             </div>
         </div>
-    </div>
-</div>
-<nav class="bottom-nav">
-    <div class="nav-item active" onclick="openPage('amalan', this)"><i class="ph ph-hands-praying"></i><span>Amalan</span></div>
-    <div class="nav-item" onclick="checkAccess('murid', this)"><i class="ph ph-users-three"></i><span>Murid</span></div>
-    <div class="nav-item" onclick="checkAccess('raport', this)"><i class="ph ph-article"></i><span>Raport</span></div>
-    <div class="nav-item" onclick="openPage('statistik', this)"><i class="ph ph-chart-pie"></i><span>Statistik</span></div>
-    <div class="nav-item" onclick="openPage('kalender', this)"><i class="ph ph-calendar-blank"></i><span>Kalender</span></div>
-    <div class="nav-item" onclick="openPage('setting', this)"><i class="ph ph-gear"></i><span>Setting</span></div>
-</nav>
-<script>
+    
+        </div> <nav class="bottom-nav">
+            <div class="nav-item active" onclick="openPage('amalan', this)"><i class="ph ph-hands-praying"></i><span>Amalan</span></div>
+            <div class="nav-item" onclick="checkAccess('murid', this)"><i class="ph ph-users-three"></i><span>Murid</span></div>
+            <div class="nav-item" onclick="checkAccess('raport', this)"><i class="ph ph-article"></i><span>Raport</span></div>
+            <div class="nav-item" onclick="openPage('statistik', this)"><i class="ph ph-chart-pie"></i><span>Statistik</span></div>
+            <div class="nav-item" onclick="openPage('kalender', this)"><i class="ph ph-calendar-blank"></i><span>Kalender</span></div>
+            <div class="nav-item" onclick="openPage('setting', this)"><i class="ph ph-gear"></i><span>Setting</span></div>
+        </nav><script>
+            
     // --- 1. CONFIG & STATE (ANTI CRASH) ---
     let rawData = localStorage.getItem('amala_pro_db_v23');
     let db;
@@ -1412,6 +1399,7 @@
 
 </body>
 </html>
+
 
 
 
