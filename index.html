@@ -56,25 +56,27 @@
             width: 100%; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; 
         }
         
-        /* --- PERBAIKAN BOTTOM NAV (BIAR GAK HILANG) --- */
+        /* --- MENU BAWAH (FIXED, TENGAH, & ANTI HILANG) --- */
         .bottom-nav { 
-            position: fixed; 
-            bottom: 0 !important; /* Paksa nempel bawah */
-            left: 50%; /* Trik tengah */
-            transform: translateX(-50%); /* Trik tengah */
-            width: 100%; 
-            max-width: 480px; /* Ikut lebar container */
+            position: fixed;        /* Kunci posisi di layar */
+            bottom: 0;              /* Tempel di paling bawah */
+            left: 50%;              /* Trik agar rata tengah */
+            transform: translateX(-50%); /* Trik agar rata tengah */
+            
+            width: 100%;            /* Lebar mengikuti layar */
+            max-width: 480px;       /* TAPI jangan lebih dari lebar HP (480px) */
+            
             background: var(--card-bg); 
             display: flex; 
             justify-content: space-around; 
-            padding: 12px 0; 
+            padding: 10px 0;        /* Padding pas */
             border-top-left-radius: 20px; 
             border-top-right-radius: 20px; 
             box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
-            z-index: 9999; /* LAPISAN PALING ATAS (ANTI HILANG) */
             border-top: 1px solid rgba(0,0,0,0.05);
+            
+            z-index: 9999 !important; /* INI KUNCINYA: Lapisan paling atas (Top Layer) */
         }
-
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-main); opacity: 0.5; cursor: pointer; gap: 5px; flex: 1; }
         .nav-item i { font-size: 24px; }
         .nav-item span { font-size: 9px; font-weight: 700; text-transform: uppercase; }
@@ -290,7 +292,7 @@
 
             <div id="div-pin-register">
                 <label style="font-size:12px; font-weight:bold; color:var(--btn-bg);">Buat PIN Akses (Angka):</label>
-                <input type="password" inputmode="numeric" id="set-pin-awal" placeholder="Buat PIN Rahasia">
+                <input type="password" inputmode="numeric" id="set-pin-awal" placeholder="Buat PIN Rahasia" onkeypress="if(event.key === 'Enter') saveProfile()">
             </div>
 
             <div id="div-ganti-pin" style="display:none; background:rgba(255,0,0,0.05); padding:10px; border-radius:8px; margin-bottom:15px; border:1px dashed red;">
@@ -317,7 +319,7 @@
             <h4><i class="ph ph-lock-key"></i> Login Pemilik</h4>
             <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN.</p>
             
-            <input type="password" inputmode="numeric" id="login-pass" placeholder="PIN Akses">
+            <input type="password" inputmode="numeric" id="login-pass" placeholder="PIN Akses" onkeypress="if(event.key === 'Enter') verifikasiLogin()">
             <button class="btn-primary" onclick="verifikasiLogin()">Buka Akses</button>
             <p id="login-status" style="font-size:12px; margin-top:5px; font-weight:bold; color:red;"></p>
             
@@ -1410,6 +1412,7 @@
 
 </body>
 </html>
+
 
 
 
