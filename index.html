@@ -245,13 +245,13 @@
 
             <div id="div-pin-register">
                 <label style="font-size:12px; font-weight:bold; color:var(--btn-bg);">Buat PIN Akses (Angka):</label>
-                <input type="number" id="set-pin-awal" placeholder="Contoh: 1234">
+                <input type="password" inputmode="numeric" id="set-pin-awal" placeholder="Buat PIN Rahasia">
             </div>
 
             <div id="div-ganti-pin" style="display:none; background:rgba(255,0,0,0.05); padding:10px; border-radius:8px; margin-bottom:15px; border:1px dashed red;">
                 <p style="font-size:11px; font-weight:bold; color:red; margin-bottom:5px;">KEAMANAN: Masukkan PIN Lama untuk mengganti.</p>
-                <input type="number" id="verif-pin-lama" placeholder="Masukkan PIN Lama">
-                <input type="number" id="verif-pin-baru" placeholder="Masukkan PIN Baru">
+                <input type="password" inputmode="numeric" id="verif-pin-lama" placeholder="Masukkan PIN Lama">
+                <input type="password" inputmode="numeric" id="verif-pin-baru" placeholder="Masukkan PIN Baru">
             </div>
 
             <div style="display:flex; gap:10px; margin-top:15px;">
@@ -271,7 +271,8 @@
         <div id="panel-login" class="card" style="border-left: 5px solid var(--btn-bg); display:none;">
             <h4><i class="ph ph-lock-key"></i> Login Pemilik</h4>
             <p style="font-size:12px; margin-bottom:10px;">Aplikasi terkunci. Masukkan PIN.</p>
-            <input type="password" id="login-pass" placeholder="PIN Akses">
+            
+            <input type="password" inputmode="numeric" id="login-pass" placeholder="PIN Akses">
             <button class="btn-primary" onclick="verifikasiLogin()">Buka Akses</button>
             <p id="login-status" style="font-size:12px; margin-top:5px; font-weight:bold; color:red;"></p>
             
@@ -941,27 +942,23 @@
         else { alert("🔒 AKSES TERKUNCI.\nSilakan Login di Setting."); openPage('setting'); }
     }
 
-    // --- LOGIC SETTINGS (KEAMANAN) ---
+    // --- LOGIC SETTINGS (KEAMANAN FIXED) ---
+
     function renderSettings() {
         const pSetup = document.getElementById('panel-setup');
         const pLogin = document.getElementById('panel-login');
         
-        // Elemen-elemen Form
         const divPinRegister = document.getElementById('div-pin-register');
         const btnToggle = document.getElementById('btn-trigger-ganti');
         const divGantiPin = document.getElementById('div-ganti-pin');
         const btnLogout = document.getElementById('btn-logout');
-        const inputName = document.getElementById('set-name');
-        const inputLokasi = document.getElementById('set-lokasi');
 
-        // KONDISI 1: USER BARU / HABIS RESET (SIGN UP)
+        // KONDISI 1: USER BARU (SIGN UP)
         if (!db.settings.setupDone) {
             pSetup.style.display = 'block'; 
             pLogin.style.display = 'none';
-            
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-sparkle"></i> Selamat Datang!';
-            document.getElementById('setup-desc').innerText = 'Silakan buat profil baru.';
-            document.getElementById('setup-btn-text').innerText = 'Simpan & Mulai';
+            document.getElementById('setup-btn-text').innerText = 'Simpan & Masuk';
             
             // WAJIB: Tampilkan Kotak Buat PIN
             divPinRegister.style.display = 'block'; 
@@ -971,8 +968,7 @@
             divGantiPin.style.display = 'none';
             btnLogout.style.display = 'none';
             
-            // Reset Form
-            inputName.value = "";
+            document.getElementById('set-name').value = "";
             document.getElementById('set-pin-awal').value = "";
         } 
         
@@ -988,7 +984,6 @@
             pLogin.style.display = 'none';
             
             document.getElementById('setup-title').innerHTML = '<i class="ph ph-user-gear"></i> Edit Profil';
-            document.getElementById('setup-desc').innerText = 'Ubah data diri Anda.';
             document.getElementById('setup-btn-text').innerText = 'Simpan Perubahan';
             
             // WAJIB: Sembunyikan Kotak PIN Awal (Privasi)
@@ -1000,50 +995,37 @@
             btnLogout.style.display = 'block';
             
             // Isi Data Lama
-            inputName.value = db.settings.userName;
-            if(db.settings.kotaId !== undefined) inputLokasi.value = db.settings.kotaId;
+            document.getElementById('set-name').value = db.settings.userName;
+            if(db.settings.kotaId !== undefined) document.getElementById('set-lokasi').value = db.settings.kotaId;
         }
     }
 
     function toggleGantiPin() {
         const box = document.getElementById('div-ganti-pin');
         if (box.style.display === 'none') {
-            box.style.display = 'block';
+            box.style.display = 'block'; // Munculkan form ganti PIN
         } else {
-            box.style.display = 'none';
+            box.style.display = 'none'; // Tutup lagi
             document.getElementById('verif-pin-lama').value = "";
             document.getElementById('verif-pin-baru').value = "";
         }
     }
 
     function saveProfile() {
-        // Ambil elemen input
-        const nameInput = document.getElementById('set-name');
-        const lokasiInput = document.getElementById('set-lokasi');
-        const pinAwalInput = document.getElementById('set-pin-awal'); // Input User Baru
+        const newName = document.getElementById('set-name').value;
+        const kotaId = document.getElementById('set-lokasi').value;
         
-        // Ambil Nilainya
-        const newName = nameInput.value;
-        const kotaId = lokasiInput.value;
-        
-        // 1. CEK NAMA
         if(!newName) { alert("⚠️ Nama wajib diisi!"); return; }
 
-        // 2. CEK PIN (LOGIKA KRUSIAL UNTUK DAFTAR ULANG)
-        // Jika Setup Belum Selesai (User Baru/Habis Reset)
+        // LOGIKA PIN (PENTING)
         if (!db.settings.setupDone) {
-            const pinBaru = pinAwalInput.value;
-            if(!pinBaru) { 
-                alert("⚠️ Wajib buat PIN akses baru!"); 
-                pinAwalInput.focus(); // Arahkan kursor ke kotak PIN
-                return; 
-            }
-            db.settings.pin = pinBaru; // Simpan PIN
-        } 
-        // Jika User Lama (Ganti PIN)
-        else {
+            // Jika User Baru -> Ambil dari kotak "set-pin-awal"
+            const pinAwal = document.getElementById('set-pin-awal').value;
+            if(!pinAwal) { alert("⚠️ Wajib buat PIN akses!"); return; }
+            db.settings.pin = pinAwal;
+        } else {
+            // Jika User Lama -> Cek kotak Ganti PIN
             const boxGanti = document.getElementById('div-ganti-pin');
-            // Hanya cek validasi jika kotak ganti PIN sedang dibuka
             if (boxGanti.style.display === 'block') {
                 const pLama = document.getElementById('verif-pin-lama').value;
                 const pBaru = document.getElementById('verif-pin-baru').value;
@@ -1051,42 +1033,34 @@
                 if (pLama !== db.settings.pin) { alert("⛔ PIN LAMA SALAH! Gagal menyimpan."); return; }
                 if (!pBaru) { alert("⚠️ PIN Baru belum diisi!"); return; }
                 
-                db.settings.pin = pBaru;
+                db.settings.pin = pBaru; // Update PIN
             }
         }
 
-        // 3. CEK LOKASI (MENCEGAH CRASH)
-        if (kotaId === "" || kotaId === null) {
-            alert("⚠️ Harap pilih lokasi kota!"); return;
-        }
-
-        const kotaPilih = daftarKota.find(k => k.id == kotaId);
-        if (!kotaPilih) {
-            alert("⚠️ Data kota tidak valid. Silakan pilih ulang."); return;
-        }
-
-        // 4. SIMPAN KE DATABASE
         db.settings.userName = newName;
         db.settings.kotaId = parseInt(kotaId);
-        db.settings.lat = kotaPilih.lat;
-        db.settings.lng = kotaPilih.lng;
+        
+        const kotaPilih = daftarKota.find(k => k.id == kotaId);
+        if(kotaPilih) { 
+            db.settings.lat = kotaPilih.lat; 
+            db.settings.lng = kotaPilih.lng; 
+        }
 
-        // Kunci Data
         db.settings.setupDone = true;
         db.settings.isLoggedIn = true;
         
-        save(); // Simpan ke memori HP
-        alert("✅ Alhamdulillah! Profil Berhasil Disimpan.");
-        
+        save();
+        alert("✅ Profil tersimpan!");
         initDashboard(); 
-        renderSettings(); // Refresh tampilan agar kotak PIN hilang
+        renderSettings();
     }
-    
+
     function verifikasiLogin() {
         const inputPin = document.getElementById('login-pass').value;
         if(inputPin === db.settings.pin) {
             db.settings.isLoggedIn = true;
-            save(); renderSettings();
+            save(); 
+            renderSettings();
         } else {
             document.getElementById('login-status').innerText = "🚫 PIN SALAH!";
         }
@@ -1095,7 +1069,8 @@
     function logout() {
         if(confirm("Log Out akan mengunci aplikasi. Lanjutkan?")) {
             db.settings.isLoggedIn = false;
-            save(); renderSettings();
+            save(); 
+            renderSettings();
         }
     }
     
@@ -1105,7 +1080,7 @@
             location.reload();
         }
     }
-
+    
     function toggleDarkMode() { db.settings.darkMode = !db.settings.darkMode; applyTheme(); save(); }
     function applyTheme() {
         const body = document.body; const toggle = document.getElementById('dm-toggle');
@@ -1304,6 +1279,7 @@
 
 </body>
 </html>
+
 
 
 
