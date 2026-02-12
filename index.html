@@ -28,14 +28,14 @@
             overflow-x: hidden; /* Mencegah geser samping */
         }
 
-        .app-container { 
-            width: 100%; 
-            max-width: 480px; 
-            margin: 0 auto; /* Pastikan selalu tengah */
-            padding-bottom: 120px; /* Space biar konten paling bawah tidak ketutup menu */
-            position: relative; 
-            min-height: 100vh;
-        }
+        /* GANTI BAGIAN .app-container DENGAN INI */
+    .app-container { 
+        width: 100%; 
+        max-width: 480px; 
+        padding-bottom: 120px !important; /* KASIH JARAK BESAR DI BAWAH */
+        position: relative; 
+        margin: 0 auto; /* Center body */
+    }
 
         .page { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
@@ -56,27 +56,28 @@
             width: 100%; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; 
         }
         
-        /* --- MENU BAWAH (FIXED, TENGAH, & ANTI HILANG) --- */
-        .bottom-nav { 
-            position: fixed;        /* Kunci posisi di layar */
-            bottom: 0;              /* Tempel di paling bawah */
-            left: 50%;              /* Trik agar rata tengah */
-            transform: translateX(-50%); /* Trik agar rata tengah */
-            
-            width: 100%;            /* Lebar mengikuti layar */
-            max-width: 480px;       /* TAPI jangan lebih dari lebar HP (480px) */
-            
-            background: var(--card-bg); 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 10px 0;        /* Padding pas */
-            border-top-left-radius: 20px; 
-            border-top-right-radius: 20px; 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
-            border-top: 1px solid rgba(0,0,0,0.05);
-            
-            z-index: 9999 !important; /* INI KUNCINYA: Lapisan paling atas (Top Layer) */
-        }
+        /* GANTI BAGIAN .bottom-nav DENGAN INI */
+    .bottom-nav {
+        position: fixed !important;    /* Kunci posisi: TETAP */
+        bottom: 0 !important;          /* Tempel di lantai bawah */
+        left: 50% !important;          /* Posisi tengah horizontal */
+        transform: translateX(-50%) !important; /* Trik Center Akurat */
+        
+        width: 100%;
+        max-width: 480px;              /* Samakan lebar dengan body HP */
+        background: var(--card-bg);
+        
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;               /* Padding pas */
+        
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.2); /* Bayangan lebih tebal biar kelihatan misah */
+        
+        z-index: 2147483647 !important; /* ANGKANYA MAKSIMAL (Lapisan Tertinggi di Dunia Web) */
+        /* Ini menjamin navbar TIDAK AKAN PERNAH KETUTUP elemen apapun */
+    }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-main); opacity: 0.5; cursor: pointer; gap: 5px; flex: 1; }
         .nav-item i { font-size: 24px; }
         .nav-item span { font-size: 9px; font-weight: 700; text-transform: uppercase; }
@@ -1412,6 +1413,7 @@
 
 </body>
 </html>
+
 
 
 
