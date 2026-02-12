@@ -616,11 +616,39 @@
         {id:18, nama:"Temanggung", lat:-7.3135, lng:110.1706}
     ];
 
+    // --- DATABASE AL-QURAN (LENGKAP 114 SURAT) ---
     const daftarSurat = [
         {n:"Al-Fatihah", a:7}, {n:"Al-Baqarah", a:286}, {n:"Ali 'Imran", a:200}, {n:"An-Nisa'", a:176},
-        {n:"Al-Ma'idah", a:120}, {n:"Al-An'am", a:165}, {n:"Al-A'raf", a:206} // Disngkat biar muat, sistem sudah paham logicnya
+        {n:"Al-Ma'idah", a:120}, {n:"Al-An'am", a:165}, {n:"Al-A'raf", a:206}, {n:"Al-Anfal", a:75},
+        {n:"At-Taubah", a:129}, {n:"Yunus", a:109}, {n:"Hud", a:123}, {n:"Yusuf", a:111},
+        {n:"Ar-Ra'd", a:43}, {n:"Ibrahim", a:52}, {n:"Al-Hijr", a:99}, {n:"An-Nahl", a:128},
+        {n:"Al-Isra'", a:111}, {n:"Al-Kahfi", a:110}, {n:"Maryam", a:98}, {n:"Thaha", a:135},
+        {n:"Al-Anbiya'", a:112}, {n:"Al-Hajj", a:78}, {n:"Al-Mu'minun", a:118}, {n:"An-Nur", a:64},
+        {n:"Al-Furqan", a:77}, {n:"Asy-Syu'ara'", a:227}, {n:"An-Naml", a:93}, {n:"Al-Qashshash", a:88},
+        {n:"Al-Ankabut", a:69}, {n:"Ar-Rum", a:60}, {n:"Luqman", a:34}, {n:"As-Sajdah", a:30},
+        {n:"Al-Ahzab", a:73}, {n:"Saba'", a:54}, {n:"Fatir", a:45}, {n:"Ya Sin", a:83},
+        {n:"As-Shaffat", a:182}, {n:"Shad", a:88}, {n:"Az-Zumar", a:75}, {n:"Ghafir", a:85},
+        {n:"Fushshilat", a:54}, {n:"Asy-Syura", a:53}, {n:"Az-Zukhruf", a:89}, {n:"Ad-Dukhan", a:59},
+        {n:"Al-Jatsiyah", a:37}, {n:"Al-Ahqaf", a:35}, {n:"Muhammad", a:38}, {n:"Al-Fath", a:29},
+        {n:"Al-Hujurat", a:18}, {n:"Qaf", a:45}, {n:"Az-Dzariyat", a:60}, {n:"Ath-Thur", a:49},
+        {n:"An-Najm", a:62}, {n:"Al-Qamar", a:55}, {n:"Ar-Rahman", a:78}, {n:"Al-Waqi'ah", a:96},
+        {n:"Al-Hadid", a:29}, {n:"Al-Mujadilah", a:22}, {n:"Al-Hasyr", a:24}, {n:"Al-Mumtahanah", a:13},
+        {n:"As-Shaff", a:14}, {n:"Al-Jumu'ah", a:11}, {n:"Al-Munafiqun", a:11}, {n:"At-Taghabun", a:18},
+        {n:"Ath-Thalaq", a:12}, {n:"At-Tahrim", a:12}, {n:"Al-Mulk", a:30}, {n:"Al-Qalam", a:52},
+        {n:"Al-Haqqah", a:52}, {n:"Al-Ma'arij", a:44}, {n:"Nuh", a:28}, {n:"Al-Jinn", a:28},
+        {n:"Al-Muzzammil", a:20}, {n:"Al-Muddatstsir", a:56}, {n:"Al-Qiyamah", a:40}, {n:"Al-Insan", a:31},
+        {n:"Al-Mursalat", a:50}, {n:"An-Naba'", a:40}, {n:"An-Nazi'at", a:46}, {n:"'Abasa", a:42},
+        {n:"At-Takwir", a:29}, {n:"Al-Infithar", a:19}, {n:"Al-Muthaffifin", a:36}, {n:"Al-Insyiqaq", a:25},
+        {n:"Al-Buruj", a:22}, {n:"Ath-Thariq", a:17}, {n:"Al-A'la", a:19}, {n:"Al-Ghasyiyah", a:26},
+        {n:"Al-Fajr", a:30}, {n:"Al-Balad", a:20}, {n:"Asy-Syams", a:15}, {n:"Al-Lail", a:21},
+        {n:"Adh-Dhuha", a:11}, {n:"Al-Insyirah", a:8}, {n:"At-Tin", a:8}, {n:"Al-'Alaq", a:19},
+        {n:"Al-Qadr", a:5}, {n:"Al-Bayyinah", a:8}, {n:"Al-Zalzalah", a:8}, {n:"Al-'Adiyat", a:11},
+        {n:"Al-Qari'ah", a:11}, {n:"At-Takatsur", a:8}, {n:"Al-'Ashr", a:3}, {n:"Al-Humazah", a:9},
+        {n:"Al-Fil", a:5}, {n:"Quraisy", a:4}, {n:"Al-Ma'un", a:7}, {n:"Al-Kautsar", a:3},
+        {n:"Al-Kafirun", a:6}, {n:"An-Nashr", a:3}, {n:"Al-Lahab", a:5}, {n:"Al-Ikhlas", a:4},
+        {n:"Al-Falaq", a:5}, {n:"An-Nas", a:6}
     ];
-
+    
     let tasbih = { pagi: 0, petang: 0 };
     let displayMonth = new Date().getMonth();
     let displayYear = new Date().getFullYear();
@@ -1276,6 +1304,7 @@
 
 </body>
 </html>
+
 
 
 
