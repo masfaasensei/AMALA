@@ -39,7 +39,7 @@
         /* UPDATE NAVBAR (CENTER & BATAS LEBAR) */
     .bottom-nav {
         position: fixed !important;
-        bottom: 20 !important;
+        bottom: 0 !important;
         left: 50% !important; /* Geser ke tengah layar */
         transform: translateX(-50%) !important; /* Trik jitu biar presisi di tengah */
         
@@ -54,9 +54,10 @@
         padding-bottom: 0; /* Reset padding biar pas tengah */
         
         z-index: 99999 !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Bayangan biar kesan melayang */
-        border-radius: 35px; /* SUDUT MEMBULAT TOTAL (Kapsul) */
-        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+        border-top-left-radius: 20px;  /* Cuma atas yang bulat */
+        border-top-right-radius: 20px;
+        border-top: 1px solid rgba(0,0,0,0.05);
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-main); opacity: 0.5; cursor: pointer; flex: 1; }
         .nav-item i { font-size: 26px; margin-bottom: 2px; }
@@ -1507,6 +1508,7 @@
 
 </body>
 </html>
+
 
 
 
