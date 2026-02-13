@@ -1011,7 +1011,7 @@
         }
         
         const d = new Date();
-        const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+        const dateStr = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
         let optsMurid = "";
         db.murid.forEach((m, i) => optsMurid += `<option value="${i}">${m.nama}</option>`);
@@ -1148,13 +1148,14 @@
             mText = `${mName} Ayat ${mStart}-${mEnd} (${mStat})`; 
         }
 
-        // Format Pesan WA
+        // Format Pesan WA (Sesuai Request + Fix Spasi)
         const text = 
-            `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A` +
-            `📅 ${tanggal}%0A%0A` +
-            `📖 *ZIYADAH (Hafalan Baru):*%0A${zText}%0A%0A` +
-            `🔄 *MUROJAAH (Mengulang):*%0A${mText}%0A%0A` +
-            `_Mohon doanya agar ananda istiqomah._%0A_Barakallahu Fikum._`;
+            `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A%0A` + 
+            `📅 *Hari/Tanggal:* ${tanggal}%0A` +  // <--- SUDAH SAYA KASIH SPASI
+            `📖 *Ziyadah (Hafalan Baru):*%0A${zText}%0A` +
+            `🔄 *Murojaah (Mengulang):*%0A${mText}%0A%0A` +
+            `_Mohon doanya agar ananda istiqomah._%0A` +
+            `_Barakallahu Fikum._`;
 
         window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
     }
@@ -1501,6 +1502,7 @@
 
 </body>
 </html>
+
 
 
 
