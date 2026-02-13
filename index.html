@@ -29,7 +29,7 @@
 
         .app-container { 
             width: 100%; 
-            max-width: 480px; 
+            max-width: 400px; 
             margin: 0 auto; 
             padding: 15px;
             position: relative; 
@@ -39,25 +39,24 @@
         /* UPDATE NAVBAR (CENTER & BATAS LEBAR) */
     .bottom-nav {
         position: fixed !important;
-        bottom: 0 !important;
+        bottom: 20 !important;
         left: 50% !important; /* Geser ke tengah layar */
         transform: translateX(-50%) !important; /* Trik jitu biar presisi di tengah */
         
-        width: 100% !important;
-        max-width: 480px !important; /* KUNCI LEBAR BIAR SAMA DENGAN BODY */
+        width: 92% !important;
+        max-width: 400px !important; /* KUNCI LEBAR BIAR SAMA DENGAN BODY */
         
         height: 65px;
         background: var(--card-bg);
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding-bottom: 8px;
+        padding-bottom: 0; /* Reset padding biar pas tengah */
         
         z-index: 99999 !important;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        border-top: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Bayangan biar kesan melayang */
+        border-radius: 35px; /* SUDUT MEMBULAT TOTAL (Kapsul) */
+        border: 1px solid rgba(0,0,0,0.05);
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-main); opacity: 0.5; cursor: pointer; flex: 1; }
         .nav-item i { font-size: 26px; margin-bottom: 2px; }
@@ -84,9 +83,9 @@
         /* PAKSA KONTEN DZIKIR KE TENGAH (SAFETY NET) */
         .header-dzikir, .dzikir-scroll {
             width: 100%;
-            max-width: 480px !important; /* Batas lebar HP */
-            margin-left: auto !important; /* Dorong kiri */
-            margin-right: auto !important; /* Dorong kanan -> Akibatnya Center */
+            max-width: 400px !important; /* SAMAKAN JADI 400px */
+            margin-left: auto !important; 
+            margin-right: auto !important; 
         }
     
         /* Biar header dzikir garisnya tidak putus jelek kalau di layar lebar */
@@ -175,10 +174,16 @@
 
         /* --- 3. UPDATE KOTAK DZIKIR (LEBIH PADAT) --- */
         .dzikir-item {
-            padding: 15px; /* Ruang dalam kotak dikurangi (Sebelumnya 20px) */
-            margin-bottom: 10px; /* Jarak antar kotak dirapatkan (Sebelumnya 12px) */
-            border-radius: 14px; /* Sudut sedikit lebih tajam */
-            border-left-width: 3px; /* Garis warna di kiri sedikit ditipiskan */
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--btn-bg);
+            cursor: pointer;
+    
+            /* TAMBAHKAN INI KALAU MAU KARTUNYA LEBIH MENGECIL KE TENGAH */
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
         /* Judul Dzikir */
@@ -1502,6 +1507,7 @@
 
 </body>
 </html>
+
 
 
 
