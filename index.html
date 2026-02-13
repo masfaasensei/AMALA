@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMALA GURU - Pro System v2.3</title>
+    <title>AMALA - Pro System v1.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
@@ -133,6 +133,80 @@
         .hm-lvl-3 { background: #4ade80; color: #064e3b; }
         .hm-lvl-4 { background: #16a34a; color: white; }
         .hm-detail-text { margin-top: 15px; padding: 12px; background: #f8fafc; border-radius: 8px; font-size: 12px; color: #334155; border-left: 4px solid var(--btn-bg); line-height: 1.6; }
+
+        /* =========================================
+           UPDATE TAMPILAN LEBIH RINGKAS (AGAR TIDAK PENUH)
+           ========================================= */
+
+        /* --- 1. UPDATE BODY PADDING --- */
+        /* Karena navbar makin kecil, padding bawah body dikurangi biar ga terlalu longgar */
+        body {
+            padding-bottom: 80px !important; /* Sebelumnya 100px */
+        }
+
+        /* --- 2. UPDATE NAVBAR (LEBIH PENDEK) --- */
+        .bottom-nav {
+            height: 65px; /* Tinggi navbar dikurangi (Sebelumnya 75px) */
+            padding-bottom: 8px; /* Penyesuaian posisi vertikal */
+        }
+        .nav-item i {
+            font-size: 22px; /* Ikon dikecilkan (Sebelumnya 26px) */
+            margin-bottom: 2px; /* Jarak ikon ke teks dirapatkan */
+        }
+        .nav-item span {
+            font-size: 9px; /* Teks menu dikecilkan (Sebelumnya 10px) */
+            font-weight: 600;
+        }
+
+        /* --- 3. UPDATE KOTAK DZIKIR (LEBIH PADAT) --- */
+        .dzikir-item {
+            padding: 15px; /* Ruang dalam kotak dikurangi (Sebelumnya 20px) */
+            margin-bottom: 10px; /* Jarak antar kotak dirapatkan (Sebelumnya 12px) */
+            border-radius: 14px; /* Sudut sedikit lebih tajam */
+            border-left-width: 3px; /* Garis warna di kiri sedikit ditipiskan */
+        }
+
+        /* Judul Dzikir */
+        .dzikir-title {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* Teks Arab */
+        .arab {
+            font-size: 22px; /* Font Arab sedikit dikecilkan (Sebelumnya 24px) */
+            margin: 10px 0; /* Jarak atas bawah teks Arab dirapatkan (Sebelumnya 15px) */
+            line-height: 1.6; /* Jarak antar baris Arab dirapatkan */
+        }
+
+        /* Terjemahan */
+        .terjemah {
+            font-size: 11px; /* Font terjemahan dikecilkan (Sebelumnya 12px) */
+            margin-top: 8px; /* Jarak ke atas dirapatkan */
+            line-height: 1.4;
+        }
+
+        /* Badge Counter (Pojok Kanan Atas) */
+        .counter-badge {
+            padding: 4px 10px;
+            font-size: 11px;
+        }
+        .counter-badge i {
+            font-size: 12px;
+        }
+
+        /* --- UPDATE TAMBAHAN: HEADER Halaman (Biar seimbang) --- */
+        .header-dzikir {
+            padding: 10px 0 15px 0; /* Padding header dikurangi dikit */
+            margin-bottom: 10px;
+        }
+        .header-dzikir h1 {
+            font-size: 16px; /* Judul halaman (MISAL: DZIKIR PAGI) dikecilkan dikit */
+        }
+        .btn-back-custom {
+            padding: 8px 14px; /* Tombol kembali dikecilkan dikit */
+            font-size: 12px;
+        }
     </style>
 </head>
 <body class="light-mode">
@@ -200,7 +274,7 @@
 
             <div class="amalan-row">
                 <i class="ph ph-hand-heart row-icon"></i>
-                <div class="row-info"><h3>Infaq / Shodaqoh</h3><span class="unit-badge">RUPIAH</span></div>
+                <div class="row-info"><h3>Infaq / Shodaqoh</h3><span class="unit-badge">Rupiah</span></div>
                 <input type="number" id="val-shodaqoh" onchange="saveShodaqoh()" placeholder="Rp 0" 
                 style="margin:0; padding:5px 0; width:100px; font-size:16px; text-align:right; border:none; border-bottom:1px solid var(--text-main); border-radius:0;">
             </div>
@@ -344,7 +418,7 @@
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
             
             <div style="font-size:13px; line-height:1.6; color:var(--text-main); margin-top:10px;">
-                <b>AMALA v.1.0</b><br>
+                <b>AMALA - Pro System v1.0</b><br>
                 Aplikasi Muhasabah dan Raport Digital<br>
                 by Mas Fajar<br>
                 <br>
@@ -1412,6 +1486,7 @@
 
 </body>
 </html>
+
 
 
 
