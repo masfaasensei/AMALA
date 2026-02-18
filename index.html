@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMALA - Pro System v1.0</title>
+    <title>AMALA - Pro System v1.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
@@ -506,7 +506,7 @@
             <h4><i class="ph ph-info"></i> Info Aplikasi</h4>
             
             <div style="font-size:13px; line-height:1.6; color:var(--text-main); margin-top:10px;">
-                <b>AMALA - Pro System v1.0</b><br>
+                <b>AMALA - Pro System v1.1</b><br>
                 Aplikasi Muhasabah dan Raport Digital<br>
                 Created by Mas Fajar<br>
                 <br>
@@ -1162,11 +1162,15 @@
             </button>
             
             <button class="btn-primary" onclick="bukaRaportDigital()" style="background:var(--accent-color); color:white; box-shadow: 0 4px 15px rgba(0,0,0, 0.2);">
-                📄 LIHAT RAPORT DIGITAL
+                📄 LIHAT RAPORT HARIAN
+            </button>
+
+            <button class="btn-primary" onclick="bukaRaportBulanan()" style="background:#2c3e50; color:white; box-shadow: 0 4px 15px rgba(0,0,0, 0.2);">
+                📊 CETAK RAPORT BULANAN
             </button>
         </div>`;
     }
-
+    
     // ==========================================
     // 🔥 MESIN RAPORT DIGITAL (PR 6 & 8) 🔥
     // ==========================================
@@ -1233,6 +1237,98 @@
             link.download = `Raport_${namaSantri}.jpg`;
             link.href = canvas.toDataURL('image/jpeg', 0.9);
             link.click(); // Otomatis mengunduh
+        });
+    }
+
+    // ==========================================
+    // 🔥 MESIN RAPORT BULANAN (PROYEK RAKSASA) 🔥
+    // ==========================================
+    function bukaRaportBulanan() {
+        const idx = document.getElementById('sel-rap-murid').value;
+        if (!db.murid || db.murid.length === 0 || !db.murid[idx]) {
+            alert("Pilih santri terlebih dahulu!");
+            return;
+        }
+        
+        const m = db.murid[idx];
+        const d = new Date();
+        const namaBulan = d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+        const kodeBulanIni = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0'); // Format YYYY-MM
+        
+        // Isi Header & Footer
+        document.getElementById('rap-bul-nama').innerText = m.nama;
+        document.getElementById('rap-bul-periode').innerText = namaBulan;
+        document.getElementById('rap-bul-guru').innerText = db.settings.userName; // Otomatis narik nama Mas Fajar
+
+        const tbody = document.getElementById('tabel-bulanan-body');
+        tbody.innerHTML = "";
+        let teksAkumulasi = "";
+
+        if (!m.riwayat || m.riwayat.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="padding: 10px; text-align: center; color: #e74c3c;">Belum ada catatan setoran.</td></tr>`;
+            teksAkumulasi = "Belum ada data setoran bulan ini.";
+        } else {
+            // Saring (Filter) riwayat yang tglID-nya berawalan bulan ini saja
+            const riwayatBulanIni = m.riwayat.filter(r => r.tglID.startsWith(kodeBulanIni));
+            
+            if (riwayatBulanIni.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 10px; text-align: center; color: #e74c3c;">Belum ada catatan setoran di bulan ini.</td></tr>`;
+                teksAkumulasi = "Belum ada kehadiran di bulan ini.";
+            } else {
+                let jmlHadir = riwayatBulanIni.length;
+                
+                // Looping/Putar data untuk membuat baris tabel
+                riwayatBulanIni.forEach(r => {
+                    // Trik Cerdas: Memecah teks "Surat Ayat 1-5 (✅ LANCAR)" menjadi dua bagian untuk dimasukkan ke 4 kolom
+                    const pisahM = r.murojaah.split(' (');
+                    const mSurat = pisahM[0];
+                    const mNilai = pisahM[1] ? pisahM[1].replace(')', '') : '-';
+
+                    const pisahZ = r.ziyadah.split(' (');
+                    const zSurat = pisahZ[0];
+                    const zNilai = pisahZ[1] ? pisahZ[1].replace(')', '') : '-';
+
+                    // Gabung keterangan nilai agar muat di kolom kecil
+                    let nilaiGabungan = "";
+                    if (mNilai !== '-' && !mNilai.includes("LIBUR")) nilaiGabungan += `M: ${mNilai}<br>`;
+                    if (zNilai !== '-' && !zNilai.includes("LIBUR")) nilaiGabungan += `Z: ${zNilai}`;
+                    if (nilaiGabungan === "") nilaiGabungan = "-";
+
+                    // Singkat tanggal teks (Contoh: "Rabu, 18 Februari 2026" jadi "18 Feb")
+                    const tglSingkat = r.tglID.split('-')[2] + " " + namaBulan.substring(0,3);
+
+                    const row = `<tr>
+                        <td style="padding: 6px; border: 1px solid #bdc3c7;">${tglSingkat}</td>
+                        <td style="padding: 6px; border: 1px solid #bdc3c7; color:#d35400;">${mSurat}</td>
+                        <td style="padding: 6px; border: 1px solid #bdc3c7; color:#16a085;">${zSurat}</td>
+                        <td style="padding: 4px; border: 1px solid #bdc3c7; font-size: 9px; line-height:1.2;">${nilaiGabungan}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+                
+                teksAkumulasi = `Alhamdulillah, ananda telah hadir dan setor hafalan sebanyak <b>${jmlHadir} kali</b> pada bulan ini.<br>Mohon motivasi dari orang tua agar ananda senantiasa istiqomah menjaga hafalannya.`;
+            }
+        }
+        
+        document.getElementById('rap-bul-akumulasi').innerHTML = teksAkumulasi;
+        document.getElementById('modalRaportBulanan').style.display = 'flex';
+    }
+
+    function tutupRaportBulanan() {
+        document.getElementById('modalRaportBulanan').style.display = 'none';
+    }
+
+    function downloadRaportBulanan() {
+        const area = document.getElementById('areaRaportBulanan');
+        const namaSantri = document.getElementById('rap-bul-nama').innerText;
+        const d = new Date();
+        const bln = d.toLocaleDateString('id-ID', { month: 'long' });
+        
+        html2canvas(area, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Raport_Bulanan_${bln}_${namaSantri}.jpg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
+            link.click();
         });
     }
     
@@ -1772,5 +1868,54 @@
             </button>
         </div>
     </div>
-</div> </body>
+</div> 
+
+    <div id="modalRaportBulanan" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; padding: 10px;">
+    <div style="background: white; border-radius: 10px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        
+        <button onclick="tutupRaportBulanan()" style="position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; z-index: 10; font-weight: bold; font-size: 16px;">X</button>
+        
+        <div id="areaRaportBulanan" style="padding: 30px 20px; color: black; background: #ffffff; position: relative;">
+            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 2px; font-weight: 800; letter-spacing: 1px; font-size: 22px;">RAPORT BULANAN</h2>
+            <h4 style="text-align: center; color: #7f8c8d; margin-bottom: 25px; font-weight: 400;">Kalam Kencana / TPA AMALA</h4> 
+            
+            <table style="width: 100%; margin-bottom: 15px; font-size: 14px;">
+                <tr><td style="width: 70px;"><b>Nama</b></td><td>: <span id="rap-bul-nama" style="font-weight: bold; color: var(--accent-color);"></span></td></tr>
+                <tr><td><b>Bulan</b></td><td>: <span id="rap-bul-periode" style="font-weight: bold;"></span></td></tr>
+            </table>
+            
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 20px; text-align: left;" border="1">
+                <thead>
+                    <tr style="background: #2c3e50; color: white;">
+                        <th style="padding: 6px; border: 1px solid #bdc3c7;">Tanggal</th>
+                        <th style="padding: 6px; border: 1px solid #bdc3c7;">Murojaah</th>
+                        <th style="padding: 6px; border: 1px solid #bdc3c7;">Ziyadah</th>
+                        <th style="padding: 6px; border: 1px solid #bdc3c7;">Nilai</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel-bulanan-body">
+                    </tbody>
+            </table>
+
+            <div style="background: #f8f9fa; padding: 12px; border-left: 4px solid #f39c12; margin-bottom: 30px; border-radius: 4px;">
+                <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #d35400;">📊 Akumulasi Bulan Ini:</h4>
+                <p id="rap-bul-akumulasi" style="margin: 0; font-size: 12px; color: #333; line-height: 1.5;"></p>
+            </div>
+
+            <div style="text-align: right; font-size: 13px; padding-right: 20px;">
+                <p style="margin: 0 0 60px 0;">Mengetahui,</p>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline; font-size: 14px;" id="rap-bul-guru"></p>
+                <p style="margin: 0; color: #7f8c8d;">Pengasuh / Ustadz</p>
+            </div>
+        </div>
+
+        <div style="padding: 15px; background: #ecf0f1; text-align: center;">
+            <button onclick="downloadRaportBulanan()" style="background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);">
+                📸 SIMPAN RAPORT BULANAN (JPG)
+            </button>
+        </div>
+    </div>
+</div>
+</body>
 </html>
+
