@@ -16,7 +16,11 @@
         }
         body { --bg-body: var(--bg-light); --text-main: var(--l-text); --card-bg: var(--l-card); --btn-bg: var(--l-btn); --btn-text: var(--l-btn-text); --accent-color: var(--l-accent); }
         body.dark-mode { --bg-body: var(--bg-dark); --text-main: var(--d-text); --card-bg: var(--d-card); --btn-bg: var(--d-btn); --btn-text: var(--d-btn-text); --accent-color: var(--d-accent); }
-        
+
+        /* KODE PEMAKSA FONT SERAGAM */
+        input, button, select, textarea {
+        font-family: inherit !important;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background 0.3s, color 0.3s; }
         
         body { 
@@ -291,6 +295,7 @@
             border-left: 4px solid #34d399 !important; /* Garis kiri hijau neon */
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body class="light-mode">
 
@@ -1151,13 +1156,86 @@
             </select>
         </div>
 
-        <div class="card" style="background: transparent; box-shadow: none; border:none; padding:0;">
+        <div class="card" style="background: transparent; box-shadow: none; border:none; padding:0; display:flex; flex-direction:column; gap:10px;">
             <button class="btn-primary" onclick="kirimWA()" style="background:#25D366; color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
                 <i class="ph ph-whatsapp-logo" style="font-size:24px;"></i> KIRIM LAPORAN WA
+            </button>
+            
+            <button class="btn-primary" onclick="bukaRaportDigital()" style="background:var(--accent-color); color:white; box-shadow: 0 4px 15px rgba(0,0,0, 0.2);">
+                📄 LIHAT RAPORT DIGITAL
             </button>
         </div>`;
     }
 
+    // ==========================================
+    // 🔥 MESIN RAPORT DIGITAL (PR 6 & 8) 🔥
+    // ==========================================
+    function bukaRaportDigital() {
+        const idx = document.getElementById('sel-rap-murid').value;
+        if (!db.murid || db.murid.length === 0 || !db.murid[idx]) {
+            alert("Pilih santri terlebih dahulu!");
+            return;
+        }
+        
+        const m = db.murid[idx];
+        const tanggal = document.getElementById('rap-current-date').value;
+        
+        // Racik Teks Ziyadah
+        const zIdx = document.getElementById('z-surat').value;
+        let zText = "-";
+        if(zIdx !== "") { 
+            zText = `${daftarSurat[zIdx].n} Ayat ${document.getElementById('z-start').value}-${document.getElementById('z-end').value}\n(${document.getElementById('z-status').value})`; 
+        }
+        
+        // Racik Teks Murojaah
+        const mIdx = document.getElementById('m-surat').value;
+        let mText = "-";
+        if(mIdx !== "") { 
+            mText = `${daftarSurat[mIdx].n} Ayat ${document.getElementById('m-start').value}-${document.getElementById('m-end').value}\n(${document.getElementById('m-status').value})`; 
+        }
+
+        // 1. Suntik Data ke HTML Raport
+        document.getElementById('rap-nama').innerText = m.nama;
+        document.getElementById('rap-tgl').innerText = tanggal;
+        document.getElementById('rap-ziyadah').innerText = zText;
+        document.getElementById('rap-murojaah').innerText = mText;
+
+        // 2. LOGIKA KOMPARASI KEMARIN (PR NOMOR 6)
+        let infoKemarin = "Belum ada catatan setoran sebelumnya.";
+        if (m.riwayat && m.riwayat.length > 0) {
+            const d = new Date();
+            const tglIDHariIni = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
+            
+            // Cari riwayat selain hari ini
+            const riwayatLama = m.riwayat.filter(r => r.tglID !== tglIDHariIni);
+            if (riwayatLama.length > 0) {
+                const dataKemarin = riwayatLama[riwayatLama.length - 1]; // Ambil yang paling terakhir
+                infoKemarin = `Ziyadah: ${dataKemarin.ziyadah}\nMurojaah: ${dataKemarin.murojaah}\n(Pada: ${dataKemarin.tanggal})`;
+            }
+        }
+        document.getElementById('rap-kemarin').innerText = infoKemarin;
+
+        // 3. Tampilkan Pop-up Raport
+        document.getElementById('modalRaport').style.display = 'flex';
+    }
+
+    function tutupRaport() {
+        document.getElementById('modalRaport').style.display = 'none';
+    }
+
+    function downloadJPG() {
+        const area = document.getElementById('areaRaport');
+        const namaSantri = document.getElementById('rap-nama').innerText;
+        
+        // Panggil html2canvas untuk memotret
+        html2canvas(area, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Raport_${namaSantri}.jpg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
+            link.click(); // Otomatis mengunduh
+        });
+    }
+    
     // --- PERBAIKAN LOGIKA RAPORT (YANG HILANG) ---
 
     function updateAyatOptions(prefix) {
@@ -1216,16 +1294,44 @@
             mText = `${mName} Ayat ${mStart}-${mEnd} (${mStat})`; 
         }
 
-        // Format Pesan WA (Sesuai Request + Fix Spasi)
-        const text = 
-            `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A%0A` + 
-            `📅 *Hari/Tanggal:* ${tanggal}%0A` +  // <--- SUDAH SAYA KASIH SPASI
-            `📖 *Ziyadah (Hafalan Baru):*%0A${zText}%0A` +
-            `🔄 *Murojaah (Mengulang):*%0A${mText}%0A%0A` +
-            `_Mohon doanya agar ananda istiqomah._%0A` +
-            `_Barakallahu Fikum._`;
+        // ==========================================
+        // 🔥 CHIP PEREKAM RIWAYAT (PR NOMOR 7) 🔥
+        // ==========================================
+        if (!m.riwayat) m.riwayat = []; // Buat buku riwayat kalau santri ini belum punya
+        
+        // Buat ID tanggal murni (Format: YYYY-MM-DD) biar gampang dihitung mesin
+        const d = new Date();
+        const tglID = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
 
-        window.open(`https://wa.me/${m.wa}?text=${text}`, '_blank');
+        // Bungkus datanya
+        const dataSetoran = {
+            tglID: tglID,
+            tanggal: tanggal, // Tanggal teks (Senin, ...)
+            ziyadah: zText,
+            murojaah: mText
+        };
+
+        // Cek apakah hari ini sudah pernah setor?
+        const indexHariIni = m.riwayat.findIndex(r => r.tglID === tglID);
+        if (indexHariIni !== -1) {
+            m.riwayat[indexHariIni] = dataSetoran; // Timpa/Update data jika hari ini dikirim ulang
+        } else {
+            m.riwayat.push(dataSetoran); // Simpan sebagai hari baru
+        }
+        
+        save(); // Wajib panggil save() agar tersimpan permanen di memori HP!
+        // ==========================================
+
+        // Format Pesan WA (Sesuai Request + Fix Spasi + Fix Deep Link)
+        const text = 
+        `Assalamu'alaikum Bapak/Ibu, berikut laporan hafalan ananda *${m.nama}*%0A%0A` + 
+        `%F0%9F%93%85 *Hari/Tanggal:*%0A${tanggal}%0A%0A` +  
+        `%F0%9F%93%96 *Ziyadah (Hafalan Baru):*%0A${zText}%0A%0A` + 
+        `%F0%9F%94%84 *Murojaah (Mengulang):*%0A${mText}%0A%0A` + 
+        `_Mohon doanya agar ananda *${m.nama}* istiqomah._%0A` +
+        `_Barakallahu Fikum._`;
+
+        window.location.href = `whatsapp://send?phone=${m.wa}&text=${text}`;
     }
     
     function checkAccess(pageId, el) {
@@ -1444,25 +1550,65 @@
         div.innerHTML = html;
     }
     
+    // 1. Fungsi Buka/Tutup Kotak Formulir
     function tambahMurid() {
-        // 1. Munculkan Popup Input
-        const nama = prompt("Masukkan Nama Santri:");
-        // Kalau user klik Cancel atau kosong, berhenti
-        if (!nama) return; 
+        document.getElementById('inputNamaSantri').value = '';
+        document.getElementById('inputWaSantri').value = '';
+        document.getElementById('modalTambahMurid').style.display = 'flex';
+    }
 
-        const wa = prompt("Masukkan No WA (Format: 628...):");
-        // Kalau user klik Cancel, berhenti
-        if (!wa) return;
+    function tutupModalTambah() {
+        document.getElementById('modalTambahMurid').style.display = 'none';
+    }
 
-        // 2. Masukkan ke Database
-        if (!db.murid) db.murid = []; // Jaga-jaga
+    // 2. Fungsi Pembersih & Auto-Format Nomor WA
+    function formatNomorWA(nomor) {
+        if (!nomor) return "";
+        let bersih = nomor.replace(/\D/g, '');
+        if (bersih.startsWith('0')) {
+            bersih = '62' + bersih.substring(1);
+        } else if (bersih.startsWith('8')) {
+            bersih = '62' + bersih;
+        }
+        return bersih;
+    }
+
+    // 3. Mesin Tombol Import Kontak (Contact Picker)
+    async function ambilKontak() {
+        const didukung = ('contacts' in navigator && 'ContactsManager' in window);
+        if (didukung) {
+            try {
+                const kontak = await navigator.contacts.select(['tel'], { multiple: false });
+                if (kontak.length > 0 && kontak[0].tel.length > 0) {
+                    // Ambil, bersihkan, dan masukkan ke kolom otomatis
+                    document.getElementById('inputWaSantri').value = formatNomorWA(kontak[0].tel[0]);
+                }
+            } catch (error) {
+                console.log("Batal memilih kontak");
+            }
+        } else {
+            alert("Maaf, HP/Browser ini belum mendukung fitur import kontak otomatis. Silakan ketik manual.");
+        }
+    }
+
+    // 4. Eksekusi Simpan ke Database
+    function simpanMuridBaru() {
+        const nama = document.getElementById('inputNamaSantri').value;
+        let wa = document.getElementById('inputWaSantri').value;
+    
+        if (!nama) { alert("Nama tidak boleh kosong!"); return; }
+        if (!wa) { alert("Nomor WA tidak boleh kosong!"); return; }
+
+        // Jalankan auto-format sekali lagi untuk memastikan kebersihannya
+        wa = formatNomorWA(wa);
+
+        if (!db.murid) db.murid = []; 
         db.murid.push({ nama: nama, wa: wa });
-        
-        // 3. Simpan & Refresh
+    
         save(); 
         renderMuridPage(); 
-        
-        // Feedback
+        tutupModalTambah(); // Tutup kotak setelah sukses
+    
         alert("✅ Berhasil! Santri " + nama + " ditambahkan.");
     }
 
@@ -1508,43 +1654,46 @@
         }
     }
 
-    // --- PRAYER TIMES (SIMPLE OFFSET CALCULATION) ---
-    function updatePrayerTimes(lat, lng) {
-        const baseLng = 105; // Base Jakarta
-        const diffLng = (lng - baseLng) * 4; 
-        
-        const subuh = 4.5 - (diffLng/60);
-        const dzuhur = 12.05 - (diffLng/60);
-        const ashar = 15.25 - (diffLng/60);
-        const maghrib = 18.10 - (diffLng/60);
-        const isya = 19.25 - (diffLng/60);
+    // --- PRAYER TIMES (API ALADHAN - STANDAR MUHAMMADIYAH) ---
+    async function updatePrayerTimes(lat, lng) {
+        try {
+            const d = new Date();
+            const dateStr = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
+            
+            // API Aladhan: method=99 (Custom) dengan methodSettings=18,null,18 (Subuh -18, Isya -18)
+            const url = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lng}&method=99&methodSettings=18,null,18`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.code === 200) {
+                const timings = data.data.timings;
+                const tSubuh = timings.Fajr;
+                const tDzuhur = timings.Dhuhr;
+                const tAshar = timings.Asr;
+                const tMaghrib = timings.Maghrib;
+                const tIsya = timings.Isha;
 
-        const formatTime = (t) => {
-            let h = Math.floor(t);
-            let m = Math.floor((t - h) * 60);
-            if(m < 0) { m += 60; h -= 1; }
-            if(h >= 24) h -= 24; if(h < 0) h += 24;
-            return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-        };
+                const curMin = d.getHours() * 60 + d.getMinutes();
+                const toMin = (str) => parseInt(str.split(':')[0]) * 60 + parseInt(str.split(':')[1]);
+                
+                let nextP = "Subuh"; let nextT = tSubuh;
 
-        const tSubuh = formatTime(subuh); const tDzuhur = formatTime(dzuhur); const tAshar = formatTime(ashar);
-        const tMaghrib = formatTime(maghrib); const tIsya = formatTime(isya);
+                if (curMin < toMin(tSubuh)) { nextP = "Subuh"; nextT = tSubuh; }
+                else if (curMin < toMin(tDzuhur)) { nextP = "Dzuhur"; nextT = tDzuhur; }
+                else if (curMin < toMin(tAshar)) { nextP = "Ashar"; nextT = tAshar; }
+                else if (curMin < toMin(tMaghrib)) { nextP = "Maghrib"; nextT = tMaghrib; }
+                else if (curMin < toMin(tIsya)) { nextP = "Isya"; nextT = tIsya; }
+                else { nextP = "Subuh"; nextT = tSubuh; }
 
-        const D = new Date();
-        const curMin = D.getHours()*60 + D.getMinutes();
-        const toMin = (str) => parseInt(str.split(':')[0])*60 + parseInt(str.split(':')[1]);
-        let nextP="Subuh"; let nextT=tSubuh;
-
-        if(curMin < toMin(tSubuh)) { nextP="Subuh"; nextT=tSubuh; }
-        else if(curMin < toMin(tDzuhur)) { nextP="Dzuhur"; nextT=tDzuhur; }
-        else if(curMin < toMin(tAshar)) { nextP="Ashar"; nextT=tAshar; }
-        else if(curMin < toMin(tMaghrib)) { nextP="Maghrib"; nextT=tMaghrib; }
-        else if(curMin < toMin(tIsya)) { nextP="Isya"; nextT=tIsya; }
-        else { nextP="Subuh"; nextT=tSubuh; }
-
-        const greetingElement = document.querySelector('p.greeting'); 
-        if(greetingElement) {
-            greetingElement.innerHTML = `<span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br><div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">🕋 ${nextP}: <b>${nextT}</b> WIB</div>`;
+                const greetingElement = document.querySelector('p.greeting'); 
+                if (greetingElement) {
+                    greetingElement.innerHTML = `<span style="font-size:16px; font-weight:bold;">${db.settings.userName}</span> <br><div style="font-size:12px; font-weight:400; color:#666; margin-top:5px; background:rgba(255,255,255,0.5); padding:4px 8px; border-radius:8px; display:inline-block; border:1px solid rgba(0,0,0,0.1);">🕋 ${nextP}: <b>${nextT}</b> WIB</div>`;
+                }
+            }
+        } catch (error) {
+            console.error("Gagal mengambil API Jadwal Shalat:", error);
+            // Kalau sedang offline/tidak ada internet, biarkan kosong agar tidak error
         }
     }
 
@@ -1566,37 +1715,62 @@
         if(db && db.settings) db.settings.isLoggedIn = false;
         checkNewDay(); initDashboard(); applyTheme(); renderDateHeader(); updateUI(); renderCalendar();   
     };
-</script>
+</script> <div id="modalTambahMurid" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: var(--card-bg); padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+        <h3 style="margin-bottom: 15px;">Tambah Santri</h3>
+        
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Nama Santri</label>
+        <input type="text" id="inputNamaSantri" placeholder="Masukkan Nama..." style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ccc; background: var(--bg-body); color: var(--text-main);">
+        
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Nomor WA (Pilih 👤 atau Ketik)</label>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="number" id="inputWaSantri" placeholder="Contoh: 081234..." style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; background: var(--bg-body); color: var(--text-main);">
+            
+            <button type="button" onclick="ambilKontak()" style="padding: 10px 15px; background: var(--btn-bg); color: var(--btn-text); border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                👤
+            </button>
+        </div>
+        
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button onclick="tutupModalTambah()" style="padding: 10px 15px; background: #888; color: white; border: none; border-radius: 5px; cursor: pointer;">Batal</button>
+            <button onclick="simpanMuridBaru()" style="padding: 10px 15px; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Simpan</button>
+        </div>
+    </div>
+</div> <div id="modalRaport" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: white; border-radius: 10px; width: 100%; max-width: 400px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        
+        <button onclick="tutupRaport()" style="position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; z-index: 10; font-weight: bold; font-size: 16px;">X</button>
+        
+        <div id="areaRaport" style="padding: 30px 20px; color: black; background: #ffffff; position: relative;">
+            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 2px; font-weight: 800; letter-spacing: 1px;">RAPORT SETORAN</h2>
+            <h4 style="text-align: center; color: #7f8c8d; margin-bottom: 25px; font-weight: 400;">TPA AMALA</h4>
+            
+            <table style="width: 100%; margin-bottom: 20px; font-size: 15px; border-collapse: collapse;">
+                <tr><td style="padding: 5px 0; width: 80px;"><b>Nama</b></td><td style="padding: 5px 0;">: <span id="rap-nama" style="font-weight: bold; color: var(--accent-color);"></span></td></tr>
+                <tr><td style="padding: 5px 0;"><b>Tanggal</b></td><td style="padding: 5px 0;">: <span id="rap-tgl"></span></td></tr>
+            </table>
+            
+            <div style="background: #e8f8f5; border-left: 5px solid #1abc9c; padding: 12px; border-radius: 0 5px 5px 0; margin-bottom: 15px;">
+                <h4 style="color: #16a085; margin-bottom: 5px; font-size: 14px;">📖 ZIYADAH HARI INI</h4>
+                <p id="rap-ziyadah" style="margin: 0; font-size: 15px; font-weight: bold; color: #2c3e50; line-height: 1.4;"></p>
+            </div>
+            
+            <div style="background: #fdf2e9; border-left: 5px solid #e67e22; padding: 12px; border-radius: 0 5px 5px 0; margin-bottom: 20px;">
+                <h4 style="color: #d35400; margin-bottom: 5px; font-size: 14px;">🔄 MUROJAAH HARI INI</h4>
+                <p id="rap-murojaah" style="margin: 0; font-size: 15px; font-weight: bold; color: #2c3e50; line-height: 1.4;"></p>
+            </div>
 
-</body>
+            <div style="border-top: 2px dashed #bdc3c7; padding-top: 15px; margin-top: 10px;">
+                <h4 style="color: #2980b9; margin-bottom: 5px; font-size: 13px;">📊 Jejak Setoran Sebelumnya:</h4>
+                <p id="rap-kemarin" style="margin: 0; font-size: 13px; font-style: italic; color: #7f8c8d; line-height: 1.5;"></p>
+            </div>
+        </div>
+
+        <div style="padding: 15px; background: #ecf0f1; text-align: center;">
+            <button onclick="downloadJPG()" style="background: #2980b9; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; box-shadow: 0 4px 6px rgba(41, 128, 185, 0.3);">
+                📸 SIMPAN KE GALERI (JPG)
+            </button>
+        </div>
+    </div>
+</div> </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
