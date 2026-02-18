@@ -525,7 +525,7 @@
             </div>
         </div>
     
-    </div> </div> <div id="page-pagi" class="page">
+    </div> <div id="page-pagi" class="page">
     <div class="header-dzikir">
             <button onclick="openPage('amalan')" class="btn-back-custom">
                 <i class="ph ph-arrow-left" style="font-size: 18px;"></i> Kembali
@@ -1852,6 +1852,43 @@
         if(db && db.settings) db.settings.isLoggedIn = false;
         checkNewDay(); initDashboard(); applyTheme(); renderDateHeader(); updateUI(); renderCalendar();   
     };
+
+        // ==========================================
+    // 🛡️ MESIN BACKUP & RESTORE DATABASE
+    // ==========================================
+    function backupDataPro() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+        const dlAnchorElem = document.createElement('a');
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute("download", "Backup_AMALA_HQ_" + new Date().toLocaleDateString('id-ID').replace(/\//g, '-') + ".amala");
+        document.body.appendChild(dlAnchorElem);
+        dlAnchorElem.click();
+        dlAnchorElem.remove();
+        document.getElementById('modalBackupPro').style.display = 'none';
+    }
+
+    function restoreDataPro(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const importedDB = JSON.parse(e.target.result);
+                if (importedDB.settings && importedDB.pribadi) {
+                    db = importedDB;
+                    save();
+                    alert("✅ Alhamdulillah! Data berhasil dipulihkan.");
+                    location.reload();
+                } else {
+                    alert("❌ File tidak valid atau rusak!");
+                }
+            } catch (err) {
+                alert("❌ Gagal membaca file backup!");
+            }
+        };
+        reader.readAsText(file);
+    }
+
 </script> <div id="modalTambahMurid" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
     <div style="background: var(--card-bg); padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
         <h3 style="margin-bottom: 15px;">Tambah Santri</h3>
@@ -1987,6 +2024,7 @@
 </div>
 </body>
 </html>
+
 
 
 
